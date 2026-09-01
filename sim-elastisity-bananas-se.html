@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demand Total Revenue Test</title>
+    <!-- Подключаем Chart.js и Tailwind CSS для идеального компактного визуала -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #0d1117;
+            color: white;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        /* Глубокий металлический паз для винтажного слайдера */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #151922;
+            height: 8px;
+            border-radius: 4px;
+            outline: none;
+            border: 1px solid #2d3748;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Прямоугольная металлическая ручка с красной шкалой отметки (эффект винтажного радио/микшера) */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 24px;
+            border-radius: 2px;
+            /* Хромированный градиент с ярко-красной линией индикатора по центру */
+            background: linear-gradient(
+                to right, 
+                #3a3a3a 0%, 
+                #a2a2a2 15%, 
+                #ffffff 45%, 
+                #ff1744 46%, 
+                #ff1744 54%, 
+                #ffffff 55%, 
+                #a2a2a2 85%, 
+                #3a3a3a 100%
+            );
+            border: 1px solid #111111;
+            cursor: pointer;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.6), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            transition: transform 0.1s, filter 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.08);
+            filter: brightness(1.1);
+        }
+
+        /* Поддержка Firefox */
+        input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 24px;
+            border-radius: 2px;
+            background: linear-gradient(
+                to right, 
+                #3a3a3a 0%, 
+                #a2a2a2 15%, 
+                #ffffff 45%, 
+                #ff1744 46%, 
+                #ff1744 54%, 
+                #ffffff 55%, 
+                #a2a2a2 85%, 
+                #3a3a3a 100%
+            );
+            border: 1px solid #111111;
+            cursor: pointer;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.6), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            transition: transform 0.1s, filter 0.1s;
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.08);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body class="p-2 min-h-screen flex flex-col justify-between">
+
+<div class="max-w-[1300px] w-full mx-auto flex-1 flex flex-col justify-between">
+    <!-- Заголовок (Компактный) -->
+    <div class="text-center mb-1.5">
+        <h1 class="text-xl md:text-2xl font-bold text-[#0052ff] tracking-wide leading-tight">Total Revenue Test</h1>
+        <p class="text-[10px] text-[#9aa4b2]">Economics • Quantitative Demand Analysis </p>
+    </div>
+
+    <!-- KPI показатели (Высокоплотные, узкие) -->
+    <div class="grid grid-cols-4 gap-2 mb-2">
+        <div class="bg-[#161b22] p-1.5 rounded-lg text-center border border-[#22303c] shadow-sm">
+            <div class="text-[9px] text-[#95a0ad] uppercase font-semibold">Min. Viable Cost Kazakhstan</div>
+            <div class="text-base font-bold text-[#800020] mt-0.5">403 ₸</div>
+        </div>
+        <div class="bg-[#161b22] p-1.5 rounded-lg text-center border border-[#22303c] shadow-sm">
+            <div class="text-[9px] text-[#95a0ad] uppercase font-semibold">Elasticity</div>
+            <div class="text-base font-bold mt-0.5 transition-colors duration-300" id="elasticityBox">0.00</div>
+        </div>
+        <div class="bg-[#161b22] p-1.5 rounded-lg text-center border border-[#22303c] shadow-sm">
+            <div class="text-[9px] text-[#95a0ad] uppercase font-semibold">MR Zone</div>
+            <div class="text-base font-bold mt-0.5 transition-colors duration-300" id="mrZone">-</div>
+        </div>
+        <div class="bg-[#161b22] p-1.5 rounded-lg text-center border border-[#22303c] shadow-sm">
+            <div class="text-[9px] text-[#95a0ad] uppercase font-semibold">Revenue Δ</div>
+            <div class="text-base font-bold text-[#00ffd0] mt-0.5" id="revenueDelta">0%</div>
+        </div>
+    </div>
+
+    <!-- Основная рабочая область (Строго в один ряд) -->
+    <div class="grid grid-cols-2 gap-3 mb-2">
+        <!-- Левая панель: Параметры рынка -->
+        <div class="bg-[#161b22] rounded-xl p-3 border border-[#22303c] flex flex-col justify-between shadow-lg h-full">
+            <div>
+                <h2 class="text-xs font-bold text-[#00ffd0] uppercase tracking-wider mb-2">Market Parameters</h2>
+                
+                <!-- Кнопки сезонов с иконками -->
+                <label class="text-[10px] text-[#aeb7c2] block mb-1 font-medium">Season</label>
+                <div class="grid grid-cols-4 gap-1.5 mb-2">
+                    <button id="btn-spring" onclick="selectSeason(0.7, 1.00, 'spring')" class="py-1 rounded-lg text-base bg-[#232a34] hover:bg-[#2d3744] border border-transparent transition-all" title="Spring (Ed: 0.7)">🌸</button>
+                    <button id="btn-summer" onclick="selectSeason(1.2, 0.60, 'summer')" class="py-1 rounded-lg text-base bg-[#232a34] hover:bg-[#2d3744] border border-transparent transition-all" title="Summer (Ed: 1.2)">☀️</button>
+                    <button id="btn-autumn" onclick="selectSeason(0.9, 1.15, 'autumn')" class="py-1 rounded-lg text-base bg-[#232a34] hover:bg-[#2d3744] border border-transparent transition-all" title="Autumn (Ed: 0.9)">🍂</button>
+                    <button id="btn-winter" onclick="selectSeason(0.5, 1.35, 'winter')" class="py-1 rounded-lg text-base bg-[#232a34] hover:bg-[#2d3744] border border-transparent transition-all" title="Winter (Ed: 0.5)">❄️</button>
+                </div>
+
+                <!-- Хранение выбранных параметров сезона -->
+                <input type="hidden" id="elasticity" value="-0.7">
+                <input type="hidden" id="seasonFactor" value="1.00">
+
+                <!-- Слайдеры параметров (Сжатые отступы, мгновенный автоматический пересчет) -->
+                <div class="space-y-1.5">
+                    <div>
+                        <div class="flex justify-between text-[10px] text-[#aeb7c2] font-medium">
+                            <span>Current Banana Price</span>
+                            <span class="text-[#00ffd0] font-bold"><span id="lbl-price1">700</span> ₸/kg</span>
+                        </div>
+                        <input type="range" id="price1" min="403" max="2000" step="1" value="700" class="w-full mt-0.5" oninput="calculate()">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-[10px] text-[#aeb7c2] font-medium">
+                            <span>Current Demand Quantity</span>
+                            <span class="text-[#00ffd0] font-bold"><span id="lbl-qty1">12000</span> kg/mo</span>
+                        </div>
+                        <input type="range" id="qty1" min="500" max="14000" step="100" value="12000" class="w-full mt-0.5" oninput="calculate()">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-[10px] text-[#aeb7c2] font-medium">
+                            <span>New Banana Price</span>
+                            <span class="text-[#00ffd0] font-bold"><span id="lbl-price2">650</span> ₸/kg</span>
+                        </div>
+                        <input type="range" id="price2" min="403" max="2000" step="1" value="650" class="w-full mt-0.5" oninput="calculate()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая панель: Результаты теста (Уплотненная за счет удаления r7) -->
+        <div class="bg-[#161b22] rounded-xl p-3 border border-[#22303c] flex flex-col justify-between shadow-lg h-full">
+            <div>
+                <h2 class="text-xs font-bold text-[#00ffd0] uppercase tracking-wider mb-2">Test Results</h2>
+                <div class="space-y-1">
+                    <div class="bg-[#1f2630] rounded-lg p-1.5 text-[11px] flex justify-between" id="r1"></div>
+                    <div class="bg-[#1f2630] rounded-lg p-1.5 text-[11px] flex justify-between" id="r2"></div>
+                    <div class="bg-[#1f2630] rounded-lg p-1.5 text-[11px] flex justify-between" id="r3"></div>
+                    <div class="bg-[#1f2630] rounded-lg p-1.5 text-[11px] flex justify-between" id="r4"></div>
+                    <div class="bg-[#1f2630] rounded-lg p-1.5 text-[11px] flex justify-between" id="r5"></div>
+                    <div class="bg-[#1f2630] rounded-lg p-1.5 text-[11px] flex justify-between" id="r6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Графики: один рядом с другим, увеличенные по высоте за счет сжатия верхних панелей -->
+    <div class="grid grid-cols-2 gap-3">
+        <!-- Левый график: Общая выручка (Бар-чаты "До" и "После") -->
+        <div class="bg-[#161b22] border border-[#22303c] rounded-xl p-2 shadow-md flex flex-col justify-between h-[215px]">
+            <canvas id="revenueChart" class="max-h-[200px] h-[200px] w-full"></canvas>
+        </div>
+        <!-- Правый график: Полукруговой интерактивный индикатор эластичности с интегрированным блоком решения -->
+        <div class="bg-[#161b22] border border-[#22303c] rounded-xl p-2 shadow-md flex flex-col justify-between items-center h-[215px]">
+            <span class="text-[10px] text-[#95a0ad] uppercase font-bold tracking-wider pt-0.5">Demand Elasticity Gauge</span>
+            <svg id="elasticityGauge" viewBox="0 0 200 120" class="w-full max-h-[145px]">
+                <defs>
+                    <!-- Тень для придания стрелке объемного 3D эффекта -->
+                    <filter id="needleShadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.7"/>
+                    </filter>
+                    <!-- Металлический градиент для стрелки -->
+                    <linearGradient id="needleChrome" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                        <stop offset="40%" stop-color="#d1d5db" stop-opacity="0.85"/>
+                        <stop offset="100%" stop-color="#4b5563" stop-opacity="0.95"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Задний красный полукруг (неэластичный спрос < 1.0) - ЯРКО-КРАСНЫЙ (#ff1744) -->
+                <path d="M 30 95 A 70 70 0 0 1 135 34.38" fill="none" stroke="#ff1744" stroke-width="12" stroke-linecap="round" />
+                <!-- Задний синий полукруг (эластичный спрос > 1.0) - ЯРКО-СИНИЙ (#0052ff) -->
+                <path d="M 135 34.38 A 70 70 0 0 1 170 95" fill="none" stroke="#0052ff" stroke-width="12" stroke-linecap="round" />
+                <!-- Зелёный сектор ровно на отметке 1.0 - ТЁМНО-ЗЕЛЁНЫЙ, но контрастный (#00c853) -->
+                <path d="M 132.8 38.0 A 70 70 0 0 1 137.2 30.5" fill="none" stroke="#00c853" stroke-width="14" />
+                
+                <!-- Динамическая шкала засечек и подписей -->
+                <g id="gaugeTicks"></g>
+
+                <!-- Центральная точка крепления (Pin) -->
+                <circle cx="100" cy="95" r="5" fill="#232a34" stroke="#00ffd0" stroke-width="1.5" />
+                
+                <!-- Стрелка (Индикатор) в виде клиновидного объемного полигона с плавным и реалистичным Spring-вращением -->
+                <path id="gaugeNeedle" d="M 97.5 95 L 100 28 L 102.5 95 Z" fill="#00ffd0" filter="url(#needleShadow)" transform="rotate(0, 100, 95)" style="transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1.15), fill 0.4s ease;" />
+                
+                <!-- Динамический вывод значения эластичности внутри прибора (Сделан больше: 18px и приподнят на y=116) -->
+                <text id="gaugeVal" x="100" y="116" font-size="18" font-weight="bold" fill="#00ffd0" text-anchor="middle" style="transition: fill 0.4s ease;">0.00</text>
+            </svg>
+            <!-- Перенесенное экономическое решение с динамической границей -->
+            <div class="bg-[#1f2630] rounded-lg p-1.5 text-[10px] w-full text-center border-l-4 border-[#00ffd0]" id="r8"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let revenueChart;
+
+    // Инициализация при первой загрузке (устанавливаем Весну по умолчанию)
+    window.onload = function() {
+        generateGaugeDetails(); // Генерация шкалы засечек и цифр
+        selectSeason(0.7, 1.00, 'spring');
+    };
+
+    // Функция автоматической генерации точной аналоговой шкалы прибора
+    function generateGaugeDetails() {
+        const ticksGroup = document.getElementById("gaugeTicks");
+        if (!ticksGroup) return;
+        ticksGroup.innerHTML = ""; // Очищаем
+
+        const cx = 100;
+        const cy = 95;
+        const R_inner = 64; // Засечки начинаются на внутренней границе дуги (64px)
+        const R_outer = 81; // Цифры шкалы вынесены дальше за дугу (81px) для идеального отступа
+
+        // Генерируем деления от -1.0 до 2.0 с мелким шагом 0.1
+        for (let val = -1.0; val <= 2.05; val += 0.1) {
+            const roundedVal = Math.round(val * 10) / 10;
+            const angleDegrees = (roundedVal - 0.5) * 60; // Формула перевода значений в градусы вращения
+            const angleRad = angleDegrees * Math.PI / 180;
+
+            let tickLen = 3;  // Короткие промежуточные засечки по умолчанию
+            let strokeW = 0.6;
+            let strokeColor = "rgba(149, 160, 173, 0.45)"; // Приглушенный серый для мелких делений
+
+            if (Math.abs(roundedVal % 1) < 0.01) {
+                // Целые числа: -1, 0, 1, 2 (Длинные белые засечки)
+                tickLen = 9;
+                strokeW = 1.6;
+                strokeColor = "#ffffff";
+
+                // Динамическое позиционирование цифр строго напротив соответствующих засечек
+                const lx = cx + R_outer * Math.sin(angleRad);
+                const ly = cy - R_outer * Math.cos(angleRad);
+
+                const labelText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                labelText.setAttribute("x", lx);
+                labelText.setAttribute("y", ly + 3.5); // Корректировка базовой линии шрифта
+                labelText.setAttribute("font-size", "10");
+                labelText.setAttribute("fill", "#95a0ad");
+                labelText.setAttribute("text-anchor", "middle");
+                labelText.setAttribute("font-weight", "bold");
+                labelText.textContent = roundedVal;
+                ticksGroup.appendChild(labelText);
+
+            } else if (Math.abs((roundedVal * 2) % 1) < 0.01) {
+                // Половинные деления: -0.5, 0.5, 1.5 (Средние серые засечки)
+                tickLen = 6;
+                strokeW = 1.1;
+                strokeColor = "rgba(201, 209, 217, 0.8)";
+            }
+
+            // Вычисляем координаты начала и конца линии засечки
+            const x1 = cx + R_inner * Math.sin(angleRad);
+            const y1 = cy - R_inner * Math.cos(angleRad);
+            const x2 = cx + (R_inner - tickLen) * Math.sin(angleRad);
+            const y2 = cy - (R_inner - tickLen) * Math.cos(angleRad);
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x1);
+            line.setAttribute("y1", y1);
+            line.setAttribute("x2", x2);
+            line.setAttribute("y2", y2);
+            line.setAttribute("stroke", strokeColor);
+            line.setAttribute("stroke-width", strokeW);
+            ticksGroup.appendChild(line);
+        }
+    }
+
+    function selectSeason(elasticity, factor, btnId) {
+        // Мы делаем эластичность отрицательной для сохранения верной математики
+        document.getElementById("elasticity").value = -Math.abs(elasticity);
+        document.getElementById("seasonFactor").value = factor;
+
+        // ПРИНУДИТЕЛЬНЫЙ СБРОС СЛАЙДЕРОВ В ИХ БАЗОВЫЕ ЗНАЧЕНИЯ:
+        // Это гарантирует, что эластичность примет в точности стартовое табличное значение (0.5, 0.7, 0.9, 1.2)
+        document.getElementById("price1").value = 700;
+        document.getElementById("qty1").value = 12000;
+        document.getElementById("price2").value = 700; // Цена не изменилась, мы в базовой точке
+
+        // Визуальное переключение активной кнопки
+        const buttons = ['spring', 'summer', 'autumn', 'winter'];
+        buttons.forEach(id => {
+            const btn = document.getElementById('btn-' + id);
+            if (id === btnId) {
+                btn.classList.remove('bg-[#232a34]', 'text-white');
+                btn.classList.add('bg-[#00ffd0]', 'text-black', 'scale-[1.03]', 'border-[#00ffd0]');
+            } else {
+                btn.classList.remove('bg-[#00ffd0]', 'text-black', 'scale-[1.03]', 'border-[#00ffd0]');
+                btn.classList.add('bg-[#232a34]', 'text-white');
+            }
+        });
+
+        calculate();
+    }
+
+    function calculate(){
+        const seasonFactor = parseFloat(document.getElementById("seasonFactor").value);
+        const price1 = parseFloat(document.getElementById("price1").value);
+        const qty1kg = parseFloat(document.getElementById("qty1").value); // Слайдер теперь сразу в кг
+        const baseElasticity = parseFloat(document.getElementById("elasticity").value);
+        const price2 = parseFloat(document.getElementById("price2").value);
+
+        // Обновление числовых подписей к слайдерам
+        document.getElementById("lbl-price1").innerText = price1.toLocaleString();
+        document.getElementById("lbl-qty1").innerText = qty1kg.toLocaleString();
+        document.getElementById("lbl-price2").innerText = price2.toLocaleString();
+
+        // Сезонный спрос
+        const adjustedQty1 = qty1kg * seasonFactor;
+
+        // Исходная выручка
+        const revenue1 = price1 * adjustedQty1;
+
+        // Изменение цены
+        const priceChange = (price2 - price1) / price1;
+
+        // Эффект эластичности (базовый)
+        const qtyChange = baseElasticity * priceChange;
+
+        // Новый объем спроса
+        const adjustedQty2 = Math.max(0, adjustedQty1 * (1 + qtyChange));
+
+        // Новая выручка
+        const revenue2 = adjustedQty2 * price2;
+
+        // Изменение выручки
+        const revenueDiff = revenue2 - revenue1;
+        const revenuePercent = ((revenue2 - revenue1) / revenue1) * 100;
+
+        // ------------------------------------------------------------------
+        // МАТЕМАТИКА ДИНАМИЧЕСКОЙ ЭЛАСТИЧНОСТИ (Точечный расчет на кривой)
+        // ------------------------------------------------------------------
+        const baseQtyActual = 12000 * seasonFactor;
+        const basePrice = 700;
+        const b_slope = Math.abs(baseElasticity) * baseQtyActual / basePrice;
+        
+        // Текущая точечная эластичность в новой ценовой точке P2:
+        let dynamicElasticity = 0;
+        if (adjustedQty2 > 0) {
+            dynamicElasticity = b_slope * price2 / adjustedQty2;
+        } else {
+            dynamicElasticity = 4.0; // Граничное значение
+        }
+
+        if (isNaN(dynamicElasticity) || !isFinite(dynamicElasticity)) {
+            dynamicElasticity = 0.0;
+        }
+
+        // Цена единичной эластичности
+        const unitElasticPrice = Math.max(403, price1 * (1 - (1 / Math.abs(baseElasticity)) * 0.1));
+
+        // Определение зоны MR на основе ДИНАМИЧЕСКОЙ эластичности
+        let zone = "";
+        if (dynamicElasticity > 1.005) {
+            zone = "E > 1 (Elastic)";
+        } else if (dynamicElasticity >= 0.995 && dynamicElasticity <= 1.005) {
+            zone = "E = 1 (Unitary)";
+        } else {
+            zone = "E < 1 (Inelastic)";
+        }
+
+        // ЦВЕТОВАЯ ПАЛИТРА ПО РЕГЛАМЕНТУ:
+        // Ярко-синий: #0052ff, Тёмно-зелёный: #00c853, Ярко-красный: #ff1744
+        const elBox = document.getElementById("elasticityBox");
+        elBox.innerHTML = dynamicElasticity.toFixed(2);
+        
+        if (dynamicElasticity < 0.995) {
+            elBox.className = "text-base font-bold mt-0.5 text-[#ff1744]"; // Ярко-красный
+        } else if (dynamicElasticity >= 0.995 && dynamicElasticity <= 1.005) {
+            elBox.className = "text-base font-bold mt-0.5 text-[#00c853]"; // Тёмно-зелёный
+        } else {
+            elBox.className = "text-base font-bold mt-0.5 text-[#0052ff]"; // Ярко-синий
+        }
+
+        // Привязка MR Zone к изменению цвета
+        const mrBox = document.getElementById("mrZone");
+        mrBox.innerHTML = zone;
+        if (dynamicElasticity < 0.995) {
+            mrBox.className = "text-base font-bold mt-0.5 text-[#ff1744]"; // Ярко-красный
+        } else if (dynamicElasticity >= 0.995 && dynamicElasticity <= 1.005) {
+            mrBox.className = "text-base font-bold mt-0.5 text-[#00c853]"; // Тёмно-зелёный
+        } else {
+            mrBox.className = "text-base font-bold mt-0.5 text-[#0052ff]"; // Ярко-синий
+        }
+
+        document.getElementById("revenueDelta").innerHTML = (revenuePercent >= 0 ? "+" : "") + revenuePercent.toFixed(1) + "%";
+
+        // Заполнение результатов теста
+        document.getElementById("r1").innerHTML = `<span>Initial Revenue (TR1):</span> <strong class="text-white">${Math.round(revenue1).toLocaleString()} ₸</strong>`;
+        document.getElementById("r2").innerHTML = `<span>New Sales Volume (Q2):</span> <strong class="text-white">${Math.round(adjustedQty2).toLocaleString()} kg/mo</strong>`;
+        document.getElementById("r3").innerHTML = `<span>New Revenue (TR2):</span> <strong class="text-white">${Math.round(revenue2).toLocaleString()} ₸</strong>`;
+
+        const cls = revenueDiff >= 0 ? "text-[#00c853]" : "text-[#ff1744]";
+        document.getElementById("r4").innerHTML = `<span>Revenue Change (₸):</span> <strong class="${cls}">${Math.round(revenueDiff).toLocaleString()} ₸</strong>`;
+        document.getElementById("r5").innerHTML = `<span>Revenue Change (%):</span> <strong class="${cls}">${(revenuePercent >= 0 ? "+" : "") + revenuePercent.toFixed(2)}%</strong>`;
+        document.getElementById("r6").innerHTML = `<span>Unit Elastic Price (MR≈0):</span> <strong class="text-[#00ffd0]">${Math.round(unitElasticPrice)} ₸/kg</strong>`;
+
+        // Формирование аналитического решения
+        let recommendation = "";
+        const r8Block = document.getElementById("r8");
+        if (price2 < 403) {
+            recommendation = "<span class='text-[#ffd54f] font-bold'>⚠️ Price dropped below Min. Viable Cost (403 ₸)</span>";
+            r8Block.className = "bg-[#1f2630] rounded-lg p-1.5 text-[10px] w-full text-center border-l-4 border-[#ffd54f]";
+        } else if (revenueDiff > 0) {
+            recommendation = "<span class='text-[#00c853] font-bold'>📈 Effective: price change increases TR</span>";
+            r8Block.className = "bg-[#1f2630] rounded-lg p-1.5 text-[10px] w-full text-center border-l-4 border-[#00c853]";
+        } else {
+            recommendation = "<span class='text-[#ff1744] font-bold'>📉 Ineffective: price change decreases TR</span>";
+            r8Block.className = "bg-[#1f2630] rounded-lg p-1.5 text-[10px] w-full text-center border-l-4 border-[#ff1744]";
+        }
+        r8Block.innerHTML = recommendation;
+
+        // Обновление левого графика (Бар-чаты)
+        buildRevenueChart(revenue1, revenue2, revenueDiff);
+
+        // Обновление правого SVG-полукруга
+        updateGauge(dynamicElasticity);
+    }
+
+    function buildRevenueChart(revenue1, revenue2, revenueDiff){
+        const ctx = document.getElementById("revenueChart");
+        if (revenueChart) {
+            revenueChart.destroy();
+        }
+
+        let bgColors = ["rgba(0, 255, 208, 0.4)", "rgba(0, 255, 208, 0.7)"];
+        let borderColors = ["#00ffd0", "#00ffd0"];
+
+        if (revenueDiff > 0) {
+            bgColors = ["rgba(255, 23, 68, 0.5)", "rgba(0, 200, 83, 0.75)"]; // Ярко-красный -> Тёмно-зелёный
+            borderColors = ["#ff1744", "#00c853"];
+        } else if (revenueDiff < 0) {
+            bgColors = ["rgba(0, 200, 83, 0.5)", "rgba(255, 23, 68, 0.75)"]; // Тёмно-зелёный -> Ярко-красный
+            borderColors = ["#00c853", "#ff1744"];
+        }
+
+        revenueChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["Before Change", "After Change"],
+                datasets: [{
+                    label: "Revenue (₸)",
+                    data: [revenue1, revenue2],
+                    backgroundColor: bgColors,
+                    borderColor: borderColors,
+                    borderWidth: 1.5,
+                    borderRadius: 4,
+                    barThickness: 70
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: "#8b949e", font: { size: 9 } }
+                    },
+                    y: {
+                        grid: { color: "rgba(255, 255, 255, 0.05)" },
+                        ticks: { color: "#8b949e", font: { size: 9 } }
+                    }
+                }
+            }
+        });
+    }
+
+    // Функция обновления полукругового индикатора
+    function updateGauge(absE) {
+        const needle = document.getElementById("gaugeNeedle");
+        const valText = document.getElementById("gaugeVal");
+
+        const clampedVal = Math.min(Math.max(absE, -1), 2);
+        const rotationAngle = ((clampedVal + 1) / 3 * 180) - 90;
+
+        needle.setAttribute("transform", `rotate(${rotationAngle}, 100, 95)`);
+        valText.textContent = absE.toFixed(2);
+
+        let activeColor = "#0052ff"; // Ярко-синий
+        if (absE < 0.995) {
+            activeColor = "#ff1744"; // Ярко-красный
+        } else if (absE >= 0.995 && absE <= 1.005) {
+            activeColor = "#00c853"; // Тёмно-зелёный
+        }
+
+        needle.setAttribute("fill", activeColor);
+        valText.setAttribute("fill", activeColor);
+    }
+</script>
+
+</body>
+</html>
