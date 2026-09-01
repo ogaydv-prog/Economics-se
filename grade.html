@@ -103,7 +103,7 @@
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Student Full Name</label>
                         <div class="relative">
                             <i class="fa-solid fa-user absolute left-4 top-3.5 text-slate-500"></i>
-                            <input type="text" id="student-search-input" onkeydown="handleSearchKeyDown(event)" placeholder="e.g. Student SE 01" 
+                            <input type="text" id="student-search-input" onkeydown="handleSearchKeyDown(event)" placeholder="e.g. Азими Шазия" 
                                 class="w-full pl-11 pr-24 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             <button onclick="searchStudentGrade()" class="absolute right-2 top-2 px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                                 Search
@@ -117,7 +117,7 @@
             <div id="student-result-card" class="max-w-4xl mx-auto bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden hidden">
                 <div class="bg-gradient-to-r from-indigo-950/40 to-slate-900 px-6 py-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <span class="text-[10px] font-bold bg-indigo-900/50 text-indigo-300 px-2.5 py-1 rounded-full border border-indigo-800/30 uppercase tracking-wider">Software Engineering Team Student</span>
+                        <span class="text-[10px] font-bold bg-indigo-900/50 text-indigo-300 px-2.5 py-1 rounded-full border border-indigo-800/30 uppercase tracking-wider">Software Engineering Student</span>
                         <h3 id="sr-name" class="text-xl font-extrabold text-white mt-1.5">Student Full Name</h3>
                     </div>
                     <div class="text-right">
@@ -262,7 +262,7 @@
                 <i class="fa-solid fa-user-slash text-rose-500 text-2xl mb-2.5"></i>
                 <h4 class="text-sm font-bold text-rose-400">Student Not Found</h4>
                 <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                    Please check spelling (e.g. search for <strong class="text-slate-300">Student SE 01</strong>).
+                    Please check spelling (e.g. search for <strong class="text-slate-300">Азими Шазия</strong>).
                 </p>
             </div>
         </div>
@@ -371,7 +371,7 @@
                             <table class="w-full text-left border-collapse min-w-[780px]">
                                 <thead>
                                     <tr class="border-b border-slate-800 bg-slate-900/40 text-slate-400 text-[9px] font-bold uppercase tracking-wider">
-                                        <th class="py-3.5 px-3">Student (Software Engineering Team)</th>
+                                        <th class="py-3.5 px-3">Student Name</th>
                                         <th class="py-3.5 px-1.5 text-center w-14">Att (10%)</th>
                                         <th class="py-3.5 px-1.5 text-center w-14">Act (10%)</th>
                                         <th class="py-3.5 px-1.5 text-center w-14">CA1 (10%)</th>
@@ -419,7 +419,7 @@
                         <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">
                             Each line will be imported as a student name. Initial grades default to 0.
                         </p>
-                        <textarea id="bulk-import-area" rows="4" placeholder="Student SE 11&#10;Student SE 12" 
+                        <textarea id="bulk-import-area" rows="4" placeholder="Student Name 1&#10;Student Name 2" 
                             class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder-slate-700 font-mono"></textarea>
                         
                         <button onclick="runBulkImport()" class="w-full mt-3 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition-colors flex items-center justify-center space-x-2 shadow-lg shadow-indigo-600/15">
@@ -591,22 +591,19 @@
     </footer>
 
     <script>
-        // Initial list of 10 students with all grades reset to ZERO
-        const initialGroupStudents = Array.from({ length: 10 }, (_, i) => {
-            const num = String(i + 1).padStart(2, '0');
-            return {
-                id: `st-${i + 1}`,
-                name: `Student SE ${num}`,
-                attendance: 0,
-                activities: 0,
-                ca1: 0,
-                mc1: 0,
-                ca2: 0,
-                mc2: 0,
-                exam: 0,
-                attendanceHours: Array(30).fill(false) // 15 weeks * 2 hours
-            };
-        });
+        // Updated group list of 9 Software Engineering students
+        // Lecture 1 (Offline 1h + Online 1h) marked for: Shaziya, Aigerim, Azhar.
+        const initialGroupStudents = [
+            { id: "st-1", name: "Азими Шазия", attendance: 7, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: [true, true, ...Array(28).fill(false)] },
+            { id: "st-2", name: "Берікбай Нұрай Нұрғалиқызы", attendance: 0, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: Array(30).fill(false) },
+            { id: "st-3", name: "Қалдыбай Алиянұр Ғалымқызы", attendance: 0, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: Array(30).fill(false) },
+            { id: "st-4", name: "Қошан Нұрай Нұрланқызы", attendance: 0, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: Array(30).fill(false) },
+            { id: "st-5", name: "Марлен Бақтияр", attendance: 0, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: Array(30).fill(false) },
+            { id: "st-6", name: "Мұрат Әмір Олжасұлы", attendance: 0, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: Array(30).fill(false) },
+            { id: "st-7", name: "Нурхайдаров Бексултан Айдарович", attendance: 0, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: Array(30).fill(false) },
+            { id: "st-8", name: "Төлегенқызы Айгерім", attendance: 7, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: [true, true, ...Array(28).fill(false)] },
+            { id: "st-9", name: "Хамитбек Ажар Ғаниқызы", attendance: 7, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: [true, true, ...Array(28).fill(false)] }
+        ];
 
         // Attendance Dates Configuration (15 weeks, 2 hours each: Hour 1 Offline, Hour 2 Online)
         const ATTENDANCE_DATES = Array.from({ length: 15 }, (_, i) => `Week ${i + 1}`);
@@ -686,7 +683,7 @@
             const notFoundCard = document.getElementById('student-not-found');
 
             if (!searchInput) {
-                showToast('Please enter your full name!', 'error');
+                showToast('Please enter full name!', 'error');
                 return;
             }
 
@@ -1108,7 +1105,7 @@
             if (!groupChart) return;
 
             const sorted = [...students].sort((a, b) => a.name.localeCompare(b.name));
-            const names = sorted.map(s => s.name.replace('Student SE ', '#'));
+            const names = sorted.map(s => s.name);
 
             groupChart.data.labels = names;
             groupChart.data.datasets[0].data = sorted.map(s => s.attendance);
