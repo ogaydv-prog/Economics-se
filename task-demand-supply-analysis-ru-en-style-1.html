@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economic Simulator | AlmaU</title>
+<!-- Подключение Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0b0f13;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.05) 0px, transparent 50%);
+  }
+
+  /* Стилизация полей ввода */
+  input[type="number"] {
+    background-color: #151b22;
+    border: 1px solid #30363d;
+    color: #f0f6fc;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+  }
+  input[type="number"]:focus {
+    border-color: #10b981;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  }
+
+  /* ВИНТАЖНЫЙ СЛАЙДЕР РЕГУЛИРОВКИ ЦЕНЫ (НАСТИЛЬ МИКШЕРА / УСИЛИТЕЛЯ) */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #090d12;
+    height: 12px;
+    border-radius: 6px;
+    border: 1px solid #21262d;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+    outline: none;
+  }
+
+  /* Прямоугольный металлический фейдер с красной неоновой полоской (WebKit) */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 34px;
+    border-radius: 4px;
+    /* Металлический градиент аналоговой ручки */
+    background: linear-gradient(180deg, #38414e 0%, #1c2128 50%, #2d333b 100%);
+    border: 1px solid #444c56;
+    box-shadow: 
+      0 4px 8px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    cursor: grab;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    /* Ярко-красная неоновая индикаторная полоса по центру */
+    background-image: linear-gradient(to right, transparent 8px, #ef4444 8px, #ef4444 12px, transparent 12px);
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.08);
+    box-shadow: 
+      0 6px 12px rgba(0, 0, 0, 0.8),
+      0 0 12px rgba(239, 68, 68, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  input[type="range"]::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.02);
+  }
+
+  /* Прямоугольный фейдер для Firefox */
+  input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 34px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #38414e 0%, #1c2128 50%, #2d333b 100%);
+    border: 1px solid #444c56;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    cursor: grab;
+    background-image: linear-gradient(to right, transparent 8px, #ef4444 8px, #ef4444 12px, transparent 12px);
+  }
+
+  /* Панель с эффектом стекла */
+  .glass-card {
+    background: rgba(21, 27, 34, 0.7);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* СТИЛИ 5 ЦВЕТОВЫХ ПАЛИТР (BLOOMBERG STYLE) */
+  .theme-amber { color: #f59e0b !important; text-shadow: 0 0 20px rgba(245, 158, 11, 0.35); }
+  .theme-emerald { color: #10b981 !important; text-shadow: 0 0 20px rgba(16, 185, 129, 0.35); }
+  .theme-blue { color: #3b82f6 !important; text-shadow: 0 0 20px rgba(59, 130, 246, 0.35); }
+  .theme-red { color: #ef4444 !important; text-shadow: 0 0 20px rgba(239, 68, 68, 0.35); }
+  .theme-cyan { color: #06b6d4 !important; text-shadow: 0 0 20px rgba(6, 182, 212, 0.35); }
+
+  /* Подсветка активного кружка темы */
+  .color-dot {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .color-dot.active-dot {
+    transform: scale(1.25);
+    box-shadow: 0 0 10px rgba(255,255,255,0.6);
+  }
+</style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col">
+
+  <!-- ШАПКА C ПЕРЕКЛЮЧАТЕЛЕМ ТЕМ И ЯЗЫКА -->
+  <header class="border-b border-slate-900 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Заголовок шапки -->
+      <div class="flex items-center space-x-3">
+        <span id="hdr-brand" class="font-extrabold text-base tracking-wider text-white block leading-tight">
+          AlmaU Economic Simulator
+        </span>
+      </div>
+
+      <!-- Переключатель палитры и языка -->
+      <div class="flex items-center space-x-4">
+        
+        <!-- 5 Цветовых точек (Палитра) -->
+        <div class="flex items-center gap-2 bg-black/40 p-1.5 rounded-xl border border-slate-800">
+          <button onclick="setTheme('amber')" id="dot-amber" class="color-dot active-dot w-4 h-4 rounded-full bg-amber-500 hover:scale-110" title="Bloomberg Amber"></button>
+          <button onclick="setTheme('emerald')" id="dot-emerald" class="color-dot w-4 h-4 rounded-full bg-emerald-500 hover:scale-110" title="Emerald Green"></button>
+          <button onclick="setTheme('blue')" id="dot-blue" class="color-dot w-4 h-4 rounded-full bg-blue-500 hover:scale-110" title="Royal Blue"></button>
+          <button onclick="setTheme('red')" id="dot-red" class="color-dot w-4 h-4 rounded-full bg-red-500 hover:scale-110" title="Noble Red"></button>
+          <button onclick="setTheme('cyan')" id="dot-cyan" class="color-dot w-4 h-4 rounded-full bg-cyan-500 hover:scale-110" title="Cyber Cyan"></button>
+        </div>
+
+        <!-- Кнопка языка -->
+        <button id="lang-btn" onclick="toggleLanguage()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all border border-slate-700 flex items-center gap-1.5 shadow-md">
+          🌐 <span>RU / EN</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    
+    <!-- Инструкция и заголовок -->
+    <div class="glass-card p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="space-y-1">
+        <h1 id="txt-title" class="text-xl sm:text-2xl font-black tracking-tight theme-amber transition-colors duration-300">
+          Графический анализатор спроса и предложения
+        </h1>
+        <p id="txt-subtitle" class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+          Изучите, как государственное регулирование цен (ценовой потолок или пол) разрушает рыночное равновесие и формирует чистые потери общества (DWL).
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button id="reset-btn" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2.5 rounded-lg font-semibold transition-all border border-slate-700">
+          Сбросить к равновесию ↺
+        </button>
+        <button id="toggle-area-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3.5 py-2.5 rounded-lg font-semibold transition-all shadow-md shadow-emerald-900/10">
+          Показать зону выручки
+        </button>
+      </div>
+    </div>
+
+    <!-- Предупреждения об ошибках ввода -->
+    <div id="error-badge" class="hidden bg-rose-500/15 border border-rose-500/30 text-rose-400 p-4 rounded-xl text-xs space-y-1">
+      <div id="error-title" class="font-bold">⚠️ Ошибка в граничных условиях параметров:</div>
+      <div id="error-desc">Введенные параметры не позволяют построить корректные кривые спроса и предложения.</div>
+    </div>
+
+    <!-- Основная сетка -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- ЛЕВАЯ КОЛОНКА: Настройки и параметры (5/12) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- Карточка 1: Равновесные ориентиры -->
+        <div class="glass-card p-5 rounded-2xl space-y-4">
+          <h3 id="txt-card1-head" class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            1. Равновесные параметры рынка
+          </h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label id="lbl-P0" class="text-[11px] text-slate-400 block font-medium">Равновесная цена (P₀)</label>
+              <input id="inp-P0" type="number" value="30" class="w-full px-3 py-2 text-sm font-semibold">
+            </div>
+            <div class="space-y-1.5">
+              <label id="lbl-Q0" class="text-[11px] text-slate-400 block font-medium">Равновесный объем (Q₀)</label>
+              <input id="inp-Q0" type="number" value="50" class="w-full px-3 py-2 text-sm font-semibold">
+            </div>
+            <div class="space-y-1.5">
+              <label id="lbl-Pmax" class="text-[11px] text-slate-400 block font-medium">Макс. цена спроса (P_max)</label>
+              <input id="inp-Pmax" type="number" value="50" class="w-full px-3 py-2 text-sm font-semibold">
+            </div>
+            <div class="space-y-1.5">
+              <label id="lbl-Pmin" class="text-[11px] text-slate-400 block font-medium">Мин. цена предл. (P_min)</label>
+              <input id="inp-Pmin" type="number" value="10" class="w-full px-3 py-2 text-sm font-semibold">
+            </div>
+          </div>
+        </div>
+
+        <!-- Карточка 2: Регулятор текущей цены -->
+        <div class="glass-card p-5 rounded-2xl space-y-4 border-t-2 border-t-emerald-500">
+          <h3 id="txt-card2-head" class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+            2. Инструмент регулирования (Текущая цена)
+          </h3>
+          
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-900 space-y-3">
+            <div class="flex justify-between items-center">
+              <span id="lbl-current-price" class="text-xs text-slate-400">Установленная цена (P):</span>
+              <span class="text-lg font-black theme-amber transition-colors duration-300" id="current-price-badge">30.00</span>
+            </div>
+            <!-- Обновленный регулятор фейдерного типа -->
+            <div class="py-2 px-1">
+              <input id="price-slider" type="range" min="0" max="60" value="30" step="0.5" class="w-full cursor-pointer">
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-500 font-medium">
+              <span id="slider-min-label">P = 10 (Дефицит)</span>
+              <span id="slider-max-label">P = 50 (Избыток)</span>
+            </div>
+          </div>
+
+          <!-- Показатели рынка при текущей цене -->
+          <div class="space-y-2 text-xs pt-1">
+            <div class="flex justify-between py-1 border-b border-slate-900">
+              <span id="lbl-qd" class="text-slate-400">Объем спроса (Qd):</span>
+              <span id="val-qd" class="font-bold text-white">-</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-900">
+              <span id="lbl-qs" class="text-slate-400">Объем предложения (Qs):</span>
+              <span id="val-qs" class="font-bold text-white">-</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-900">
+              <span id="lbl-qfact" class="text-slate-400">Реальный объем сделок (Q_fact):</span>
+              <span id="val-qfact" class="font-bold text-emerald-400">-</span>
+            </div>
+            <div class="flex justify-between py-1 font-bold pt-2">
+              <span id="state-label" class="text-slate-400">Состояние рынка:</span>
+              <span id="val-state" class="text-white">-</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ПРАВАЯ КОЛОНКА: График и Визуализация (7/12) -->
+      <div class="lg:col-span-7 flex flex-col space-y-6">
+        
+        <!-- Карточка Графика -->
+        <div class="glass-card p-5 rounded-2xl flex-grow flex flex-col min-h-[460px]">
+          <div class="flex justify-between items-center mb-4">
+            <div class="space-y-0.5">
+              <span id="txt-chart-badge" class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Интерактивный график</span>
+              <span id="txt-chart-sub" class="text-xs text-slate-400">Тяните линию цены прямо на графике</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-[11px] text-slate-400">
+              <span class="inline-block w-2.5 h-2.5 bg-emerald-500 rounded-sm"></span> <span id="leg-demand">Спрос (D)</span>
+              <span class="inline-block w-2.5 h-2.5 bg-sky-500 rounded-sm ml-2"></span> <span id="leg-supply">Предложение (S)</span>
+            </div>
+          </div>
+
+          <!-- Контейнер для Canvas -->
+          <div class="relative flex-grow bg-[#151b22] border border-[#30363d] rounded-xl overflow-hidden cursor-row-resize">
+            <canvas id="market-canvas" class="absolute inset-0 w-full h-full"></canvas>
+          </div>
+
+          <!-- Интерактивная легенда под графиком -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] mt-4 pt-4 border-t border-slate-900">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded bg-emerald-500/20 border border-emerald-500/50"></span>
+              <div>
+                <span id="lbl-cs" class="text-slate-400 block leading-none">Излишек потр. (CS)</span>
+                <span id="legend-cs" class="font-bold text-white">-</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded bg-sky-500/20 border border-sky-500/50"></span>
+              <div>
+                <span id="lbl-ps" class="text-slate-400 block leading-none">Излишек произов. (PS)</span>
+                <span id="legend-ps" class="font-bold text-white">-</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded bg-amber-500/15 border border-amber-500/40"></span>
+              <div>
+                <span id="lbl-tr" class="text-slate-400 block leading-none">Выручка (TR)</span>
+                <span id="legend-tr" class="font-bold text-white">-</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded bg-rose-500/30 border border-rose-500/60"></span>
+              <div>
+                <span id="lbl-dwl" class="text-slate-400 block leading-none">Потери (DWL)</span>
+                <span id="legend-dwl" class="font-bold text-rose-400">-</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ: Экономический анализ эффектов -->
+    <div class="glass-card p-6 rounded-2xl space-y-4">
+      <h3 id="txt-analysis-head" class="text-sm font-bold text-white flex items-center gap-2">
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        Экономическое заключение и анализ благосостояния
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs sm:text-sm">
+        
+        <div class="space-y-2 bg-slate-950/40 p-4 rounded-xl border border-slate-900/50">
+          <h4 id="txt-card-surplus" class="font-bold text-slate-300">Состояние излишков</h4>
+          <p id="analysis-surplus" class="text-slate-400 leading-relaxed text-xs">
+            Загрузка аналитических данных...
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-slate-950/40 p-4 rounded-xl border border-slate-900/50">
+          <h4 id="txt-card-dwl" class="font-bold text-slate-300">Распределение потерь (DWL)</h4>
+          <p id="analysis-dwl" class="text-slate-400 leading-relaxed text-xs">
+            Загрузка аналитических данных...
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-slate-950/40 p-4 rounded-xl border border-slate-900/50">
+          <h4 id="txt-card-manager" class="font-bold text-slate-300">Вывод для менеджера</h4>
+          <p id="analysis-manager" class="text-slate-400 leading-relaxed text-xs">
+            Загрузка аналитических данных...
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ПОДВАЛ (FOOTER) -->
+  <footer class="border-t border-slate-900 bg-slate-950/80 py-6 text-center text-[11px] text-slate-500 mt-auto">
+    <div id="footer-text">
+      Разработано для студентов AlmaU | Школа экономики и цифровых технологий
+    </div>
+  </footer>
+
+  <!-- ИНТЕРАКТИВНЫЙ, ДВУЯЗЫЧНЫЙ И МУЛЬТИТЕМАТИЧЕСКИЙ ДВИЖОК -->
+  <script>
+    let currentLang = 'ru';
+    let currentTheme = 'amber';
+
+    const i18n = {
+      ru: {
+        hdrBrand: "Экономический дашборд",
+        title: "Графический анализ спроса и предложения",
+        subtitle: "Изучите, как государственное регулирование цен (ценовой потолок или пол) разрушает рыночное равновесие и формирует чистые потери общества (DWL).",
+        resetBtn: "Сбросить к равновесию ↺",
+        showRevenue: "Показать зону выручки",
+        hideRevenue: "Скрыть зону выручки",
+        errTitle: "⚠️ Ошибка в граничных условиях параметров:",
+        errEmpty: "Поля ввода не могут быть пустыми.",
+        errP0Pmin: "Равновесная цена (P₀) должна быть строго выше минимальной цены предложения (P_min).",
+        errP0Pmax: "Равновесная цена (P₀) должна быть строго ниже максимальной цены спроса (P_max).",
+        errQ0: "Равновесный объем сделок (Q₀) должен быть положительным.",
+        card1Head: "1. Равновесные параметры рынка",
+        lblP0: "Равновесная цена (P₀)",
+        lblQ0: "Равновесный объем (Q₀)",
+        lblPmax: "Макс. цена спроса (P_max)",
+        lblPmin: "Мин. цена предл. (P_min)",
+        card2Head: "2. Инструмент регулирования (Текущая цена)",
+        lblCurrentPrice: "Установленная цена (P):",
+        lblQd: "Объем спроса (Qd):",
+        lblQs: "Объем предложения (Qs):",
+        lblQfact: "Реальный объем сделок (Q_fact):",
+        stateLabelEq: "Рынок:",
+        stateLabelDeficit: "Дефицит рынка:",
+        stateLabelSurplus: "Избыток рынка:",
+        stateEq: "Рыночное равновесие",
+        stateDeficit: "Дефицит продукции",
+        stateSurplus: "Избыток продукции",
+        sliderDeficit: "Дефицит",
+        sliderSurplus: "Избыток",
+        chartBadge: "Интерактивный график",
+        chartSub: "Тяните линию цены прямо на графике",
+        legDemand: "Спрос (D)",
+        legSupply: "Предложение (S)",
+        lblCs: "Излишек потр. (CS)",
+        lblPs: "Излишек произов. (PS)",
+        lblTr: "Выручка (TR)",
+        lblDwl: "Потери (DWL)",
+        axisP: "P (Цена)",
+        axisQ: "Q (Количество)",
+        analysisHead: "Экономическое заключение и анализ благосостояния",
+        cardSurplus: "Состояние излишков",
+        cardDwl: "Распределение потерь (DWL)",
+        cardManager: "Вывод для менеджера",
+        units: " ед.",
+        footer: "Разработано для студентов AlmaU | Школа экономики и цифровых технологий"
+      },
+      en: {
+        hdrBrand: "Economic dashbord",
+        title: "Supply & Demand Graphical Analyzer",
+        subtitle: "Explore how government price controls (price ceilings or floors) disrupt market equilibrium and create deadweight loss (DWL).",
+        resetBtn: "Reset to Equilibrium ↺",
+        showRevenue: "Show Revenue Area",
+        hideRevenue: "Hide Revenue Area",
+        errTitle: "⚠️ Parameter Boundary Error:",
+        errEmpty: "Input fields cannot be empty.",
+        errP0Pmin: "Equilibrium Price (P₀) must be strictly above Minimum Supply Price (P_min).",
+        errP0Pmax: "Equilibrium Price (P₀) must be strictly below Maximum Demand Price (P_max).",
+        errQ0: "Equilibrium Quantity (Q₀) must be positive.",
+        card1Head: "1. Market Equilibrium Parameters",
+        lblP0: "Equilibrium Price (P₀)",
+        lblQ0: "Equilibrium Quantity (Q₀)",
+        lblPmax: "Max Demand Price (P_max)",
+        lblPmin: "Min Supply Price (P_min)",
+        card2Head: "2. Regulatory Control (Current Price)",
+        lblCurrentPrice: "Set Price (P):",
+        lblQd: "Quantity Demanded (Qd):",
+        lblQs: "Quantity Supplied (Qs):",
+        lblQfact: "Traded Quantity (Q_fact):",
+        stateLabelEq: "Market:",
+        stateLabelDeficit: "Market Shortage:",
+        stateLabelSurplus: "Market Surplus:",
+        stateEq: "Market Equilibrium",
+        stateDeficit: "Shortage",
+        stateSurplus: "Surplus",
+        sliderDeficit: "Shortage",
+        sliderSurplus: "Surplus",
+        chartBadge: "Interactive Chart",
+        chartSub: "Drag the price line directly on the graph",
+        legDemand: "Demand (D)",
+        legSupply: "Supply (S)",
+        lblCs: "Consumer Surp. (CS)",
+        lblPs: "Producer Surp. (PS)",
+        lblTr: "Revenue (TR)",
+        lblDwl: "Deadweight Loss (DWL)",
+        axisP: "P (Price)",
+        axisQ: "Q (Quantity)",
+        analysisHead: "Economic Summary & Welfare Analysis",
+        cardSurplus: "Surplus Distribution",
+        cardDwl: "Deadweight Loss (DWL)",
+        cardManager: "Managerial Takeaway",
+        units: " units",
+        footer: "Developed for AlmaU Students | School of Economics and Digital Technologies"
+      }
+    };
+
+    // DOM Элементы
+    const canvas = document.getElementById('market-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const inpP0 = document.getElementById('inp-P0');
+    const inpQ0 = document.getElementById('inp-Q0');
+    const inpPmax = document.getElementById('inp-Pmax');
+    const inpPmin = document.getElementById('inp-Pmin');
+
+    const priceSlider = document.getElementById('price-slider');
+    const currentPriceBadge = document.getElementById('current-price-badge');
+
+    const valQd = document.getElementById('val-qd');
+    const valQs = document.getElementById('val-qs');
+    const valQfact = document.getElementById('val-qfact');
+    const valState = document.getElementById('val-state');
+    const stateLabel = document.getElementById('state-label');
+
+    const legendCs = document.getElementById('legend-cs');
+    const legendPs = document.getElementById('legend-ps');
+    const legendTr = document.getElementById('legend-tr');
+    const legendDwl = document.getElementById('legend-dwl');
+
+    const toggleAreaBtn = document.getElementById('toggle-area-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const errorBadge = document.getElementById('error-badge');
+    const errorDesc = document.getElementById('error-desc');
+
+    const analysisSurplus = document.getElementById('analysis-surplus');
+    const analysisDwl = document.getElementById('analysis-dwl');
+    const analysisManager = document.getElementById('analysis-manager');
+
+    let showRevenueArea = false;
+    let isDraggingPrice = false;
+    let logicalWidth = 0;
+    let logicalHeight = 0;
+
+    const pad = { top: 20, right: 25, bottom: 35, left: 45 };
+
+    // ФУНКЦИЯ ПЕРЕКЛЮЧЕНИЯ ТЕМ ОФОРМЛЕНИЯ
+    function setTheme(themeName) {
+      currentTheme = themeName;
+      const titleEl = document.getElementById('txt-title');
+      const badgeEl = document.getElementById('current-price-badge');
+      
+      const themes = ['theme-amber', 'theme-emerald', 'theme-blue', 'theme-red', 'theme-cyan'];
+      const dots = ['amber', 'emerald', 'blue', 'red', 'cyan'];
+
+      themes.forEach(t => {
+        titleEl.classList.remove(t);
+        badgeEl.classList.remove(t);
+      });
+
+      titleEl.classList.add(`theme-${themeName}`);
+      badgeEl.classList.add(`theme-${themeName}`);
+
+      dots.forEach(d => {
+        const dotEl = document.getElementById(`dot-${d}`);
+        if (d === themeName) {
+          dotEl.classList.add('active-dot');
+        } else {
+          dotEl.classList.remove('active-dot');
+        }
+      });
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'ru' ? 'en' : 'ru';
+      applyLanguageUI();
+      update();
+    }
+
+    function applyLanguageUI() {
+      const t = i18n[currentLang];
+      document.getElementById('hdr-brand').innerText = t.hdrBrand;
+      document.getElementById('txt-title').innerText = t.title;
+      document.getElementById('txt-subtitle').innerText = t.subtitle;
+      resetBtn.innerText = t.resetBtn;
+      toggleAreaBtn.innerText = showRevenueArea ? t.hideRevenue : t.showRevenue;
+      document.getElementById('error-title').innerText = t.errTitle;
+      
+      document.getElementById('txt-card1-head').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> ${t.card1Head}`;
+      document.getElementById('lbl-P0').innerText = t.lblP0;
+      document.getElementById('lbl-Q0').innerText = t.lblQ0;
+      document.getElementById('lbl-Pmax').innerText = t.lblPmax;
+      document.getElementById('lbl-Pmin').innerText = t.lblPmin;
+
+      document.getElementById('txt-card2-head').innerHTML = `<span class="w-2 h-2 rounded-full bg-sky-400"></span> ${t.card2Head}`;
+      document.getElementById('lbl-current-price').innerText = t.lblCurrentPrice;
+      document.getElementById('lbl-qd').innerText = t.lblQd;
+      document.getElementById('lbl-qs').innerText = t.lblQs;
+      document.getElementById('lbl-qfact').innerText = t.lblQfact;
+
+      document.getElementById('txt-chart-badge').innerText = t.chartBadge;
+      document.getElementById('txt-chart-sub').innerText = t.chartSub;
+      document.getElementById('leg-demand').innerText = t.legDemand;
+      document.getElementById('leg-supply').innerText = t.legSupply;
+
+      document.getElementById('lbl-cs').innerText = t.lblCs;
+      document.getElementById('lbl-ps').innerText = t.lblPs;
+      document.getElementById('lbl-tr').innerText = t.lblTr;
+      document.getElementById('lbl-dwl').innerText = t.lblDwl;
+
+      document.getElementById('txt-analysis-head').innerHTML = `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> ${t.analysisHead}`;
+      document.getElementById('txt-card-surplus').innerText = t.cardSurplus;
+      document.getElementById('txt-card-dwl').innerText = t.cardDwl;
+      document.getElementById('txt-card-manager').innerText = t.cardManager;
+      document.getElementById('footer-text').innerText = t.footer;
+    }
+
+    toggleAreaBtn.addEventListener('click', () => {
+      showRevenueArea = !showRevenueArea;
+      const t = i18n[currentLang];
+      toggleAreaBtn.innerText = showRevenueArea ? t.hideRevenue : t.showRevenue;
+      update();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      const P0 = parseFloat(inpP0.value);
+      priceSlider.value = P0;
+      update();
+    });
+
+    function validateInputs() {
+      const t = i18n[currentLang];
+      const P0 = parseFloat(inpP0.value);
+      const Q0 = parseFloat(inpQ0.value);
+      const Pmax = parseFloat(inpPmax.value);
+      const Pmin = parseFloat(inpPmin.value);
+
+      if (isNaN(P0) || isNaN(Q0) || isNaN(Pmax) || isNaN(Pmin)) {
+        showError(t.errEmpty);
+        return false;
+      }
+      if (P0 <= Pmin) {
+        showError(t.errP0Pmin);
+        return false;
+      }
+      if (P0 >= Pmax) {
+        showError(t.errP0Pmax);
+        return false;
+      }
+      if (Q0 <= 0) {
+        showError(t.errQ0);
+        return false;
+      }
+      
+      errorBadge.classList.add('hidden');
+      return true;
+    }
+
+    function showError(text) {
+      errorDesc.innerText = text;
+      errorBadge.classList.remove('hidden');
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      logicalWidth = rect.width;
+      logicalHeight = rect.height;
+    }
+
+    function getX(q, qAxisMax) {
+      const plotWidth = logicalWidth - pad.left - pad.right;
+      return pad.left + (q / qAxisMax) * plotWidth;
+    }
+
+    function getY(p, pAxisMax) {
+      const plotHeight = logicalHeight - pad.top - pad.bottom;
+      return logicalHeight - pad.bottom - (p / pAxisMax) * plotHeight;
+    }
+
+    function getPriceFromY(y, pAxisMax) {
+      const plotHeight = logicalHeight - pad.top - pad.bottom;
+      const relativeY = logicalHeight - pad.bottom - y;
+      let p = (relativeY / plotHeight) * pAxisMax;
+      return Math.max(0, p);
+    }
+
+    function update() {
+      if (!validateInputs()) return;
+      const t = i18n[currentLang];
+
+      const P0 = parseFloat(inpP0.value);
+      const Q0 = parseFloat(inpQ0.value);
+      const Pmax = parseFloat(inpPmax.value);
+      const Pmin = parseFloat(inpPmin.value);
+
+      priceSlider.min = Pmin * 0.5;
+      priceSlider.max = Pmax * 1.1;
+      
+      let P = parseFloat(priceSlider.value);
+      currentPriceBadge.innerText = P.toFixed(2);
+
+      const b = Q0 / (Pmax - P0);
+      const a = b * Pmax;
+
+      const d = Q0 / (P0 - Pmin);
+      const c = d * Pmin;
+
+      const Qd = Math.max(0, a - b * P);
+      const Qs = Math.max(0, d * (P - Pmin));
+      const Q_fact = Math.min(Qd, Qs);
+
+      valQd.innerText = Qd.toFixed(1) + t.units;
+      valQs.innerText = Qs.toFixed(1) + t.units;
+      valQfact.innerText = Q_fact.toFixed(1) + t.units;
+
+      if (Math.abs(P - P0) < 0.05) {
+        valState.innerText = t.stateEq;
+        valState.className = "text-emerald-400 font-bold";
+        stateLabel.innerText = t.stateLabelEq;
+      } else if (P < P0) {
+        const deficit = Qd - Qs;
+        valState.innerText = `${t.stateDeficit} (${deficit.toFixed(1)}${t.units})`;
+        valState.className = "text-rose-400 font-bold";
+        stateLabel.innerText = t.stateLabelDeficit;
+      } else {
+        const surplus = Qs - Qd;
+        valState.innerText = `${t.stateSurplus} (${surplus.toFixed(1)}${t.units})`;
+        valState.className = "text-amber-400 font-bold";
+        stateLabel.innerText = t.stateLabelSurplus;
+      }
+
+      document.getElementById('slider-min-label').innerText = `P = ${(Pmin).toFixed(0)} (${t.sliderDeficit})`;
+      document.getElementById('slider-max-label').innerText = `P = ${(Pmax).toFixed(0)} (${t.sliderSurplus})`;
+
+      const TR = P * Q_fact;
+      const P_dem_fact = Pmax - Q_fact / b;
+      const CS = 0.5 * (Pmax - P + P_dem_fact - P) * Q_fact;
+
+      const P_sup_fact = Pmin + Q_fact / d;
+      const PS = 0.5 * (P - Pmin + P - P_sup_fact) * Q_fact;
+
+      const DWL = 0.5 * (P_dem_fact - P_sup_fact) * (Q0 - Q_fact);
+
+      legendCs.innerText = CS.toFixed(1);
+      legendPs.innerText = PS.toFixed(1);
+      legendTr.innerText = TR.toFixed(1);
+      legendDwl.innerText = DWL.toFixed(1);
+
+      updateEconomicAnalysis(P, P0, Qd, Qs, Q_fact, CS, PS, DWL, TR);
+
+      // ---------------- CANVAS DRAWING ----------------
+      resizeCanvas();
+      ctx.clearRect(0, 0, logicalWidth, logicalHeight);
+
+      const qAxisMax = Q0 * 1.8;
+      const pAxisMax = Pmax * 1.15;
+
+      // 1. Grid Lines
+      ctx.strokeStyle = '#21262d';
+      ctx.lineWidth = 1;
+      
+      const qStep = Q0 / 2;
+      for (let q = qStep; q < qAxisMax; q += qStep) {
+        ctx.beginPath();
+        ctx.moveTo(getX(q, qAxisMax), getY(0, pAxisMax));
+        ctx.lineTo(getX(q, qAxisMax), getY(pAxisMax, pAxisMax));
+        ctx.stroke();
+      }
+
+      const pStep = P0 / 2;
+      for (let p = pStep; p < pAxisMax; p += pStep) {
+        ctx.beginPath();
+        ctx.moveTo(getX(0, qAxisMax), getY(p, pAxisMax));
+        ctx.lineTo(getX(qAxisMax, qAxisMax), getY(p, pAxisMax));
+        ctx.stroke();
+      }
+
+      // 2. Shaded Areas
+      if (showRevenueArea && Q_fact > 0) {
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.15)';
+        ctx.fillRect(getX(0, qAxisMax), getY(P, pAxisMax), getX(Q_fact, qAxisMax) - getX(0, qAxisMax), getY(0, pAxisMax) - getY(P, pAxisMax));
+        
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.3)';
+        ctx.setLineDash([4, 4]);
+        ctx.strokeRect(getX(0, qAxisMax), getY(P, pAxisMax), getX(Q_fact, qAxisMax) - getX(0, qAxisMax), getY(0, pAxisMax) - getY(P, pAxisMax));
+        ctx.setLineDash([]);
+      }
+
+      if (CS > 0) {
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.22)';
+        ctx.beginPath();
+        ctx.moveTo(getX(0, qAxisMax), getY(P, pAxisMax));
+        ctx.lineTo(getX(0, qAxisMax), getY(Pmax, pAxisMax));
+        ctx.lineTo(getX(Q_fact, qAxisMax), getY(P_dem_fact, pAxisMax));
+        ctx.lineTo(getX(Q_fact, qAxisMax), getY(P, pAxisMax));
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      if (PS > 0) {
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.22)';
+        ctx.beginPath();
+        ctx.moveTo(getX(0, qAxisMax), getY(Pmin, pAxisMax));
+        ctx.lineTo(getX(0, qAxisMax), getY(P, pAxisMax));
+        ctx.lineTo(getX(Q_fact, qAxisMax), getY(P, pAxisMax));
+        ctx.lineTo(getX(Q_fact, qAxisMax), getY(P_sup_fact, pAxisMax));
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      if (DWL > 0) {
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.35)';
+        ctx.beginPath();
+        ctx.moveTo(getX(Q_fact, qAxisMax), getY(P_dem_fact, pAxisMax));
+        ctx.lineTo(getX(Q0, qAxisMax), getY(P0, pAxisMax));
+        ctx.lineTo(getX(Q_fact, qAxisMax), getY(P_sup_fact, pAxisMax));
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // 3. Axes
+      ctx.strokeStyle = '#8b949e';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, pad.top);
+      ctx.lineTo(pad.left, logicalHeight - pad.bottom);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(pad.left, logicalHeight - pad.bottom);
+      ctx.lineTo(logicalWidth - pad.right, logicalHeight - pad.bottom);
+      ctx.stroke();
+
+      ctx.fillStyle = '#8b949e';
+      ctx.beginPath();
+      ctx.moveTo(pad.left - 4, pad.top + 5);
+      ctx.lineTo(pad.left, pad.top);
+      ctx.lineTo(pad.left + 4, pad.top + 5);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(logicalWidth - pad.right - 5, logicalHeight - pad.bottom - 4);
+      ctx.lineTo(logicalWidth - pad.right, logicalHeight - pad.bottom);
+      ctx.lineTo(logicalWidth - pad.right - 5, logicalHeight - pad.bottom + 4);
+      ctx.fill();
+
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText(t.axisP, pad.left - 40, pad.top - 8);
+      ctx.fillText(t.axisQ, logicalWidth - pad.right - 40, logicalHeight - pad.bottom + 25);
+
+      // 4. Demand (D) & Supply (S) Curves
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(getX(0, qAxisMax), getY(Pmax, pAxisMax));
+      ctx.lineTo(getX(qAxisMax, qAxisMax), getY(Pmax - qAxisMax / b, pAxisMax));
+      ctx.stroke();
+
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(getX(0, qAxisMax), getY(Pmin, pAxisMax));
+      ctx.lineTo(getX(qAxisMax, qAxisMax), getY(Pmin + qAxisMax / d, pAxisMax));
+      ctx.stroke();
+
+      ctx.font = 'bold 10px Inter, sans-serif';
+      ctx.fillStyle = '#10b981';
+      ctx.fillText('D', getX(qAxisMax, qAxisMax) - 15, getY(Pmax - qAxisMax / b, pAxisMax) - 8);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('S', getX(qAxisMax, qAxisMax) - 15, getY(Pmin + qAxisMax / d, pAxisMax) + 14);
+
+      // 5. Equilibrium Lines
+      ctx.strokeStyle = '#ffffff';
+      ctx.setLineDash([2, 3]);
+      ctx.lineWidth = 1;
+      
+      ctx.beginPath();
+      ctx.moveTo(getX(Q0, qAxisMax), getY(0, pAxisMax));
+      ctx.lineTo(getX(Q0, qAxisMax), getY(P0, pAxisMax));
+      ctx.lineTo(getX(0, qAxisMax), getY(P0, pAxisMax));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#10b981';
+      ctx.beginPath();
+      ctx.arc(getX(Q0, qAxisMax), getY(P0, pAxisMax), 5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 10px Inter, sans-serif';
+      ctx.fillText('E₀', getX(Q0, qAxisMax) + 8, getY(P0, pAxisMax) - 8);
+
+      // Price Line
+      ctx.strokeStyle = isDraggingPrice ? '#34d399' : '#ffffff';
+      ctx.lineWidth = isDraggingPrice ? 2.5 : 2;
+      ctx.beginPath();
+      ctx.moveTo(getX(0, qAxisMax), getY(P, pAxisMax));
+      ctx.lineTo(getX(qAxisMax, qAxisMax), getY(P, pAxisMax));
+      ctx.stroke();
+
+      ctx.strokeStyle = '#f1f5f9';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(getX(Q_fact, qAxisMax), getY(0, pAxisMax));
+      ctx.lineTo(getX(Q_fact, qAxisMax), getY(P, pAxisMax));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '9px Inter, sans-serif';
+      ctx.fillText(`P₀=${P0.toFixed(0)}`, pad.left - 38, getY(P0, pAxisMax) + 3);
+      ctx.fillText(`Q₀=${Q0.toFixed(0)}`, getX(Q0, qAxisMax) - 12, logicalHeight - pad.bottom + 14);
+
+      ctx.fillStyle = '#34d399';
+      ctx.fillText(`P=${P.toFixed(1)}`, pad.left - 35, getY(P, pAxisMax) + 3);
+      ctx.fillText(`Q_fact=${Q_fact.toFixed(1)}`, getX(Q_fact, qAxisMax) - 18, logicalHeight - pad.bottom + 24);
+
+      window.lastMaxValP = pAxisMax;
+      window.lastGH = logicalHeight;
+    }
+
+    function updateEconomicAnalysis(P, P0, Qd, Qs, Q_fact, CS, PS, DWL, TR) {
+      if (currentLang === 'ru') {
+        if (Math.abs(P - P0) < 0.05) {
+          analysisSurplus.innerHTML = `Рынок сбалансирован. Потребительский излишек составляет <b class="text-white">${CS.toFixed(1)}</b>, а излишек производителей — <b class="text-white">${PS.toFixed(1)}</b>. Совокупное общественное благосостояние максимально.`;
+          analysisDwl.innerHTML = `Чистые потери благосостояния (Deadweight Loss) отсутствуют (<b class="text-emerald-400">0.00</b>). Аллокативная эффективность рынка полностью достигнута.`;
+          analysisManager.innerHTML = `Менеджеру выгодно поддерживать данное равновесие. Избегайте искусственного дефицита или перепроизводства, если это не обосновано долгосрочной стратегией захвата долей.`;
+        } else if (P < P0) {
+          analysisSurplus.innerHTML = `Ценовой потолок ($P < P₀$) увеличил излишек тех покупателей, кто смог приобрести товар, до <b class="text-emerald-400">${CS.toFixed(1)}</b>. Но производители снизили продажи, их излишек упал до <b class="text-sky-400">${PS.toFixed(1)}</b>.`;
+          analysisDwl.innerHTML = `Искусственная нехватка товаров создала чистые потери общества (DWL) в размере <b class="text-rose-400">${DWL.toFixed(1)}</b>. Сделки объемом <b class="text-white">${(Qd - Qs).toFixed(1)} ед.</b> не состоялись из-за заниженной цены.`;
+          analysisManager.innerHTML = `<span class="text-rose-300">Риск дефицита!</span> Менеджер должен готовиться к очередям, теневому рынку и оптимизировать запасы. Снижение рыночных продаж уменьшает совокупную выручку до <b class="text-amber-400">${TR.toFixed(1)}</b>.`;
+        } else {
+          analysisSurplus.innerHTML = `Ценовой пол ($P > P₀$) сократил спрос до <b class="text-emerald-400">${Qd.toFixed(1)} ед.</b> Излишек потребителей сократился до <b class="text-emerald-400">${CS.toFixed(1)}</b>. Излишек производителей равен <b class="text-sky-400">${PS.toFixed(1)}</b>.`;
+          analysisDwl.innerHTML = `Высокая цена блокирует покупки, создавая избыток товара. Чистые потери общества составляют <b class="text-rose-400">${DWL.toFixed(1)}</b>. Общественное благосостояние безвозвратно утеряно.`;
+          analysisManager.innerHTML = `<span class="text-amber-300">Избыток товаров!</span> Повышение цены снизило продажи. Вынужденный простой мощностей. Рассмотрите диверсификацию или скидки, если регулирование допускает это.`;
+        }
+      } else {
+        if (Math.abs(P - P0) < 0.05) {
+          analysisSurplus.innerHTML = `Market is balanced. Consumer Surplus is <b class="text-white">${CS.toFixed(1)}</b>, and Producer Surplus is <b class="text-white">${PS.toFixed(1)}</b>. Total social welfare is maximized.`;
+          analysisDwl.innerHTML = `Deadweight Loss (DWL) is zero (<b class="text-emerald-400">0.00</b>). Full allocative efficiency achieved.`;
+          analysisManager.innerHTML = `Maintain this equilibrium. Avoid artificial shortages or overproduction unless driven by long-term market share expansion strategies.`;
+        } else if (P < P0) {
+          analysisSurplus.innerHTML = `Price ceiling ($P < P₀$) increased surplus for buyers who secured goods to <b class="text-emerald-400">${CS.toFixed(1)}</b>. However, producers reduced output, dropping PS to <b class="text-sky-400">${PS.toFixed(1)}</b>.`;
+          analysisDwl.innerHTML = `Artificial shortage created a Deadweight Loss (DWL) of <b class="text-rose-400">${DWL.toFixed(1)}</b>. Transactions worth <b class="text-white">${(Qd - Qs).toFixed(1)} units</b> were blocked by low prices.`;
+          analysisManager.innerHTML = `<span class="text-rose-300">Shortage Risk!</span> Prepare for queues, secondary markets, and inventory rationing. Lower sales reduce total revenue to <b class="text-amber-400">${TR.toFixed(1)}</b>.`;
+        } else {
+          analysisSurplus.innerHTML = `Price floor ($P > P₀$) reduced demand to <b class="text-emerald-400">${Qd.toFixed(1)} units</b>. Consumer surplus shrank to <b class="text-emerald-400">${CS.toFixed(1)}</b>. Producer surplus equals <b class="text-sky-400">${PS.toFixed(1)}</b>.`;
+          analysisDwl.innerHTML = `High prices block transactions, creating excess stock. Deadweight loss amounts to <b class="text-rose-400">${DWL.toFixed(1)}</b>. Total social welfare is lost.`;
+          analysisManager.innerHTML = `<span class="text-amber-300">Surplus Risk!</span> Price increase reduced sales, leaving capacity idle. Consider product diversification or promotional discounts if regulation permits.`;
+        }
+      }
+    }
+
+    function getMousePos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    canvas.addEventListener('mousedown', function(e) {
+      const pos = getMousePos(e);
+      if (pos.x >= pad.left && pos.x <= logicalWidth - pad.right) {
+        isDraggingPrice = true;
+        const calculatedPrice = getPriceFromY(pos.y, window.lastMaxValP);
+        priceSlider.value = calculatedPrice;
+        update();
+      }
+    });
+
+    window.addEventListener('mousemove', function(e) {
+      if (!isDraggingPrice) return;
+      const pos = getMousePos(e);
+      const calculatedPrice = getPriceFromY(pos.y, window.lastMaxValP);
+      priceSlider.value = calculatedPrice;
+      update();
+    });
+
+    window.addEventListener('mouseup', function() {
+      isDraggingPrice = false;
+      update();
+    });
+
+    canvas.addEventListener('touchstart', function(e) {
+      const pos = getMousePos(e);
+      if (pos.x >= pad.left && pos.x <= logicalWidth - pad.right) {
+        isDraggingPrice = true;
+      }
+    });
+
+    canvas.addEventListener('touchmove', function(e) {
+      if (!isDraggingPrice) return;
+      e.preventDefault();
+      const pos = getMousePos(e);
+      const calculatedPrice = getPriceFromY(pos.y, window.lastMaxValP);
+      priceSlider.value = calculatedPrice;
+      update();
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', function() {
+      isDraggingPrice = false;
+      update();
+    });
+
+    [inpP0, inpQ0, inpPmax, inpPmin, priceSlider].forEach(el => {
+      el.addEventListener('input', update);
+    });
+
+    window.addEventListener('load', () => {
+      applyLanguageUI();
+      setTheme('amber');
+      update();
+    });
+
+    window.addEventListener('resize', () => {
+      update();
+    });
+  </script>
+</body>
+</html>
