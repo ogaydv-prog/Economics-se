@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 4 | Economics for Software Engineers</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px 20px;
+            position: relative;
+        }
+
+        .top-left-logo {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
+
+        /* Кнопка "Назад" к списку тем */
+        .back-button {
+            position: absolute;
+            top: 35px;
+            right: 30px;
+            text-decoration: none;
+            background-color: #001e50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #003380;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #001e50;
+            margin-bottom: 8px;
+            margin-top: 20px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #555555;
+            max-width: 650px;
+            line-height: 1.5;
+            margin: 0 auto;
+        }
+
+        /* Сетка для 5 карточек материалов */
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 40px;
+        }
+
+        /* ЕДИНАЯ РАМКА ДЛЯ КАРТОЧЕК */
+        .card {
+            display: inline-block;
+            text-decoration: none;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 180px; 
+            height: 270px; 
+            position: relative;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill; 
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        /* Эффект при наведении */
+        .card:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: #001e50;
+            box-shadow: 0 16px 30px rgba(0, 30, 80, 0.18);
+        }
+
+        footer {
+            margin-top: auto;
+            font-size: 14px;
+            color: #718096;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Логотип AlmaU -->
+    <img src="almau.jpg" alt="AlmaU Logo" class="top-left-logo">
+    
+    <!-- Кнопка возврата к списку тем -->
+    <a href="topics.html" class="back-button">← Back to Topics</a>
+
+    <header>
+        <h1>Topic 4: Consumer Choice and Utility Theory</h1>
+        <p class="subtitle">
+            Select a learning resource below: presentation, interactive simulators, case study, or video lecture.
+        </p>
+    </header>
+
+    <main class="grid-container">
+        <!-- 1. Презентация (Google Drive Preview) -->
+        <a href="https://drive.google.com/file/d/1Eixl2-9RWqg-P0DSrxcDy8exwt6Lu-nq/preview" 
+           target="_blank" rel="noopener noreferrer" class="card" title="Presentation: Consumer Choice & Utility">
+            <img src="pic-preza4-pe.png" alt="Consumer Choice Presentation">
+        </a>
+
+        <!-- 2. Симулятор полезности / Теория поведения потребителей -->
+        <a href="sim-utilit-pe-ib.html" class="card" title="Consumer Behavior & Utility Simulator">
+            <img src="pic-sim-cons-behev-pe.png" alt="Consumer Behavior Simulator">
+        </a>
+
+        <!-- 3. Симулятор кривых безразличия (Indifference Curves) -->
+        <a href="sim-indiff-curve-ru-en.html" class="card" title="Indifference Curves Simulator">
+            <img src="pic-sim-indiff-curve-pe.png" alt="Indifference Curves Simulator">
+        </a>
+
+        <!-- 4. Практический кейс / Предельная полезность -->
+        <a href="sim-case-marginal-utilities-pe-rus-en.html" class="card" title="Marginal Utility Case Study Task">
+            <img src="pic-case4-pe.png" alt="Marginal Utility Case Task">
+        </a>
+
+        <!-- 5. Видеолекция на YouTube -->
+        <a href="https://www.youtube.com/watch?v=_mMmstUpAB4" target="_blank" rel="noopener noreferrer" class="card" title="Video Lecture: Consumer Theory">
+            <img src="pic-video4-pe.png" alt="Video Lecture on Consumer Choice">
+        </a>
+    </main>
+
+    <footer>
+        <p>Developed for Software Engineering Team AlmaU 2026 | Course: Economics for Software Engineers</p>
+        <p>© Almaty Management University | School of Digital Technologies & Economics</p>
+    </footer>
+
+</body>
+</html>
