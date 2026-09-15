@@ -12,6 +12,12 @@
         .vintage-panel { background: #0f172a; border: 2px solid #1e293b; border-radius: 20px; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7); }
         .kpi-block { background: linear-gradient(135deg, #0b1329 0%, #172554 100%); border: 1px solid #1e3a8a; }
         .btn-glow { box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3); }
+        
+        /* Скрытие белого фона у логотипа через смешивание */
+        .no-bg-logo {
+            mix-blend-mode: multiply;
+            filter: contrast(125%) brightness(110%);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-white">
@@ -20,11 +26,12 @@
     <header class="bg-slate-900/90 border-b border-slate-800 py-3.5 px-6 sticky top-0 z-50 backdrop-blur-md">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3.5">
-                <div class="h-11 w-11 bg-gradient-to-tr from-sky-500 via-indigo-500 to-emerald-400 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-sky-500/20 border border-white/20">
-                    MU
+                <!-- Логотип AlmaU без белого фона вместо квадрата MU -->
+                <div class="h-11 w-11 flex items-center justify-center overflow-hidden rounded-xl">
+                    <img src="almau.jpg" alt="AlmaU Logo" class="h-full w-full object-contain no-bg-logo">
                 </div>
                 <div>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-sky-400" id="header-subtitle">Utility Maximizing Rule | AlmaU SDTE</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-sky-400" id="header-subtitle">Utility Maximizing Rule | AlmaU SE</span>
                     <h1 class="text-lg sm:text-xl font-black text-white" id="header-title">Теория потребительского поведения</h1>
                 </div>
             </div>
@@ -132,7 +139,7 @@
                 </div>
             </div>
 
-            <!-- Table (Справа - Изумрудно-голубой премиум стиль) -->
+            <!-- Table (Справа) -->
             <div class="lg:col-span-2 vintage-panel p-6 shadow-2xl text-white">
                 <div class="text-center mb-4">
                     <h2 class="text-lg font-black tracking-wider uppercase text-sky-400" id="tbl-main-title">Utility Maximizing Rule Table</h2>
@@ -177,7 +184,7 @@
 
         const dictionary = {
             ru: {
-                headerSubtitle: "Utility Maximizing Rule | AlmaU GSB",
+                headerSubtitle: "Utility Maximizing Rule | AlmaU SE",
                 headerTitle: "Теория потребительского поведения",
                 labelVariant: "Вариант:",
                 btnNextVariant: "Следующий вариант (Сброс)",
@@ -204,7 +211,7 @@
                 alertFail: "⚠️ Вариант не является оптимумом.\n\nВаша полезность: {tu} utils (Потрачено ${spent}).\nМаксимально возможная полезность: {maxTu} utils.\n\nПодсказка: Сравните значения MU/P для последних купленных единиц обоих товаров!"
             },
             en: {
-                headerSubtitle: "Utility Maximizing Rule | AlmaU GSB",
+                headerSubtitle: "Utility Maximizing Rule | AlmaU SE",
                 headerTitle: "Theory of Consumer Behavior",
                 labelVariant: "Variant:",
                 btnNextVariant: "Next Variant (Reset)",
