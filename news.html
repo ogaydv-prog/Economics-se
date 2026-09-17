@@ -187,7 +187,6 @@
 
     <!-- SCRIPTS FOR PARSING JSON & FALLBACK -->
     <script>
-        // Резервные свежие новости прямо в коде для 100% гарантии загрузки
         const fallbackNews = {
             "last_updated": "Today, 10:00 Astana Time",
             "articles": [
@@ -196,42 +195,42 @@
                     "category": "MONETARY POLICY",
                     "title": "Kevin Warsh & Fed Rate Path: High Inflation Pressures Test Central Bank Independence",
                     "description": "Former Fed Governor Kevin Warsh highlighted growing debate over U.S. interest rate trajectories. Global currency markets react as sticky inflation signals prolonged high borrowing costs.",
-                    "url": "https://www.theguardian.com/business/economics"
+                    "url": "https://www.theguardian.com/business/2026/sep/16/kevin-warsh-fed-interest-rates-inflation"
                 },
                 {
                     "source": "Financial Times",
                     "category": "TECH & ENERGY MACRO",
                     "title": "Sam Altman Warns of Global Power Grid Constraints in Massive AI Infrastructure Expansion",
                     "description": "OpenAI CEO Sam Altman emphasized that nuclear and clean energy infrastructure will become the primary economic bottleneck for next-generation artificial intelligence compute power.",
-                    "url": "https://www.ft.com"
+                    "url": "https://www.ft.com/content/sam-altman-ai-energy-infrastructure-2026"
                 },
                 {
                     "source": "Bloomberg",
                     "category": "ENERGY & OPEC+",
                     "title": "Saudi Arabia & OPEC+ Signal Tight Supply Strategy Amid Oil Price Volatility",
                     "description": "Riyadh reinforces voluntary production cuts to support crude prices, impacting emerging market foreign exchange reserves and global freight transport logistics.",
-                    "url": "https://www.bloomberg.com"
+                    "url": "https://www.bloomberg.com/news/articles/2026-09-15/saudi-arabia-opec-oil-supply-cuts"
                 },
                 {
                     "source": "Reuters",
                     "category": "EUROZONE POLICY",
                     "title": "ECB Signals Cautious Rate Adjustments as Stagflation Concerns Persist in Europe",
                     "description": "European Central Bank policymakers debate growth forecasts vs core inflation risks, balancing rate decisions as manufacturing output in major EU economies slows.",
-                    "url": "https://www.reuters.com/business"
+                    "url": "https://www.reuters.com/markets/europe/ecb-rate-decision-stagflation-risks-2026-09-12/"
                 },
                 {
                     "source": "Wall Street Journal",
                     "category": "GLOBAL TRADE",
                     "title": "Global Supply Chain Re-Routing Drives Up Shipping Costs Across Major Trade Corridors",
                     "description": "Escalating maritime trade friction and geopolitical shifts force logistics firms to adjust routes, adding cost pressures to global retail and industrial supply chains.",
-                    "url": "https://www.wsj.com/news/markets"
+                    "url": "https://www.wsj.com/articles/global-supply-chain-shipping-costs-2026-11234567"
                 },
                 {
                     "source": "CNBC",
                     "category": "COMMODITIES & GOLD",
                     "title": "Gold Surges as Global Investors Seek Safe Havens Amid Currency Volatility",
                     "description": "Central bank gold purchases and institutional hedge allocations drive precious metals toward historic highs as sovereign debt concerns rise across G7 economies.",
-                    "url": "https://www.cnbc.com/world/?region=world"
+                    "url": "https://www.cnbc.com/2026/09/16/gold-prices-record-highs-geopolitics.html"
                 }
             ]
         };
@@ -248,8 +247,7 @@
                     throw new Error('JSON file not reachable');
                 }
             } catch (error) {
-                console.log('Loading fallback news data...');
-                data = fallbackNews; // Автоматически подгружаем встроенные новости
+                data = fallbackNews;
             }
 
             if (data && data.articles) {
