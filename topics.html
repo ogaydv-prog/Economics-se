@@ -23,20 +23,24 @@
             position: relative;
         }
 
+        /* Верхняя панель навигации */
+        .top-nav {
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            justify-content: space-between;
+            items-center;
+            margin-bottom: 10px;
+        }
+
         .top-left-logo {
-            position: absolute;
-            top: 25px;
-            left: 30px;
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
         }
 
-        /* Кнопка "Назад" на главный дашборд */
+        /* Кнопка "Назад" */
         .back-button {
-            position: absolute;
-            top: 35px;
-            right: 30px;
             text-decoration: none;
             background-color: #001e50;
             color: white;
@@ -45,6 +49,7 @@
             font-weight: 600;
             font-size: 14px;
             transition: background-color 0.3s ease;
+            display: inline-block;
         }
 
         .back-button:hover {
@@ -54,40 +59,39 @@
         header {
             text-align: center;
             margin-top: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            padding: 0 10px;
         }
 
         h1 {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             color: #001e50;
             margin-bottom: 8px;
-            margin-top: 20px;
         }
 
         .subtitle {
-            font-size: 16px;
+            font-size: 15px;
             color: #555555;
             max-width: 650px;
             line-height: 1.5;
             margin: 0 auto;
         }
 
-        /* Сетка для 14 карточек */
+        /* Адаптивная CSS-сетка для карточек */
         .grid-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
             max-width: 1400px;
             width: 100%;
-            justify-content: center;
-            align-items: center;
-            padding-bottom: 40px;
+            justify-items: center;
+            padding-bottom: 30px;
         }
 
-        /* ЕДИНАЯ РАМКА ДЛЯ ВСЕХ 14 КАРТОЧЕК */
+        /* ЕДИНАЯ РАМКА И АДАПТИВНЫЙ РАЗМЕР КАРТОЧЕК */
         .card {
-            display: inline-block;
+            display: block;
             text-decoration: none;
             background: #ffffff;
             border: 2px solid #e2e8f0;
@@ -95,8 +99,9 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 160px; 
-            height: 250px; 
+            width: 100%;
+            max-width: 160px;
+            aspect-ratio: 16 / 25;
         }
 
         .card img {
@@ -107,29 +112,69 @@
             transition: transform 0.3s ease;
         }
 
-        .card:hover {
-            transform: translateY(-8px) scale(1.03);
+        .card:hover, .card:active {
+            transform: translateY(-6px) scale(1.03);
             border-color: #001e50;
-            box-shadow: 0 16px 30px rgba(0, 30, 80, 0.15);
+            box-shadow: 0 12px 24px rgba(0, 30, 80, 0.15);
         }
 
         footer {
             margin-top: auto;
-            font-size: 14px;
+            font-size: 13px;
             color: #718096;
-            padding-top: 30px;
-            padding-bottom: 20px;
+            padding-top: 20px;
+            padding-bottom: 15px;
             text-align: center;
             line-height: 1.6;
+        }
+
+        /* Стили для десктопов и планшетов */
+        @media (min-width: 640px) {
+            .top-left-logo {
+                position: absolute;
+                top: 25px;
+                left: 30px;
+                width: 55px;
+                height: 55px;
+            }
+
+            .back-button {
+                position: absolute;
+                top: 35px;
+                right: 30px;
+            }
+
+            .top-nav {
+                display: none; /* На десктопах используем абсолютное позиционирование */
+            }
+
+            h1 {
+                font-size: 32px;
+                margin-top: 15px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .grid-container {
+                gap: 20px;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 160px));
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Исправленный логотип на новый репозиторий -->
+    <!-- Мобильная панель навигации (для узких экранов) -->
+    <div class="top-nav">
+        <img src="https://ogaydv-prog.github.io/Economics-se/almau.jpg" alt="AlmaU Logo" class="top-left-logo" style="position: static; width: 45px; height: 45px;">
+        <a href="index.html" class="back-button" style="position: static;">← Back</a>
+    </div>
+
+    <!-- Логотип и кнопка для десктопных экранов -->
     <img src="https://ogaydv-prog.github.io/Economics-se/almau.jpg" alt="AlmaU Logo" class="top-left-logo">
-    
-    <!-- Кнопка возврата на главный дашборд нового репозитория -->
     <a href="index.html" class="back-button">← Back to Dashboard</a>
 
     <header>
@@ -145,7 +190,7 @@
         <a href="topic2.html" class="card" title="Topic 2"><img src="pic-top2.png" alt="Topic 2"></a>
         <a href="topic3.html" class="card" title="Topic 3"><img src="pic-top3.png" alt="Topic 3"></a>
         <a href="topic4.html" class="card" title="Topic 4: Consumer Choice and Utility Theory"><img src="pic-top4.png" alt="Topic 4"></a>
-       <a href="topic5.html" class="card" title="Topic 5: Firm Behavior and Production Costs"><img src="pic-top5.png" alt="Topic 5"></a>
+        <a href="topic5.html" class="card" title="Topic 5: Firm Behavior and Production Costs"><img src="pic-top5.png" alt="Topic 5"></a>
         <a href="#" class="card" title="Topic 6"><img src="pic-top6.png" alt="Topic 6"></a>
         <a href="#" class="card" title="Topic 7"><img src="pic-top7.png" alt="Topic 7"></a>
         
