@@ -19,10 +19,11 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 15px 20px;
+            padding: 20px;
             position: relative;
         }
 
+        /* Шапка по умолчанию (ПК) */
         .top-left-logo {
             position: absolute;
             top: 25px;
@@ -35,7 +36,8 @@
         header {
             text-align: center;
             margin-top: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            width: 100%;
         }
 
         h1 {
@@ -43,7 +45,8 @@
             font-weight: 700;
             color: #001e50;
             margin-bottom: 12px;
-            margin-top: 20px;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
         }
 
         .subtitle {
@@ -66,7 +69,7 @@
             padding-bottom: 30px;
         }
 
-        /* Строго одинаковые пропорции карточек */
+        /* Карточки на ПК */
         .card {
             display: inline-block;
             text-decoration: none;
@@ -79,12 +82,13 @@
             width: 190px;
             height: 250px;
             position: relative;
+            flex-shrink: 0;
         }
 
         .card img {
             width: 100%;
             height: 100%;
-            object-fit: fill; /* Заполняет рамку ровно без обрезки */
+            object-fit: fill;
             display: block;
             transition: transform 0.3s ease;
         }
@@ -99,7 +103,7 @@
             transform: scale(1.02);
         }
 
-        /* Карточки без активных ссылок */
+        /* Неактивные карточки */
         .card.disabled {
             cursor: default;
             opacity: 0.85;
@@ -119,6 +123,66 @@
             padding-bottom: 20px;
             text-align: center;
             line-height: 1.6;
+            width: 100%;
+        }
+
+        /* МОБИЛЬНАЯ АДАПТАЦИЯ (Смартфоны и планшеты) */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            /* Центрирование логотипа на мобильном */
+            .top-left-logo {
+                position: static;
+                display: block;
+                margin: 10px auto 15px auto;
+                width: 60px;
+                height: 60px;
+            }
+
+            header {
+                margin-top: 0;
+                margin-bottom: 20px;
+                padding: 0 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-top: 0;
+                margin-bottom: 8px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+
+            /* Оптимизированная сетка для карточек на телефоне (по 2 в ряд) */
+            .grid-container {
+                gap: 12px;
+                padding-bottom: 20px;
+            }
+
+            .card {
+                width: 150px;
+                height: 200px;
+                border-radius: 12px;
+            }
+
+            footer {
+                font-size: 12px;
+                padding-top: 20px;
+                padding-bottom: 15px;
+            }
+        }
+
+        /* Для совсем небольших экранов (360px и меньше) */
+        @media (max-width: 360px) {
+            .card {
+                width: 135px;
+                height: 180px;
+            }
         }
     </style>
 </head>
@@ -156,7 +220,7 @@
             <img src="pic-gloss-se.png" alt="Glossary">
         </a>
 
-        <!-- 5. Economic News (Теперь полностью активна и ведет на news.html) -->
+        <!-- 5. Economic News -->
         <a href="news.html" class="card" title="Economic News & Analysis">
             <img src="pic-news-se.png" alt="Economic News">
         </a>
@@ -166,17 +230,17 @@
             <img src="pic-video-se.png" alt="Video Lectures">
         </a>
 
-        <!-- 7. Midterm Control 1 (Coming soon) -->
+        <!-- 7. Midterm Control 1 -->
         <div class="card disabled" title="Midterm Control 1 - Coming Soon">
             <img src="pic-mc1-se.png" alt="Midterm Control 1">
         </div>
 
-        <!-- 8. Midterm Control 2 (Coming soon) -->
+        <!-- 8. Midterm Control 2 -->
         <div class="card disabled" title="Midterm Control 2 - Coming Soon">
             <img src="pic-mc2-se.png" alt="Midterm Control 2">
         </div>
 
-        <!-- 9. Final Exam (Coming soon) -->
+        <!-- 9. Final Exam -->
         <div class="card disabled" title="Final Exam - Coming Soon">
             <img src="pic-exam-se.png" alt="Final Exam Preparation">
         </div>
