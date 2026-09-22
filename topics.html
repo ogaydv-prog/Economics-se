@@ -23,42 +23,36 @@
             position: relative;
         }
 
-        /* Верхняя панель навигации */
-        .top-nav {
-            width: 100%;
-            max-width: 1400px;
-            display: flex;
-            justify-content: space-between;
-            items-center;
+        /* Единый логотип AlmaU */
+        .top-left-logo {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
             margin-bottom: 10px;
         }
 
-        .top-left-logo {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-        }
-
-        /* Кнопка "Назад" */
+        /* Единая кнопка "Назад" */
         .back-button {
             text-decoration: none;
             background-color: #001e50;
             color: white;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 14px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
             display: inline-block;
+            box-shadow: 0 2px 6px rgba(0, 30, 80, 0.15);
         }
 
         .back-button:hover {
             background-color: #003380;
+            transform: translateY(-1px);
         }
 
         header {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
             margin-bottom: 25px;
             padding: 0 10px;
         }
@@ -78,18 +72,18 @@
             margin: 0 auto;
         }
 
-        /* Адаптивная CSS-сетка для карточек */
+        /* CSS-сетка для карточек */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(2, 1fr); /* 2 колонки по умолчанию для мобильных */
+            gap: 12px;
             max-width: 1400px;
             width: 100%;
             justify-items: center;
             padding-bottom: 30px;
         }
 
-        /* ЕДИНАЯ РАМКА И АДАПТИВНЫЙ РАЗМЕР КАРТОЧЕК */
+        /* Карточки */
         .card {
             display: block;
             text-decoration: none;
@@ -100,7 +94,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             width: 100%;
-            max-width: 160px;
             aspect-ratio: 16 / 25;
         }
 
@@ -128,29 +121,27 @@
             line-height: 1.6;
         }
 
-        /* Стили для десктопов и планшетов */
+        /* Адаптация для десктопов и планшетов (больше 640px) */
         @media (min-width: 640px) {
             .top-left-logo {
                 position: absolute;
                 top: 25px;
                 left: 30px;
-                width: 55px;
-                height: 55px;
+                margin-bottom: 0;
             }
 
             .back-button {
                 position: absolute;
-                top: 35px;
+                top: 30px;
                 right: 30px;
             }
 
-            .top-nav {
-                display: none; /* На десктопах используем абсолютное позиционирование */
+            header {
+                margin-top: 10px;
             }
 
             h1 {
                 font-size: 32px;
-                margin-top: 15px;
             }
 
             .subtitle {
@@ -162,19 +153,19 @@
                 grid-template-columns: repeat(auto-fit, minmax(150px, 160px));
                 justify-content: center;
             }
+
+            .card {
+                max-width: 160px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Мобильная панель навигации (для узких экранов) -->
-    <div class="top-nav">
-        <img src="https://ogaydv-prog.github.io/Economics-se/almau.jpg" alt="AlmaU Logo" class="top-left-logo" style="position: static; width: 45px; height: 45px;">
-        <a href="index.html" class="back-button" style="position: static;">← Back</a>
-    </div>
-
-    <!-- Логотип и кнопка для десктопных экранов -->
+    <!-- Единый логотип AlmaU -->
     <img src="https://ogaydv-prog.github.io/Economics-se/almau.jpg" alt="AlmaU Logo" class="top-left-logo">
+
+    <!-- Единая кнопка возврата -->
     <a href="index.html" class="back-button">← Back to Dashboard</a>
 
     <header>
@@ -185,7 +176,7 @@
     </header>
 
     <main class="grid-container">
-        <!-- 14 карточек -->
+        <!-- 14 карточек разделов -->
         <a href="topic1.html" class="card" title="Topic 1"><img src="pic-top1.png" alt="Topic 1"></a>
         <a href="topic2.html" class="card" title="Topic 2"><img src="pic-top2.png" alt="Topic 2"></a>
         <a href="topic3.html" class="card" title="Topic 3"><img src="pic-top3.png" alt="Topic 3"></a>
