@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Income Inequality Sandbox | AlmaU</title>
+    <title>Lorenz Curve & Gini Index Simulator | AlmaU</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,27 +25,34 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Винтажные радио-слайдеры с цветными рисками */
+        /* Темные карточки Neon Grey для левой колонки */
+        .neon-grey-card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);
+        }
+
+        /* Винтажные радио-слайдеры */
         input[type=range].retro-slider {
             -webkit-appearance: none;
             width: 100%;
-            height: 10px;
-            border-radius: 5px;
-            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            background: #334155;
             outline: none;
-            border: 1px solid #cbd5e1;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+            border: 1px solid #475569;
         }
 
         input[type=range].retro-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 18px;
-            height: 26px;
+            width: 16px;
+            height: 24px;
             border-radius: 4px;
             background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
             border: 1px solid #64748b;
             cursor: pointer;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4);
             transition: transform 0.1s ease;
         }
 
@@ -53,17 +60,18 @@
             transform: scale(1.1);
         }
 
+        /* Цветные риски */
         input[type=range].slider-q1::-webkit-slider-thumb {
-            background: linear-gradient(90deg, #e2e8f0 40%, #ef4444 41%, #ef4444 59%, #e2e8f0 60%);
+            background: linear-gradient(90deg, #e2e8f0 38%, #ef4444 39%, #ef4444 61%, #e2e8f0 62%);
         }
         input[type=range].slider-q2::-webkit-slider-thumb {
-            background: linear-gradient(90deg, #e2e8f0 40%, #f97316 41%, #f97316 59%, #e2e8f0 60%);
+            background: linear-gradient(90deg, #e2e8f0 38%, #f97316 39%, #f97316 61%, #e2e8f0 62%);
         }
         input[type=range].slider-q3::-webkit-slider-thumb {
-            background: linear-gradient(90deg, #e2e8f0 40%, #eab308 41%, #eab308 59%, #e2e8f0 60%);
+            background: linear-gradient(90deg, #e2e8f0 38%, #eab308 39%, #eab308 61%, #e2e8f0 62%);
         }
         input[type=range].slider-q4::-webkit-slider-thumb {
-            background: linear-gradient(90deg, #e2e8f0 40%, #10b981 41%, #10b981 59%, #e2e8f0 60%);
+            background: linear-gradient(90deg, #e2e8f0 38%, #10b981 39%, #10b981 61%, #e2e8f0 62%);
         }
 
         /* Контейнер графика */
@@ -73,13 +81,29 @@
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .canvas-container {
             position: relative;
             width: 100%;
-            max-width: 580px;
+            max-width: 620px;
             margin: 0 auto;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            background-color: #10b981;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #064e3b;
         }
     </style>
 </head>
@@ -88,21 +112,24 @@
     <!-- Header Section -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 lg:px-8 py-3.5">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-[#004B87] flex items-center justify-center font-extrabold text-white text-base shadow-sm">
-                    📊
+            <div class="flex items-center gap-3.5">
+                <!-- Логотип AlmaU вместо смайлика -->
+                <div class="w-10 h-10 rounded-xl bg-[#004B87] p-1.5 flex items-center justify-center shadow-md border border-slate-200">
+                    <img src="almau.jpg" alt="AlmaU Logo" class="w-full h-full object-contain rounded-lg">
                 </div>
                 <div>
-                    <h1 class="text-base md:text-lg font-extrabold text-slate-900 tracking-tight" id="hdr-title">
-                        Global Income Inequality Sandbox
+                    <!-- Заголовок крупными буквами -->
+                    <h1 class="text-base md:text-xl font-black text-slate-900 tracking-tight" id="hdr-title">
+                        Lorenz Curve & Gini Index Simulator
                     </h1>
+                    <!-- Подзаголовок Global Income Sandbox -->
                     <p class="text-xs text-slate-500 font-medium" id="hdr-subtitle">
-                        Симулятор кривой Лоренца и индекса Джини • Almaty Management University
+                        Global Income Inequality Sandbox • Almaty Management University
                     </p>
                 </div>
             </div>
 
-            <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-200 transition-all flex items-center gap-1.5">
+            <button onclick="toggleLanguage()" class="px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-200 transition-all flex items-center gap-1.5">
                 🌐 <span id="lang-btn-text">EN</span>
             </button>
         </div>
@@ -128,129 +155,138 @@
         </div>
 
         <!-- Двухколоночный макет -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
-            <!-- ЛЕВАЯ КОЛОНКА: Слайдеры + Пояснения -->
-            <div class="lg:col-span-5 space-y-6">
+            <!-- ЛЕВАЯ КОЛОНКА: Слайдеры + Пояснения в стиле Neon Grey -->
+            <div class="lg:col-span-4 space-y-5 flex flex-col justify-between">
                 
-                <!-- Винтажные Слайдеры -->
-                <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm space-y-4">
-                    <div class="border-b border-slate-100 pb-2">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800" id="sliders-title">
+                <!-- Винтажные Слайдеры (Neon Grey) -->
+                <div class="neon-grey-card rounded-xl p-4 md:p-5 space-y-4">
+                    <div class="border-b border-slate-800 pb-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-sky-400" id="sliders-title">
                             🎛️ Настройка квинтилей
                         </h3>
-                        <p class="text-[11px] text-slate-500 font-medium mt-0.5" id="sliders-subtitle">
-                            Накопительные доли доходов населения (от Q1 до Q4)
+                        <p class="text-[11px] text-slate-400 font-medium mt-0.5" id="sliders-subtitle">
+                            Накопительные доли доходов населения (Q1 – Q4)
                         </p>
                     </div>
 
-                    <div class="space-y-3.5">
+                    <div class="space-y-3">
                         <!-- Q1 -->
-                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+                        <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-slate-700 flex items-center gap-1.5" id="lbl-q1">
+                                <span class="font-bold text-slate-300 flex items-center gap-1.5" id="lbl-q1">
                                     <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span> Q1 (Бедные 20%)
                                 </span>
-                                <span id="q1-val" class="font-black text-red-600 font-mono-num text-xs">9.0%</span>
+                                <span id="q1-val" class="font-black text-red-400 font-mono-num text-xs">9.0%</span>
                             </div>
                             <input type="range" id="q1-range" min="1" max="20" step="0.1" value="9.0" oninput="updateCalculations()" class="retro-slider slider-q1">
                         </div>
 
                         <!-- Q2 -->
-                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+                        <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-slate-700 flex items-center gap-1.5" id="lbl-q2">
+                                <span class="font-bold text-slate-300 flex items-center gap-1.5" id="lbl-q2">
                                     <span class="w-2.5 h-2.5 rounded-full bg-orange-500 inline-block"></span> Q2 (До 40%)
                                 </span>
-                                <span id="q2-val" class="font-black text-orange-600 font-mono-num text-xs">16.5%</span>
+                                <span id="q2-val" class="font-black text-orange-400 font-mono-num text-xs">16.5%</span>
                             </div>
                             <input type="range" id="q2-range" min="5" max="40" step="0.1" value="16.5" oninput="updateCalculations()" class="retro-slider slider-q2">
                         </div>
 
                         <!-- Q3 -->
-                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+                        <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-slate-700 flex items-center gap-1.5" id="lbl-q3">
+                                <span class="font-bold text-slate-300 flex items-center gap-1.5" id="lbl-q3">
                                     <span class="w-2.5 h-2.5 rounded-full bg-yellow-500 inline-block"></span> Q3 (До 60%)
                                 </span>
-                                <span id="q3-val" class="font-black text-yellow-600 font-mono-num text-xs">22.5%</span>
+                                <span id="q3-val" class="font-black text-yellow-400 font-mono-num text-xs">22.5%</span>
                             </div>
                             <input type="range" id="q3-range" min="10" max="60" step="0.1" value="22.5" oninput="updateCalculations()" class="retro-slider slider-q3">
                         </div>
 
                         <!-- Q4 -->
-                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+                        <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-slate-700 flex items-center gap-1.5" id="lbl-q4">
+                                <span class="font-bold text-slate-300 flex items-center gap-1.5" id="lbl-q4">
                                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> Q4 (До 80%)
                                 </span>
-                                <span id="q4-val" class="font-black text-emerald-600 font-mono-num text-xs">31.5%</span>
+                                <span id="q4-val" class="font-black text-emerald-400 font-mono-num text-xs">31.5%</span>
                             </div>
                             <input type="range" id="q4-range" min="20" max="80" step="0.1" value="31.5" oninput="updateCalculations()" class="retro-slider slider-q4">
                         </div>
                     </div>
 
                     <!-- Площади -->
-                    <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-600 font-medium space-y-1">
+                    <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400 font-medium space-y-1">
                         <div class="flex justify-between">
-                            <span id="lbl-auc">Площадь под кривой (AUC):</span>
-                            <span id="auc-val" class="font-bold text-slate-900 font-mono-num">0.375</span>
+                            <span id="lbl-auc">Площадь под кривой (AUC / B):</span>
+                            <span id="auc-val" class="font-bold text-emerald-400 font-mono-num">0.375</span>
                         </div>
                         <div class="flex justify-between">
                             <span id="lbl-equality-gap">Площадь неравенства (A):</span>
-                            <span id="gap-val" class="font-bold text-red-600 font-mono-num">0.125</span>
+                            <span id="gap-val" class="font-bold text-rose-400 font-mono-num">0.125</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Пояснения -->
-                <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-2" id="info-header">
+                <!-- Пояснения (Neon Grey) -->
+                <div class="neon-grey-card rounded-xl p-4 md:p-5 space-y-3">
+                    <h4 class="text-xs font-bold text-sky-400 uppercase tracking-wider border-b border-slate-800 pb-2" id="info-header">
                         💡 Методология и Инсайты
                     </h4>
 
-                    <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
-                        <div class="bg-blue-50/50 p-2.5 rounded-lg border border-blue-100">
-                            <strong class="text-blue-900 block mb-0.5" id="info-p1-title">1. Интегрирование трапециями:</strong>
-                            <span id="info-p1-text">Индекс Джини вычисляется как отношение площади между линией равенства и кривой Лоренца к площади треугольника (0.5).</span>
+                    <div class="space-y-2.5 text-xs text-slate-300 leading-relaxed">
+                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
+                            <strong class="text-sky-300 block mb-0.5" id="info-p1-title">1. Интегрирование трапециями:</strong>
+                            <span id="info-p1-text">Индекс Джини равен отношению площади неравенства A к сумме площадей (A + B = 0.5).</span>
                         </div>
 
-                        <div class="bg-amber-50/50 p-2.5 rounded-lg border border-amber-100">
-                            <strong class="text-amber-900 block mb-0.5" id="info-p2-title">2. Перераспределение:</strong>
+                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
+                            <strong class="text-amber-300 block mb-0.5" id="info-p2-title">2. Перераспределение:</strong>
                             <span id="info-p2-text">Прогрессивные налоги и трансферты сдвигают кривую Лоренца влево, снижая коэффициент Джини.</span>
                         </div>
 
-                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-                            <strong class="text-slate-800 block mb-0.5" id="info-p3-title">3. Аналитический подход:</strong>
-                            <span id="info-p3-text">Официальные агрегированные индексы могут сглаживать реальный разрыв в доходах.</span>
+                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
+                            <strong class="text-emerald-300 block mb-0.5" id="info-p3-title">3. Зеленая зона (AUC / B):</strong>
+                            <span id="info-p3-text">Включите тумблер на графике, чтобы визуализировать площадь доходов под кривой Лоренца.</span>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- ПРАВАЯ КОЛОНКА: График (Точная копия Observable) -->
-            <div class="lg:col-span-7">
-                <div class="chart-box space-y-4">
+            <!-- ПРАВАЯ КОЛОНКА: Вытянутый График -->
+            <div class="lg:col-span-8 flex flex-col">
+                <div class="chart-box">
                     
-                    <!-- Шапка графика и Бейдж Джини -->
-                    <div class="flex flex-wrap justify-between items-center gap-3">
+                    <!-- Шапка графика, Тумблер и Бейдж Джини -->
+                    <div class="flex flex-wrap justify-between items-center gap-3 border-b border-slate-100 pb-3">
                         <div class="text-sm font-bold text-slate-900" id="lbl-status-header">
                             Analysis Status: Matches Kazakhstan 🇰🇿
                         </div>
 
-                        <!-- Бейдж Observable HQ -->
-                        <div class="flex items-center bg-[#004B87] text-white rounded-md overflow-hidden border-r-4 border-[#E4002B]">
-                            <span class="text-[10px] uppercase font-black tracking-widest px-3 py-1.5 opacity-90" id="lbl-gini-badge">GINI INDEX:</span>
-                            <span id="gini-score" class="text-2xl font-black font-mono-num bg-[#003360] px-3.5 py-1 text-white">
-                                0.250
-                            </span>
+                        <div class="flex items-center gap-4">
+                            <!-- Тумблер зеленой зоны AUC -->
+                            <label class="flex items-center cursor-pointer gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+                                <span class="text-xs font-bold text-slate-700" id="lbl-toggle-auc">Зона AUC (B):</span>
+                                <input type="checkbox" id="toggle-auc" onchange="updateCalculations()" class="sr-only peer">
+                                <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 relative"></div>
+                            </label>
+
+                            <!-- Бейдж Observable HQ -->
+                            <div class="flex items-center bg-[#004B87] text-white rounded-md overflow-hidden border-r-4 border-[#E4002B] shadow-sm">
+                                <span class="text-[10px] uppercase font-black tracking-widest px-3 py-1.5 opacity-90" id="lbl-gini-badge">GINI INDEX:</span>
+                                <span id="gini-score" class="text-2xl font-black font-mono-num bg-[#003360] px-3.5 py-1 text-white">
+                                    0.250
+                                </span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Холст для рисования графика -->
-                    <div class="canvas-container">
-                        <canvas id="lorenzCanvas" width="550" height="550" class="w-full h-auto block"></canvas>
+                    <!-- Холст для рисования графика (Вытянут по высоте) -->
+                    <div class="canvas-container py-2">
+                        <canvas id="lorenzCanvas" width="600" height="600" class="w-full h-auto block"></canvas>
                     </div>
 
                 </div>
@@ -298,53 +334,55 @@
 
         const dict = {
             RU: {
-                hdrTitle: "Global Income Inequality Sandbox",
-                hdrSubtitle: "Симулятор кривой Лоренца и индекса Джини • Almaty Management University",
+                hdrTitle: "Lorenz Curve & Gini Index Simulator",
+                hdrSubtitle: "Global Income Inequality Sandbox • Almaty Management University",
                 lblPreset: "Выберите страну (24 Экономики):",
                 matchStatus: "Анализ совпадения:",
                 analysisMatch: "Analysis Status: Matches",
                 lblGiniBadge: "GINI INDEX:",
+                lblToggleAuc: "Зона AUC (B):",
                 slidersTitle: "🎛️ Настройка квинтилей",
-                slidersSubtitle: "Накопительные доли доходов населения (от Q1 до Q4)",
+                slidersSubtitle: "Накопительные доли доходов населения (Q1 – Q4)",
                 lblQ1: "Q1 (Бедные 20%)",
                 lblQ2: "Q2 (До 40%)",
                 lblQ3: "Q3 (До 60%)",
                 lblQ4: "Q4 (До 80%)",
-                lblAuc: "Площадь под кривой (AUC):",
+                lblAuc: "Площадь под кривой (AUC / B):",
                 lblEqualityGap: "Площадь неравенства (A):",
                 infoHeader: "💡 Методология и Инсайты",
                 infoP1Title: "1. Интегрирование трапециями:",
-                infoP1Text: "Индекс Джини вычисляется как отношение площади между линией равенства и кривой Лоренца к площади треугольника (0.5).",
+                infoP1Text: "Индекс Джини равен отношению площади неравенства A к сумме площадей (A + B = 0.5).",
                 infoP2Title: "2. Перераспределение:",
                 infoP2Text: "Прогрессивные налоги и трансферты сдвигают кривую Лоренца влево, снижая коэффициент Джини.",
-                infoP3Title: "3. Аналитический подход:",
-                infoP3Text: "Официальные агрегированные индексы могут сглаживать реальный разрыв в доходах.",
+                infoP3Title: "3. Зеленая зона (AUC / B):",
+                infoP3Text: "Включите тумблер на графике, чтобы визуализировать площадь доходов под кривой Лоренца.",
                 xAxisLabel: "Population Share (Cumulative) →",
                 yAxisLabel: "↑ National Income Share (Cumulative)",
                 customProfile: "Custom Profile"
             },
             EN: {
-                hdrTitle: "Global Income Inequality Sandbox",
-                hdrSubtitle: "Lorenz Curve & Gini Index Simulator • Almaty Management University",
+                hdrTitle: "Lorenz Curve & Gini Index Simulator",
+                hdrSubtitle: "Global Income Inequality Sandbox • Almaty Management University",
                 lblPreset: "Select Country (24 Economies):",
                 matchStatus: "Match Status:",
                 analysisMatch: "Analysis Status: Matches",
                 lblGiniBadge: "GINI INDEX:",
+                lblToggleAuc: "AUC Area (B):",
                 slidersTitle: "🎛️ Quintile Controls",
                 slidersSubtitle: "Cumulative Population Income Shares (Q1 to Q4)",
                 lblQ1: "Q1 (Bottom 20%)",
                 lblQ2: "Q2 (Cumulative 40%)",
                 lblQ3: "Q3 (Cumulative 60%)",
                 lblQ4: "Q4 (Cumulative 80%)",
-                lblAuc: "Area Under Curve (AUC):",
+                lblAuc: "Area Under Curve (AUC / B):",
                 lblEqualityGap: "Inequality Area (A):",
                 infoHeader: "💡 Methodology & Insights",
                 infoP1Title: "1. Trapezoidal Integration:",
-                infoP1Text: "The Gini Index is computed as the ratio between the equality line and the Lorenz curve over total area (0.5).",
+                infoP1Text: "Gini Index equals ratio of Inequality Area A over total triangle area (A + B = 0.5).",
                 infoP2Title: "2. Redistribution:",
                 infoP2Text: "Progressive taxes and welfare transfers shift the Lorenz curve leftward, reducing inequality.",
-                infoP3Title: "3. Empirical Critical View:",
-                infoP3Text: "Official indicators may smooth out real wealth disparities. Quintile analysis reveals hidden gaps.",
+                infoP3Title: "3. Green Zone (AUC / B):",
+                infoP3Text: "Toggle the switch on top of the chart to visualize the cumulative income area under the Lorenz curve.",
                 xAxisLabel: "Population Share (Cumulative) →",
                 yAxisLabel: "↑ National Income Share (Cumulative)",
                 customProfile: "Custom Profile"
@@ -370,9 +408,9 @@
         }
 
         /* -------------------------------------------------------------
-           Canvas Rendering Engine (Отрисовка в точности как в Observable)
+           Canvas Rendering Engine (Поддержка двойной подсвечиваемой зоны)
         ------------------------------------------------------------- */
-        function drawExactObservableChart(points) {
+        function drawExactObservableChart(points, showAucGreen) {
             const canvas = document.getElementById('lorenzCanvas');
             const ctx = canvas.getContext('2d');
             const w = canvas.width;
@@ -384,7 +422,7 @@
 
             ctx.clearRect(0, 0, w, h);
 
-            // 1. Отрисовка фоновой сетки (Grid)
+            // 1. Отрисовка сетки
             ctx.strokeStyle = "#e2e8f0";
             ctx.lineWidth = 1;
             ctx.fillStyle = "#64748b";
@@ -396,14 +434,12 @@
                 const x = padding.left + (i / 10) * graphWidth;
                 const y = padding.top + (1 - i / 10) * graphHeight;
 
-                // Вертикальные линии и метки X
                 ctx.beginPath();
                 ctx.moveTo(x, padding.top);
                 ctx.lineTo(x, padding.top + graphHeight);
                 ctx.stroke();
                 ctx.fillText(val, x, padding.top + graphHeight + 18);
 
-                // Горизонтальные линии и метки Y
                 ctx.beginPath();
                 ctx.moveTo(padding.left, y);
                 ctx.lineTo(padding.left + graphWidth, y);
@@ -414,26 +450,37 @@
                 ctx.textAlign = "center";
             }
 
-            // Координаты точек на холсте Canvas
             const canvasPoints = points.map(pt => ({
                 x: padding.left + pt.x * graphWidth,
                 y: padding.top + (1 - pt.y) * graphHeight
             }));
 
-            // 2. ОБЛАСТЬ НЕРАВЕНСТВА (Розовая заливка строго МЕЖДУ серым пунктиром и красной кривой)
-            ctx.beginPath();
-            ctx.moveTo(canvasPoints[0].x, canvasPoints[0].y); // (0,0)
-            ctx.lineTo(canvasPoints[5].x, canvasPoints[5].y); // (1,1) по прямой линия равенства
+            // 2. ЗОНА B (Светло-зеленая область AUC под кривой Лоренца)
+            if (showAucGreen) {
+                ctx.beginPath();
+                ctx.moveTo(canvasPoints[0].x, canvasPoints[0].y); // (0,0)
+                for (let i = 1; i < canvasPoints.length; i++) {
+                    ctx.lineTo(canvasPoints[i].x, canvasPoints[i].y);
+                }
+                ctx.lineTo(canvasPoints[5].x, padding.top + graphHeight); // (1,0)
+                ctx.lineTo(canvasPoints[0].x, padding.top + graphHeight); // (0,0)
+                ctx.closePath();
+                ctx.fillStyle = "rgba(16, 185, 129, 0.20)"; // Прозрачный зеленый
+                ctx.fill();
+            }
 
-            // Идем обратно по кривой Лоренца
+            // 3. ЗОНА A (Розовая заливка площади неравенства)
+            ctx.beginPath();
+            ctx.moveTo(canvasPoints[0].x, canvasPoints[0].y);
+            ctx.lineTo(canvasPoints[5].x, canvasPoints[5].y);
             for (let i = 4; i >= 0; i--) {
                 ctx.lineTo(canvasPoints[i].x, canvasPoints[i].y);
             }
             ctx.closePath();
-            ctx.fillStyle = "rgba(228, 0, 43, 0.12)"; // Фирменный прозрачно-розовый цвет
+            ctx.fillStyle = "rgba(228, 0, 43, 0.12)";
             ctx.fill();
 
-            // 3. Линия Абсолютного Равенства (Серый пунктир)
+            // 4. Серый пунктир линии равенства
             ctx.beginPath();
             ctx.setLineDash([6, 6]);
             ctx.strokeStyle = "#94a3b8";
@@ -441,9 +488,9 @@
             ctx.moveTo(canvasPoints[0].x, canvasPoints[0].y);
             ctx.lineTo(canvasPoints[5].x, canvasPoints[5].y);
             ctx.stroke();
-            ctx.setLineDash([]); // Сброс пунктира
+            ctx.setLineDash([]);
 
-            // 4. Красная Кривая Лоренца (Толстая линия Observable)
+            // 5. Красная Кривая Лоренца
             ctx.beginPath();
             ctx.strokeStyle = "#E4002B";
             ctx.lineWidth = 4;
@@ -453,7 +500,7 @@
             }
             ctx.stroke();
 
-            // 5. Синие Узловые Точки
+            // 6. Синие Узловые Точки
             canvasPoints.forEach(pt => {
                 ctx.beginPath();
                 ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
@@ -464,16 +511,14 @@
                 ctx.stroke();
             });
 
-            // 6. Названия осей
+            // 7. Названия осей
             const lang = dict[currentLang];
             ctx.fillStyle = "#334155";
             ctx.font = "600 11px Inter, sans-serif";
 
-            // Ось X (Справа внизу)
             ctx.textAlign = "right";
             ctx.fillText(lang.xAxisLabel, padding.left + graphWidth, padding.top + graphHeight + 38);
 
-            // Ось Y (Слева вверху)
             ctx.textAlign = "left";
             ctx.fillText(lang.yAxisLabel, padding.left - 30, padding.top - 15);
         }
@@ -534,8 +579,8 @@
             document.getElementById('country-match-tag').innerText = matchName;
             document.getElementById('lbl-status-header').innerText = `${lang.analysisMatch} ${matchName}`;
 
-            // Вызов отрисовщика Canvas
-            drawExactObservableChart(points);
+            const showAucGreen = document.getElementById('toggle-auc').checked;
+            drawExactObservableChart(points, showAucGreen);
         }
 
         function toggleLanguage() {
@@ -548,6 +593,7 @@
             document.getElementById('lbl-preset').innerText = l.lblPreset;
             document.getElementById('match-status-box').childNodes[0].nodeValue = l.matchStatus + ' ';
             document.getElementById('lbl-gini-badge').innerText = l.lblGiniBadge;
+            document.getElementById('lbl-toggle-auc').innerText = l.lblToggleAuc;
             document.getElementById('sliders-title').innerText = l.slidersTitle;
             document.getElementById('sliders-subtitle').innerText = l.slidersSubtitle;
             document.getElementById('lbl-q1').childNodes[2].nodeValue = ' ' + l.lblQ1;
