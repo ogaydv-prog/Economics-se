@@ -85,7 +85,7 @@
             padding-bottom: 40px;
         }
 
-        /* Узкие изящные карточки оригинальных пропорций */
+        /* Карточка ровно по ширине картинки без отступов */
         .card {
             display: inline-block;
             text-decoration: none;
@@ -95,19 +95,17 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 165px;  /* Зафиксированная изящная узкая ширина */
-            height: 270px; /* Вертикальный длинный портретный формат */
+            width: 178px;  
+            height: 270px; 
             position: relative;
             flex-shrink: 0;
             cursor: pointer;
         }
 
-        /* Естественная посадка картинки без растягивания */
         .card img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Картинка ложится идеально без искажений */
-            background-color: #ffffff;
+            object-fit: cover; /* Полное прилегание картинки к рамке */
             display: block;
             transition: transform 0.3s ease;
         }
@@ -211,7 +209,7 @@
             line-height: 1.6;
         }
 
-        /* Мобильная адаптивность (Smartphones & Tablets) */
+        /* Мобильная адаптивность */
         @media (max-width: 992px) {
             body {
                 padding: 10px 15px;
