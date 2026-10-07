@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Income Inequality Sandbox | AlmaU</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        .font-mono-num {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Винтажные радио-слайдеры с цветными рисками */
+        input[type=range].retro-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+            border: 1px solid #cbd5e1;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        input[type=range].retro-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 26px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            border: 1px solid #64748b;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8);
+            transition: transform 0.1s ease;
+        }
+
+        input[type=range].retro-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        input[type=range].slider-q1::-webkit-slider-thumb {
+            background: linear-gradient(90deg, #e2e8f0 40%, #ef4444 41%, #ef4444 59%, #e2e8f0 60%);
+        }
+        input[type=range].slider-q2::-webkit-slider-thumb {
+            background: linear-gradient(90deg, #e2e8f0 40%, #f97316 41%, #f97316 59%, #e2e8f0 60%);
+        }
+        input[type=range].slider-q3::-webkit-slider-thumb {
+            background: linear-gradient(90deg, #e2e8f0 40%, #eab308 41%, #eab308 59%, #e2e8f0 60%);
+        }
+        input[type=range].slider-q4::-webkit-slider-thumb {
+            background: linear-gradient(90deg, #e2e8f0 40%, #10b981 41%, #10b981 59%, #e2e8f0 60%);
+        }
+
+        /* Контейнер графика */
+        .chart-box {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            max-width: 580px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 lg:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-[#004B87] flex items-center justify-center font-extrabold text-white text-base shadow-sm">
+                    📊
+                </div>
+                <div>
+                    <h1 class="text-base md:text-lg font-extrabold text-slate-900 tracking-tight" id="hdr-title">
+                        Global Income Inequality Sandbox
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium" id="hdr-subtitle">
+                        Симулятор кривой Лоренца и индекса Джини • Almaty Management University
+                    </p>
+                </div>
+            </div>
+
+            <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-200 transition-all flex items-center gap-1.5">
+                🌐 <span id="lang-btn-text">EN</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-6 flex-1 space-y-6">
+
+        <!-- Селектор стран -->
+        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3 w-full md:w-auto">
+                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider whitespace-nowrap" id="lbl-preset">
+                    Выберите страну (24 Экономики):
+                </label>
+                <select id="country-select" onchange="loadCountryPreset(this.value)" class="w-full sm:w-72 bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-blue-600 transition-colors">
+                    <!-- Заполняется JS -->
+                </select>
+            </div>
+
+            <div class="text-xs text-slate-600 font-semibold bg-slate-100 px-3 py-2 rounded-lg border border-slate-200" id="match-status-box">
+                Анализ совпадения: <span id="country-match-tag" class="text-blue-900 font-extrabold">Kazakhstan 🇰🇿</span>
+            </div>
+        </div>
+
+        <!-- Двухколоночный макет -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- ЛЕВАЯ КОЛОНКА: Слайдеры + Пояснения -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Винтажные Слайдеры -->
+                <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800" id="sliders-title">
+                            🎛️ Настройка квинтилей
+                        </h3>
+                        <p class="text-[11px] text-slate-500 font-medium mt-0.5" id="sliders-subtitle">
+                            Накопительные доли доходов населения (от Q1 до Q4)
+                        </p>
+                    </div>
+
+                    <div class="space-y-3.5">
+                        <!-- Q1 -->
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-slate-700 flex items-center gap-1.5" id="lbl-q1">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span> Q1 (Бедные 20%)
+                                </span>
+                                <span id="q1-val" class="font-black text-red-600 font-mono-num text-xs">9.0%</span>
+                            </div>
+                            <input type="range" id="q1-range" min="1" max="20" step="0.1" value="9.0" oninput="updateCalculations()" class="retro-slider slider-q1">
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-slate-700 flex items-center gap-1.5" id="lbl-q2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-orange-500 inline-block"></span> Q2 (До 40%)
+                                </span>
+                                <span id="q2-val" class="font-black text-orange-600 font-mono-num text-xs">16.5%</span>
+                            </div>
+                            <input type="range" id="q2-range" min="5" max="40" step="0.1" value="16.5" oninput="updateCalculations()" class="retro-slider slider-q2">
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-slate-700 flex items-center gap-1.5" id="lbl-q3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-500 inline-block"></span> Q3 (До 60%)
+                                </span>
+                                <span id="q3-val" class="font-black text-yellow-600 font-mono-num text-xs">22.5%</span>
+                            </div>
+                            <input type="range" id="q3-range" min="10" max="60" step="0.1" value="22.5" oninput="updateCalculations()" class="retro-slider slider-q3">
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-slate-700 flex items-center gap-1.5" id="lbl-q4">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> Q4 (До 80%)
+                                </span>
+                                <span id="q4-val" class="font-black text-emerald-600 font-mono-num text-xs">31.5%</span>
+                            </div>
+                            <input type="range" id="q4-range" min="20" max="80" step="0.1" value="31.5" oninput="updateCalculations()" class="retro-slider slider-q4">
+                        </div>
+                    </div>
+
+                    <!-- Площади -->
+                    <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-600 font-medium space-y-1">
+                        <div class="flex justify-between">
+                            <span id="lbl-auc">Площадь под кривой (AUC):</span>
+                            <span id="auc-val" class="font-bold text-slate-900 font-mono-num">0.375</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span id="lbl-equality-gap">Площадь неравенства (A):</span>
+                            <span id="gap-val" class="font-bold text-red-600 font-mono-num">0.125</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Пояснения -->
+                <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm space-y-3.5">
+                    <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-2" id="info-header">
+                        💡 Методология и Инсайты
+                    </h4>
+
+                    <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+                        <div class="bg-blue-50/50 p-2.5 rounded-lg border border-blue-100">
+                            <strong class="text-blue-900 block mb-0.5" id="info-p1-title">1. Интегрирование трапециями:</strong>
+                            <span id="info-p1-text">Индекс Джини вычисляется как отношение площади между линией равенства и кривой Лоренца к площади треугольника (0.5).</span>
+                        </div>
+
+                        <div class="bg-amber-50/50 p-2.5 rounded-lg border border-amber-100">
+                            <strong class="text-amber-900 block mb-0.5" id="info-p2-title">2. Перераспределение:</strong>
+                            <span id="info-p2-text">Прогрессивные налоги и трансферты сдвигают кривую Лоренца влево, снижая коэффициент Джини.</span>
+                        </div>
+
+                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                            <strong class="text-slate-800 block mb-0.5" id="info-p3-title">3. Аналитический подход:</strong>
+                            <span id="info-p3-text">Официальные агрегированные индексы могут сглаживать реальный разрыв в доходах.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ПРАВАЯ КОЛОНКА: График (Точная копия Observable) -->
+            <div class="lg:col-span-7">
+                <div class="chart-box space-y-4">
+                    
+                    <!-- Шапка графика и Бейдж Джини -->
+                    <div class="flex flex-wrap justify-between items-center gap-3">
+                        <div class="text-sm font-bold text-slate-900" id="lbl-status-header">
+                            Analysis Status: Matches Kazakhstan 🇰🇿
+                        </div>
+
+                        <!-- Бейдж Observable HQ -->
+                        <div class="flex items-center bg-[#004B87] text-white rounded-md overflow-hidden border-r-4 border-[#E4002B]">
+                            <span class="text-[10px] uppercase font-black tracking-widest px-3 py-1.5 opacity-90" id="lbl-gini-badge">GINI INDEX:</span>
+                            <span id="gini-score" class="text-2xl font-black font-mono-num bg-[#003360] px-3.5 py-1 text-white">
+                                0.250
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Холст для рисования графика -->
+                    <div class="canvas-container">
+                        <canvas id="lorenzCanvas" width="550" height="550" class="w-full h-auto block"></canvas>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white py-3.5 text-center text-xs text-slate-500 font-medium">
+        Developed for AlmaU 2026 • School of Digital Technologies & Economics
+    </footer>
+
+    <!-- Logic Engine -->
+    <script>
+        const globalInequalityDatabase = [
+            { country: "South Africa 🇿🇦", q1: 2.5,  q2: 7.0,  q3: 13.0, q4: 22.5, q5: 100 },
+            { country: "Brazil 🇧🇷",       q1: 3.0,  q2: 8.5,  q3: 15.0, q4: 24.5, q5: 100 },
+            { country: "Colombia 🇨🇴",     q1: 3.2,  q2: 8.8,  q3: 15.2, q4: 24.8, q5: 100 },
+            { country: "Chile 🇨🇱",        q1: 4.0,  q2: 9.5,  q3: 15.8, q4: 25.2, q5: 100 },
+            { country: "Mexico 🇲🇽",       q1: 4.5,  q2: 10.2, q3: 16.5, q4: 25.8, q5: 100 },
+            { country: "United States 🇺🇸", q1: 5.0,  q2: 11.2, q3: 17.5, q4: 26.5, q5: 100 },
+            { country: "China 🇨🇳",        q1: 5.2,  q2: 11.5, q3: 17.8, q4: 26.8, q5: 100 },
+            { country: "Philippines 🇵🇭",  q1: 5.5,  q2: 12.0, q3: 18.2, q4: 27.2, q5: 100 },
+            { country: "India 🇮🇳",        q1: 6.0,  q2: 12.8, q3: 19.0, q4: 28.0, q5: 100 },
+            { country: "Egypt 🇪🇬",        q1: 6.8,  q2: 13.5, q3: 19.8, q4: 28.8, q5: 100 },
+            { country: "United Kingdom 🇬🇧",q1: 7.2,  q2: 14.2, q3: 20.5, q4: 29.5, q5: 100 },
+            { country: "Israel 🇮🇱",       q1: 7.0,  q2: 14.0, q3: 20.3, q4: 29.3, q5: 100 },
+            { country: "Japan 🇯🇵",        q1: 7.5,  q2: 14.8, q3: 21.0, q4: 30.0, q5: 100 },
+            { country: "New Zealand 🇳🇿",  q1: 7.6,  q2: 15.0, q3: 21.2, q4: 30.2, q5: 100 },
+            { country: "Australia 🇦🇺",    q1: 7.8,  q2: 15.2, q3: 21.5, q4: 30.5, q5: 100 },
+            { country: "South Korea 🇰🇷",   q1: 8.0,  q2: 15.5, q3: 21.8, q4: 30.8, q5: 100 },
+            { country: "Italy 🇮🇹",        q1: 7.4,  q2: 14.6, q3: 20.9, q4: 29.9, q5: 100 },
+            { country: "Greece 🇬🇷",       q1: 7.5,  q2: 14.7, q3: 21.0, q4: 30.0, q5: 100 },
+            { country: "Kazakhstan 🇰🇿",    q1: 9.0,  q2: 16.5, q3: 22.5, q4: 31.5, q5: 100 },
+            { country: "Luxembourg 🇱🇺",    q1: 9.2,  q2: 16.8, q3: 22.8, q4: 31.8, q5: 100 },
+            { country: "Sweden 🇸🇪",       q1: 9.5,  q2: 17.2, q3: 23.2, q4: 32.2, q5: 100 },
+            { country: "Norway 🇳🇴",       q1: 9.8,  q2: 17.5, q3: 23.5, q4: 32.5, q5: 100 },
+            { country: "Iceland 🇮🇸",       q1: 10.2, q2: 18.0, q3: 24.0, q4: 33.0, q5: 100 },
+            { country: "Slovenia 🇸🇮",     q1: 10.5, q2: 18.3, q3: 24.3, q4: 33.3, q5: 100 }
+        ];
+
+        let currentLang = 'RU';
+
+        const dict = {
+            RU: {
+                hdrTitle: "Global Income Inequality Sandbox",
+                hdrSubtitle: "Симулятор кривой Лоренца и индекса Джини • Almaty Management University",
+                lblPreset: "Выберите страну (24 Экономики):",
+                matchStatus: "Анализ совпадения:",
+                analysisMatch: "Analysis Status: Matches",
+                lblGiniBadge: "GINI INDEX:",
+                slidersTitle: "🎛️ Настройка квинтилей",
+                slidersSubtitle: "Накопительные доли доходов населения (от Q1 до Q4)",
+                lblQ1: "Q1 (Бедные 20%)",
+                lblQ2: "Q2 (До 40%)",
+                lblQ3: "Q3 (До 60%)",
+                lblQ4: "Q4 (До 80%)",
+                lblAuc: "Площадь под кривой (AUC):",
+                lblEqualityGap: "Площадь неравенства (A):",
+                infoHeader: "💡 Методология и Инсайты",
+                infoP1Title: "1. Интегрирование трапециями:",
+                infoP1Text: "Индекс Джини вычисляется как отношение площади между линией равенства и кривой Лоренца к площади треугольника (0.5).",
+                infoP2Title: "2. Перераспределение:",
+                infoP2Text: "Прогрессивные налоги и трансферты сдвигают кривую Лоренца влево, снижая коэффициент Джини.",
+                infoP3Title: "3. Аналитический подход:",
+                infoP3Text: "Официальные агрегированные индексы могут сглаживать реальный разрыв в доходах.",
+                xAxisLabel: "Population Share (Cumulative) →",
+                yAxisLabel: "↑ National Income Share (Cumulative)",
+                customProfile: "Custom Profile"
+            },
+            EN: {
+                hdrTitle: "Global Income Inequality Sandbox",
+                hdrSubtitle: "Lorenz Curve & Gini Index Simulator • Almaty Management University",
+                lblPreset: "Select Country (24 Economies):",
+                matchStatus: "Match Status:",
+                analysisMatch: "Analysis Status: Matches",
+                lblGiniBadge: "GINI INDEX:",
+                slidersTitle: "🎛️ Quintile Controls",
+                slidersSubtitle: "Cumulative Population Income Shares (Q1 to Q4)",
+                lblQ1: "Q1 (Bottom 20%)",
+                lblQ2: "Q2 (Cumulative 40%)",
+                lblQ3: "Q3 (Cumulative 60%)",
+                lblQ4: "Q4 (Cumulative 80%)",
+                lblAuc: "Area Under Curve (AUC):",
+                lblEqualityGap: "Inequality Area (A):",
+                infoHeader: "💡 Methodology & Insights",
+                infoP1Title: "1. Trapezoidal Integration:",
+                infoP1Text: "The Gini Index is computed as the ratio between the equality line and the Lorenz curve over total area (0.5).",
+                infoP2Title: "2. Redistribution:",
+                infoP2Text: "Progressive taxes and welfare transfers shift the Lorenz curve leftward, reducing inequality.",
+                infoP3Title: "3. Empirical Critical View:",
+                infoP3Text: "Official indicators may smooth out real wealth disparities. Quintile analysis reveals hidden gaps.",
+                xAxisLabel: "Population Share (Cumulative) →",
+                yAxisLabel: "↑ National Income Share (Cumulative)",
+                customProfile: "Custom Profile"
+            }
+        };
+
+        const selectElem = document.getElementById('country-select');
+        globalInequalityDatabase.forEach((item, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.innerText = item.country;
+            if(item.country.includes("Kazakhstan")) opt.selected = true;
+            selectElem.appendChild(opt);
+        });
+
+        function loadCountryPreset(index) {
+            const country = globalInequalityDatabase[index];
+            document.getElementById('q1-range').value = country.q1;
+            document.getElementById('q2-range').value = country.q2;
+            document.getElementById('q3-range').value = country.q3;
+            document.getElementById('q4-range').value = country.q4;
+            updateCalculations();
+        }
+
+        /* -------------------------------------------------------------
+           Canvas Rendering Engine (Отрисовка в точности как в Observable)
+        ------------------------------------------------------------- */
+        function drawExactObservableChart(points) {
+            const canvas = document.getElementById('lorenzCanvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            const padding = { top: 40, right: 30, bottom: 50, left: 50 };
+            const graphWidth = w - padding.left - padding.right;
+            const graphHeight = h - padding.top - padding.bottom;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. Отрисовка фоновой сетки (Grid)
+            ctx.strokeStyle = "#e2e8f0";
+            ctx.lineWidth = 1;
+            ctx.fillStyle = "#64748b";
+            ctx.font = "11px Inter, sans-serif";
+            ctx.textAlign = "center";
+
+            for (let i = 0; i <= 10; i++) {
+                const val = (i / 10).toFixed(1);
+                const x = padding.left + (i / 10) * graphWidth;
+                const y = padding.top + (1 - i / 10) * graphHeight;
+
+                // Вертикальные линии и метки X
+                ctx.beginPath();
+                ctx.moveTo(x, padding.top);
+                ctx.lineTo(x, padding.top + graphHeight);
+                ctx.stroke();
+                ctx.fillText(val, x, padding.top + graphHeight + 18);
+
+                // Горизонтальные линии и метки Y
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(padding.left + graphWidth, y);
+                ctx.stroke();
+
+                ctx.textAlign = "right";
+                ctx.fillText(val, padding.left - 8, y + 4);
+                ctx.textAlign = "center";
+            }
+
+            // Координаты точек на холсте Canvas
+            const canvasPoints = points.map(pt => ({
+                x: padding.left + pt.x * graphWidth,
+                y: padding.top + (1 - pt.y) * graphHeight
+            }));
+
+            // 2. ОБЛАСТЬ НЕРАВЕНСТВА (Розовая заливка строго МЕЖДУ серым пунктиром и красной кривой)
+            ctx.beginPath();
+            ctx.moveTo(canvasPoints[0].x, canvasPoints[0].y); // (0,0)
+            ctx.lineTo(canvasPoints[5].x, canvasPoints[5].y); // (1,1) по прямой линия равенства
+
+            // Идем обратно по кривой Лоренца
+            for (let i = 4; i >= 0; i--) {
+                ctx.lineTo(canvasPoints[i].x, canvasPoints[i].y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = "rgba(228, 0, 43, 0.12)"; // Фирменный прозрачно-розовый цвет
+            ctx.fill();
+
+            // 3. Линия Абсолютного Равенства (Серый пунктир)
+            ctx.beginPath();
+            ctx.setLineDash([6, 6]);
+            ctx.strokeStyle = "#94a3b8";
+            ctx.lineWidth = 2;
+            ctx.moveTo(canvasPoints[0].x, canvasPoints[0].y);
+            ctx.lineTo(canvasPoints[5].x, canvasPoints[5].y);
+            ctx.stroke();
+            ctx.setLineDash([]); // Сброс пунктира
+
+            // 4. Красная Кривая Лоренца (Толстая линия Observable)
+            ctx.beginPath();
+            ctx.strokeStyle = "#E4002B";
+            ctx.lineWidth = 4;
+            ctx.moveTo(canvasPoints[0].x, canvasPoints[0].y);
+            for (let i = 1; i < canvasPoints.length; i++) {
+                ctx.lineTo(canvasPoints[i].x, canvasPoints[i].y);
+            }
+            ctx.stroke();
+
+            // 5. Синие Узловые Точки
+            canvasPoints.forEach(pt => {
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = "#004B87";
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "#ffffff";
+                ctx.stroke();
+            });
+
+            // 6. Названия осей
+            const lang = dict[currentLang];
+            ctx.fillStyle = "#334155";
+            ctx.font = "600 11px Inter, sans-serif";
+
+            // Ось X (Справа внизу)
+            ctx.textAlign = "right";
+            ctx.fillText(lang.xAxisLabel, padding.left + graphWidth, padding.top + graphHeight + 38);
+
+            // Ось Y (Слева вверху)
+            ctx.textAlign = "left";
+            ctx.fillText(lang.yAxisLabel, padding.left - 30, padding.top - 15);
+        }
+
+        function updateCalculations() {
+            let q1 = parseFloat(document.getElementById('q1-range').value);
+            let q2 = parseFloat(document.getElementById('q2-range').value);
+            let q3 = parseFloat(document.getElementById('q3-range').value);
+            let q4 = parseFloat(document.getElementById('q4-range').value);
+
+            if (q2 < q1) { q2 = q1; document.getElementById('q2-range').value = q2; }
+            if (q3 < q2) { q3 = q2; document.getElementById('q3-range').value = q3; }
+            if (q4 < q3) { q4 = q3; document.getElementById('q4-range').value = q4; }
+
+            document.getElementById('q1-val').innerText = q1.toFixed(1) + '%';
+            document.getElementById('q2-val').innerText = q2.toFixed(1) + '%';
+            document.getElementById('q3-val').innerText = q3.toFixed(1) + '%';
+            document.getElementById('q4-val').innerText = q4.toFixed(1) + '%';
+
+            const points = [
+                { x: 0.0, y: 0.0 },
+                { x: 0.2, y: q1 / 100 },
+                { x: 0.4, y: q2 / 100 },
+                { x: 0.6, y: q3 / 100 },
+                { x: 0.8, y: q4 / 100 },
+                { x: 1.0, y: 1.0 }
+            ];
+
+            let auc = 0;
+            for (let i = 0; i < points.length - 1; i++) {
+                const width = points[i+1].x - points[i].x;
+                const meanHeight = (points[i+1].y + points[i].y) / 2;
+                auc += width * meanHeight;
+            }
+
+            let gini = 1 - 2 * auc;
+            gini = Math.max(0, Math.min(1, gini));
+            let inequalityArea = 0.5 - auc;
+
+            document.getElementById('gini-score').innerText = gini.toFixed(3);
+            document.getElementById('auc-val').innerText = auc.toFixed(3);
+            document.getElementById('gap-val').innerText = inequalityArea.toFixed(3);
+
+            const lang = dict[currentLang];
+            let minVariance = Infinity;
+            let matchName = lang.customProfile;
+
+            globalInequalityDatabase.forEach(db => {
+                const variance = Math.abs(q1 - db.q1) + Math.abs(q2 - db.q2) + Math.abs(q3 - db.q3) + Math.abs(q4 - db.q4);
+                if (variance < minVariance) {
+                    minVariance = variance;
+                    if (variance <= 3.5) {
+                        matchName = db.country;
+                    }
+                }
+            });
+
+            document.getElementById('country-match-tag').innerText = matchName;
+            document.getElementById('lbl-status-header').innerText = `${lang.analysisMatch} ${matchName}`;
+
+            // Вызов отрисовщика Canvas
+            drawExactObservableChart(points);
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'RU' ? 'EN' : 'RU';
+            document.getElementById('lang-btn-text').innerText = currentLang === 'RU' ? 'EN' : 'RU';
+
+            const l = dict[currentLang];
+            document.getElementById('hdr-title').innerText = l.hdrTitle;
+            document.getElementById('hdr-subtitle').innerText = l.hdrSubtitle;
+            document.getElementById('lbl-preset').innerText = l.lblPreset;
+            document.getElementById('match-status-box').childNodes[0].nodeValue = l.matchStatus + ' ';
+            document.getElementById('lbl-gini-badge').innerText = l.lblGiniBadge;
+            document.getElementById('sliders-title').innerText = l.slidersTitle;
+            document.getElementById('sliders-subtitle').innerText = l.slidersSubtitle;
+            document.getElementById('lbl-q1').childNodes[2].nodeValue = ' ' + l.lblQ1;
+            document.getElementById('lbl-q2').childNodes[2].nodeValue = ' ' + l.lblQ2;
+            document.getElementById('lbl-q3').childNodes[2].nodeValue = ' ' + l.lblQ3;
+            document.getElementById('lbl-q4').childNodes[2].nodeValue = ' ' + l.lblQ4;
+            document.getElementById('lbl-auc').innerText = l.lblAuc;
+            document.getElementById('lbl-equality-gap').innerText = l.lblEqualityGap;
+            document.getElementById('info-header').innerText = l.infoHeader;
+            document.getElementById('info-p1-title').innerText = l.infoP1Title;
+            document.getElementById('info-p1-text').innerText = l.infoP1Text;
+            document.getElementById('info-p2-title').innerText = l.infoP2Title;
+            document.getElementById('info-p2-text').innerText = l.infoP2Text;
+            document.getElementById('info-p3-title').innerText = l.infoP3Title;
+            document.getElementById('info-p3-text').innerText = l.infoP3Text;
+
+            updateCalculations();
+        }
+
+        loadCountryPreset(18);
+    </script>
+</body>
+</html>
