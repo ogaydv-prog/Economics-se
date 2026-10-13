@@ -1,13 +1,10 @@
-/* ==========================================
-   grading_ai_engine.js — Secure AI Audit & Auto-Submit Engine
-   AlmaU SDTE 2026 • Software Engineering (SE)
-   ========================================== */
+/* grading_ai_engine.js — Secure AI Audit & Auto-Submit Engine for PE12092026 */
 
-// URL вашей Google Таблицы (вставите сюда после создания Apps Script)
+// URL Вашей Google Таблицы:
 const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyNhILEnu1_Le-i9AtRD1ZK9BZL3FGPgpXMHc3eJUB2plQGHO2VqkdK-iHPilmKAf9SsA/exec";
 
 // ==========================================
-// 1. АВТОРИЗАЦИЯ ПРЕПОДАВАТЕЛЯ
+// 1. АВТОРИЗАЦИЯ ПРЕПОДАВАТЕЛЯ (БЕЗ ПАРОЛЯ, ПО НАЖАТИЮ)
 // ==========================================
 
 function verifyTeacherKey() {
@@ -78,7 +75,7 @@ function compileFinalToken() {
         }
     }
 
-    // Задача 3.4 (Оптимальный объем Q*) — 10 баллов
+    // Задача 3.4 (Таблица + График + Q*) — 10 баллов
     const t4qInput = document.getElementById('ans-t4-q');
     if (t4qInput && t4qInput.value.trim() !== '') {
         const val4 = parseInt(t4qInput.value);
@@ -92,15 +89,15 @@ function compileFinalToken() {
     const p4_essay = document.getElementById('p4-essay-input') ? document.getElementById('p4-essay-input').value.trim() : "";
     const p4_words = p4_essay ? p4_essay.split(/\s+/).length : 0;
 
-    if (p4_words < 100) {
+    if (p4_words < 60) {
         notify(currentLang === 'en' 
-            ? `Part 4 analysis requires at least 100 words (Current: ${p4_words}).` 
-            : `Анализ в Part 4 должен содержать не менее 100 слов (Сейчас: ${p4_words}).`, true);
+            ? `Part 4 analysis requires at least 60 words (Current: ${p4_words}).` 
+            : `Анализ в Part 4 должен содержать не менее 60 слов (Сейчас: ${p4_words}).`, true);
         return;
     }
 
     let sliderAccuracy = (typeof p4_getSliderScore === 'function') ? p4_getSliderScore() : 0;
-    let textScore = p4_words >= 100 ? 35 : 0;
+    let textScore = p4_words >= 60 ? 35 : 0;
     let scoreP4 = sliderAccuracy + textScore;
 
     let calculatedScore = Math.min(100, Math.round(scoreP1P2 + scoreP3 + scoreP4));
@@ -202,15 +199,15 @@ function decryptAndScoreToken() {
     }
 }
 
-// ГИБРИДНЫЙ ЛЕКСИЧЕСКИЙ ИИ-ДЕТЕКТОР (Расширенная база клише + TTR + Дисперсия)
+// ГИБРИДНЫЙ ДЕТЕКТОР (Симуляторные инструкции + OCR-артефакты + Слипшиеся слова + Клише)
 function runAIAudit(text) {
     if (!text) return;
 
     const lowerText = text.toLowerCase();
-    let aiRisk = 5;
+    let aiRisk = 10;
     const detectedTriggers = [];
 
-    // 1. Маркеры управления интерфейсом (когда ИИ генерирует текст по инструкции слайдеров)
+    // 1. Паттерны описания действий в симуляторе (Промпт ChatGPT к интерфейсу)
     const simulatorActions = [
         "switched the model", "switched to the", "looked at the graph", "second graph", 
         "first graph", "fist graph", "demand curve", "go up to", "tr line", "tc line",
@@ -225,11 +222,11 @@ function runAIAudit(text) {
         }
     });
     if (actionCount > 0) {
-        aiRisk += actionCount * 20;
+        aiRisk += actionCount * 22; // По 22% за каждое действие с интерфейсом
     }
 
-    // 2. Артефакты ручного переписывания с экрана (OCR/Typing Artifacts & Missing Spaces)
-    const typingArtifacts = ["fist graph", "short runtime", "higher than etc", "p is higher than etc"];
+    // 2. Артефакты ручного набора с экрана (OCR / Typing Artifacts & Missing Spaces)
+    const typingArtifacts = ["fist graph", "short runtime", "etc.", "higher than etc", "p is higher than etc"];
     typingArtifacts.forEach(art => {
         if (lowerText.includes(art)) {
             aiRisk += 25;
@@ -237,19 +234,19 @@ function runAIAudit(text) {
         }
     });
 
+    // Проверка на слипшиеся предложения без пробелов после точки (признак торопливого набора с экрана)
     const missingSpaceMatches = text.match(/[a-zа-я]\.[A-ZА-Я]/g);
     if (missingSpaceMatches && missingSpaceMatches.length > 0) {
-        aiRisk += missingSpaceMatches.length * 12;
+        aiRisk += missingSpaceMatches.length * 15;
         detectedTriggers.push(`Missing Spaces after dots: ${missingSpaceMatches.length}`);
     }
 
-    // 3. Расширенная база характерных академических штампов ИИ (ChatGPT, Claude, Gemini)
+    // 3. Стандартные академические клише ChatGPT
     const aiCliches = [
         "furthermore", "it is crucial to note", "in conclusion", "moreover", 
-        "delve into", "testament to", "pivotal role", "vibrant ecosystem", "subsequently", "it is worth noting",
+        "delve into", "testament to", "pivotal role", "vibrant ecosystem",
         "в данном контексте", "следует отметить", "таким образом", "важно подчеркнуть",
-        "необходимо заметить", "резюмируя вышесказанное", "играет ключевую роль", "исходя из вышесказанного",
-        "подводя итог", "в заключение следует"
+        "необходимо заметить", "резюмируя вышесказанное", "играет ключевую роль"
     ];
 
     let clichéCount = 0;
@@ -263,19 +260,7 @@ function runAIAudit(text) {
         aiRisk += clichéCount * 15;
     }
 
-    // 4. Метрика Type-Token Ratio (Лексическое разнообразие)
-    const words = lowerText.match(/[a-zа-я0-9]+/g) || [];
-    if (words.length > 30) {
-        const uniqueWords = new Set(words);
-        const ttr = uniqueWords.size / words.length;
-        // У ИИ-текстов средняя лексическая плотность TTR обычно находится в узком диапазоне 0.55 - 0.70
-        if (ttr >= 0.58 && ttr <= 0.68) {
-            aiRisk += 10;
-            detectedTriggers.push(`Balanced AI Lexical Density (TTR: ${ttr.toFixed(2)})`);
-        }
-    }
-
-    // 5. Ритмика предложений (Burstiness / Дисперсия длины предложений)
+    // 4. Дисперсия предложений (Burstiness)
     const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
     const sentenceLengths = sentences.map(s => s.trim().split(/\s+/).length);
     const avgLen = sentenceLengths.reduce((a, b) => a + b, 0) / (sentenceLengths.length || 1);
