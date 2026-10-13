@@ -195,9 +195,9 @@ function renderCaseP4(studentIdx, lang) {
             <div class="flex justify-between items-center">
                 <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                     <i class="fas fa-pen-nib text-indigo-400"></i>
-                    ${lang === 'en' ? 'Executive Strategy Justification (Min 100 Words)' : 'Стратегическое обоснование (Минимум 100 слов)'}
+                    ${lang === 'en' ? 'Executive Strategy Justification (Min 60 Words)' : 'Стратегическое обоснование (Минимум 60 слов)'}
                 </label>
-                <span id="p4-word-counter" class="text-[10px] font-mono font-bold text-rose-400">0 / 100 ${lang === 'en' ? 'words' : 'слов'}</span>
+                <span id="p4-word-counter" class="text-[10px] font-mono font-bold text-rose-400">0 / 60 ${lang === 'en' ? 'words' : 'слов'}</span>
             </div>
             
             <textarea id="p4-essay-input" 
@@ -207,7 +207,7 @@ function renderCaseP4(studentIdx, lang) {
                 oninput="p4_checkWordCount()"></textarea>
             
             <p class="text-[9px] text-slate-500 leading-tight">
-                ${lang === 'en' ? 'Direct copy-paste is disabled. Minimum 100 words required.' : 'Защита от вставки активирована. Для отправки требуется минимум 100 слов.'}
+                ${lang === 'en' ? 'Direct copy-paste is disabled. Minimum 60 words required.' : 'Защита от вставки активирована. Для отправки требуется минимум 60 слов.'}
             </p>
         </div>
     `;
