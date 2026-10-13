@@ -328,8 +328,8 @@
     <div id="mc1-modal" class="modal-overlay">
         <div class="modal-card">
             <h3>Midterm Control 1</h3>
-            <p>Введите ключ доступа преподавателя:</p>
-            <input type="password" id="mc1-pass-input" placeholder="SE-..." autocomplete="off" onkeydown="if(event.key === 'Enter') checkMC1Password()">
+            <p>Введите ключ доступа:</p>
+            <input type="password" id="mc1-pass-input" placeholder="Введите пароль" autocomplete="off" onkeydown="if(event.key === 'Enter') checkMC1Password()">
             <div id="mc1-error" class="error-msg">Неверный ключ доступа!</div>
             <div class="modal-buttons">
                 <button onclick="closeMC1Modal()" class="btn btn-cancel">Отмена</button>
@@ -344,8 +344,7 @@
     </footer>
 
     <script>
-        // SHA-256 ХЭШ ПАРОЛЯ "SE-14092026MC1" (в верхнем регистре)
-        // В коде нет исходного пароля в открытом виде!
+        // SHA-256 ХЭШ ПАРОЛЯ "SE-14092026MC1"
         const MC1_HASH = "809a47ef0e8ddcbdf6f7cdbc37be1e6498ee52bb6c04f9dfc6a38096232d3f92";
 
         function openMC1Modal() {
@@ -375,7 +374,7 @@
             const input = document.getElementById('mc1-pass-input');
             const err = document.getElementById('mc1-error');
             
-            // Приводим введенное значение к верхнему регистру и убираем случайные пробелы
+            // Автоматическое приведение к верхнему регистру и очистка от пробелов
             const enteredPass = input.value.trim().toUpperCase();
             
             if (!enteredPass) return;
