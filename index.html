@@ -23,7 +23,6 @@
             position: relative;
         }
 
-        /* Шапка по умолчанию (ПК) */
         .top-left-logo {
             position: absolute;
             top: 25px;
@@ -57,7 +56,6 @@
             margin: 0 auto;
         }
 
-        /* Сетка для 10 карточек */
         .grid-container {
             display: flex;
             flex-wrap: wrap;
@@ -69,7 +67,6 @@
             padding-bottom: 30px;
         }
 
-        /* Карточки на ПК */
         .card {
             display: inline-block;
             text-decoration: none;
@@ -83,6 +80,7 @@
             height: 250px;
             position: relative;
             flex-shrink: 0;
+            cursor: pointer;
         }
 
         .card img {
@@ -103,7 +101,6 @@
             transform: scale(1.02);
         }
 
-        /* Неактивные карточки */
         .card.disabled {
             cursor: default;
             opacity: 0.85;
@@ -126,13 +123,122 @@
             width: 100%;
         }
 
-        /* МОБИЛЬНАЯ АДАПТАЦИЯ (Смартфоны и планшеты) */
-        @media (max-width: 768px) {
-            body {
-                padding: 15px 10px;
-            }
+        /* МОДАЛЬНОЕ ОКНО ПАРОЛЯ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 30, 80, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
 
-            /* Центрирование логотипа на мобильном */
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-card h3 {
+            color: #001e50;
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .modal-card p {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .modal-card input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .modal-card input:focus {
+            border-color: #2563eb;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-submit {
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .btn-submit:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: -10px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
             .top-left-logo {
                 position: static;
                 display: block;
@@ -140,49 +246,16 @@
                 width: 60px;
                 height: 60px;
             }
-
-            header {
-                margin-top: 0;
-                margin-bottom: 20px;
-                padding: 0 10px;
-            }
-
-            h1 {
-                font-size: 24px;
-                margin-top: 0;
-                margin-bottom: 8px;
-            }
-
-            .subtitle {
-                font-size: 13px;
-                line-height: 1.4;
-            }
-
-            /* Оптимизированная сетка для карточек на телефоне (по 2 в ряд) */
-            .grid-container {
-                gap: 12px;
-                padding-bottom: 20px;
-            }
-
-            .card {
-                width: 150px;
-                height: 200px;
-                border-radius: 12px;
-            }
-
-            footer {
-                font-size: 12px;
-                padding-top: 20px;
-                padding-bottom: 15px;
-            }
+            header { margin-top: 0; margin-bottom: 20px; padding: 0 10px; }
+            h1 { font-size: 24px; margin-top: 0; margin-bottom: 8px; }
+            .subtitle { font-size: 13px; line-height: 1.4; }
+            .grid-container { gap: 12px; padding-bottom: 20px; }
+            .card { width: 150px; height: 200px; border-radius: 12px; }
+            footer { font-size: 12px; padding-top: 20px; padding-bottom: 15px; }
         }
 
-        /* Для совсем небольших экранов (360px и меньше) */
         @media (max-width: 360px) {
-            .card {
-                width: 135px;
-                height: 180px;
-            }
+            .card { width: 135px; height: 180px; }
         }
     </style>
 </head>
@@ -230,8 +303,8 @@
             <img src="pic-video-se.png" alt="Video Lectures">
         </a>
 
-        <!-- 7. Midterm Control 1 -->
-        <div class="card disabled" title="Midterm Control 1 - Coming Soon">
+        <!-- 7. Midterm Control 1 (АКТИВИРОВАНА) -->
+        <div onclick="openMC1Modal()" class="card" title="Midterm Control 1 - Access Protected">
             <img src="pic-mc1-se.png" alt="Midterm Control 1">
         </div>
 
@@ -251,10 +324,73 @@
         </a>
     </main>
 
+    <!-- МОДАЛЬНОЕ ОКНО ПАРОЛЯ -->
+    <div id="mc1-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Midterm Control 1</h3>
+            <p>Введите ключ доступа преподавателя:</p>
+            <input type="password" id="mc1-pass-input" placeholder="SE-..." autocomplete="off" onkeydown="if(event.key === 'Enter') checkMC1Password()">
+            <div id="mc1-error" class="error-msg">Неверный ключ доступа!</div>
+            <div class="modal-buttons">
+                <button onclick="closeMC1Modal()" class="btn btn-cancel">Отмена</button>
+                <button onclick="checkMC1Password()" class="btn btn-submit">Войти</button>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <p>Developed for Software Engineering Team AlmaU 2026 | Course: Economics</p>
         <p>© Almaty Management University | School of Digital Technologies & Economics</p>
     </footer>
 
+    <script>
+        // SHA-256 ХЭШ ПАРОЛЯ "SE-14092026MC1" (в верхнем регистре)
+        // В коде нет исходного пароля в открытом виде!
+        const MC1_HASH = "809a47ef0e8ddcbdf6f7cdbc37be1e6498ee52bb6c04f9dfc6a38096232d3f92";
+
+        function openMC1Modal() {
+            const modal = document.getElementById('mc1-modal');
+            const input = document.getElementById('mc1-pass-input');
+            const err = document.getElementById('mc1-error');
+            
+            input.value = '';
+            err.style.display = 'none';
+            modal.classList.add('active');
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function closeMC1Modal() {
+            document.getElementById('mc1-modal').classList.remove('active');
+        }
+
+        async function hashString(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function checkMC1Password() {
+            const input = document.getElementById('mc1-pass-input');
+            const err = document.getElementById('mc1-error');
+            
+            // Приводим введенное значение к верхнему регистру и убираем случайные пробелы
+            const enteredPass = input.value.trim().toUpperCase();
+            
+            if (!enteredPass) return;
+
+            const enteredHash = await hashString(enteredPass);
+
+            if (enteredHash === MC1_HASH) {
+                closeMC1Modal();
+                // Переход в папку MC1
+                window.location.href = "MC1/index.html";
+            } else {
+                err.style.display = 'block';
+                input.select();
+            }
+        }
+    </script>
 </body>
 </html>
