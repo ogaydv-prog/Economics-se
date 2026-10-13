@@ -1,10 +1,15 @@
-/* grading_ai_engine.js — Secure AI Audit & Auto-Submit Engine for PE12092026 */
+/* ==========================================================================
+   grading_ai_engine.js — Universal AI Audit & Auto-Submit Engine
+   AlmaU SDTE 2026 | Course: Economics (SE)
+   Module: PE12092026 (Midterm Control 1)
+   Supported Models: Pure Competition, Monopolistic Comp. & Monopoly
+   ========================================================================== */
 
 // URL Вашей Google Таблицы:
 const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz-fH9jFhcBpC0g5DFh9mKhB9wSo4WKtYNsa1-Cqv06ND1-0GbNemCR4VH1j2uUefAY/exec";
 
 // ==========================================
-// 1. АВТОРИЗАЦИЯ ПРЕПОДАВАТЕЛЯ (БЕЗ ПАРОЛЯ, ПО НАЖАТИЮ)
+// 1. АВТОРИЗАЦИЯ ПРЕПОДАВАТЕЛЯ
 // ==========================================
 
 function verifyTeacherKey() {
@@ -17,7 +22,7 @@ function verifyTeacherKey() {
 }
 
 // ==========================================
-// 2. ОТПРАВКА СЕССИИ В GOOGLE ТАБЛИЦУ И СБОРКА ТОКЕНА
+// 2. ОТПРАВКА СЕССИИ И РАСЧЕТ ИТОГОВОГО БАЛЛА
 // ==========================================
 
 function compileFinalToken() {
@@ -55,7 +60,7 @@ function compileFinalToken() {
         }
     }
     
-    // Задача 3.2 (ATC9) — 5 баллов
+    // Задача 3.2 (ATC) — 5 баллов
     const t2Input = document.getElementById('ans-t2');
     if (t2Input && t2Input.value.trim() !== '') {
         const val2 = parseFloat(t2Input.value.replace(',', '.'));
@@ -75,19 +80,44 @@ function compileFinalToken() {
         }
     }
 
-    // Задача 3.4 (Таблица + График + Q*) — 10 баллов
+    // Задача 3.4 (Таблица + График + Q*) — 10 баллов MAX
+    const tableInputs = document.querySelectorAll('#part3-container table input');
+    let filledCells = 0;
+    let totalCells = tableInputs.length || 1;
+    tableInputs.forEach(inp => { if (inp.value.trim() !== '') filledCells++; });
+    const fillRatio = filledCells / totalCells;
+
     const t4qInput = document.getElementById('ans-t4-q');
+    let isQCorrect = false;
+
     if (t4qInput && t4qInput.value.trim() !== '') {
         const val4 = parseInt(t4qInput.value);
         const exp4 = parseInt(t4qInput.dataset.expected);
         if (!isNaN(val4) && val4 === exp4) {
-            scoreP3 += 10;
+            isQCorrect = true;
         }
     }
 
-    // --- ЧАСТЬ 4: КЕЙС И ЭССЕ (45 баллов MAX) ---
+    // Оценка Задачи 3.4 по степени полноты таблицы:
+    if (isQCorrect) {
+        if (fillRatio >= 0.90) {
+            scoreP3 += 10; // Ответ верный + Таблица заполнена на 90%+
+        } else if (fillRatio >= 0.50) {
+            scoreP3 += 8;  // Ответ верный + Таблица заполнена на 50%-89%
+        } else {
+            scoreP3 += 5;  // Ответ верный + Таблица заполнена слабо
+        }
+    } else {
+        if (fillRatio >= 0.50) {
+            scoreP3 += 3;  // Ответ неверный, но есть попытка заполнения
+        }
+    }
+
+    // --- ЧАСТЬ 4: КЕЙС, СЛАЙДЕРЫ И АНАЛИТИЧЕСКИЙ ТЕКСТ (45 баллов MAX) ---
+    // Работает для моделей: Совершенная конкуренция, Монополистическая конкуренция, Чистая монополия
     const p4_essay = document.getElementById('p4-essay-input') ? document.getElementById('p4-essay-input').value.trim() : "";
     const p4_words = p4_essay ? p4_essay.split(/\s+/).length : 0;
+    const lowerEssay = p4_essay.toLowerCase();
 
     if (p4_words < 60) {
         notify(currentLang === 'en' 
@@ -96,10 +126,44 @@ function compileFinalToken() {
         return;
     }
 
-    let sliderAccuracy = (typeof p4_getSliderScore === 'function') ? p4_getSliderScore() : 0;
-    let textScore = p4_words >= 60 ? 35 : 0;
-    let scoreP4 = sliderAccuracy + textScore;
+    // 1. Оценка точности слайдера Q* (MR = MC) — до 20 баллов
+    let rawSliderRatio = (typeof p4_getSliderScore === 'function') ? Math.max(0, p4_getSliderScore() / 10) : 1;
+    let sliderScore = Math.round(rawSliderRatio * 20);
 
+    // 2. Смысловая оценка текста — до 20 баллов
+    const econKeywords = [
+        "прибыль", "убыт", "издержк", "предельн", "постоянн", "переменн", 
+        "выпуск", "отдач", "покрыв", "затрат", "цена", "монопол", "спрос",
+        "profit", "loss", "cost", "marginal", "variable", "fixed", "output", "cover", "avc", "atc", "mc", "mr", "demand"
+    ];
+    let keyMatches = 0;
+    econKeywords.forEach(kw => { if (lowerEssay.includes(kw)) keyMatches++; });
+    const hasNumbers = /\d+/.test(p4_essay);
+
+    let textScore = 0;
+    if (p4_words >= 60 && keyMatches >= 4 && hasNumbers) {
+        textScore = 20; // Глубокий ответ с терминологией и цифрами из таблицы
+    } else if (p4_words >= 60 && keyMatches >= 2) {
+        textScore = 12; // Общие правильные экономические суждения
+    } else {
+        textScore = 5;  // Минимальная попытка
+    }
+
+    // 3. Расчет балла за Часть 4 и начисление бонуса
+    let scoreP4 = sliderScore + textScore;
+
+    if (sliderScore >= 18 && textScore === 20) {
+        scoreP4 += 5; // Бонус +5 за идеальное соответствие слайдера и текста (всего 45)
+    }
+
+    // Страховочный порог: если студент старался и написал разбор с цифрами, не ставить ниже 20
+    if (scoreP4 < 20 && p4_words >= 60 && keyMatches >= 2) {
+        scoreP4 = 20;
+    }
+
+    scoreP4 = Math.min(45, scoreP4);
+
+    // Итоговый балл по всей сессии (MAX 100)
     let calculatedScore = Math.min(100, Math.round(scoreP1P2 + scoreP3 + scoreP4));
 
     const payload = {
@@ -124,14 +188,10 @@ function compileFinalToken() {
     if (pTime) pTime.innerText = payload.timestamp;
 
     const tokenDisplay = document.getElementById('p-token');
-    if (tokenDisplay) {
-        tokenDisplay.innerText = internalToken;
-    }
+    if (tokenDisplay) tokenDisplay.innerText = internalToken;
 
     const passportBlock = document.getElementById('passport-block');
-    if (passportBlock) {
-        passportBlock.classList.remove('hidden');
-    }
+    if (passportBlock) passportBlock.classList.remove('hidden');
 
     sendDirectToGoogleSheet(payload, internalToken);
 }
@@ -162,7 +222,7 @@ function sendDirectToGoogleSheet(payload, token) {
 }
 
 // ==========================================
-// 3. РАСШИФРОВКА И УМНЫЙ ИИ-АУДИТ В ПАНЕЛИ
+// 3. РАСШИФРОВКА И ИИ-АУДИТ В ПАНЕЛИ
 // ==========================================
 
 function decryptAndScoreToken() {
@@ -190,16 +250,14 @@ function decryptAndScoreToken() {
         runAIAudit(data.p4);
 
         const gradePanelOutput = document.getElementById('grade-panel-output');
-        if (gradePanelOutput) {
-            gradePanelOutput.classList.remove('hidden');
-        }
+        if (gradePanelOutput) gradePanelOutput.classList.remove('hidden');
         notify(currentLang === 'en' ? "AI Audit complete!" : "ИИ-аудит завершен!");
     } catch (e) {
         notify(currentLang === 'en' ? "Failed to parse session!" : "Ошибка чтения данных!", true);
     }
 }
 
-// ГИБРИДНЫЙ ДЕТЕКТОР (Симуляторные инструкции + OCR-артефакты + Слипшиеся слова + Клише)
+// ГИБРИДНЫЙ ИИ-ДЕТЕКТОР ЧЕСТНОСТИ
 function runAIAudit(text) {
     if (!text) return;
 
@@ -207,7 +265,6 @@ function runAIAudit(text) {
     let aiRisk = 10;
     const detectedTriggers = [];
 
-    // 1. Паттерны описания действий в симуляторе (Промпт ChatGPT к интерфейсу)
     const simulatorActions = [
         "switched the model", "switched to the", "looked at the graph", "second graph", 
         "first graph", "fist graph", "demand curve", "go up to", "tr line", "tc line",
@@ -221,11 +278,8 @@ function runAIAudit(text) {
             detectedTriggers.push(`Simulator Action: "${act}"`);
         }
     });
-    if (actionCount > 0) {
-        aiRisk += actionCount * 22; // По 22% за каждое действие с интерфейсом
-    }
+    if (actionCount > 0) aiRisk += actionCount * 22;
 
-    // 2. Артефакты ручного набора с экрана (OCR / Typing Artifacts & Missing Spaces)
     const typingArtifacts = ["fist graph", "short runtime", "etc.", "higher than etc", "p is higher than etc"];
     typingArtifacts.forEach(art => {
         if (lowerText.includes(art)) {
@@ -234,19 +288,16 @@ function runAIAudit(text) {
         }
     });
 
-    // Проверка на слипшиеся предложения без пробелов после точки (признак торопливого набора с экрана)
     const missingSpaceMatches = text.match(/[a-zа-я]\.[A-ZА-Я]/g);
     if (missingSpaceMatches && missingSpaceMatches.length > 0) {
         aiRisk += missingSpaceMatches.length * 15;
         detectedTriggers.push(`Missing Spaces after dots: ${missingSpaceMatches.length}`);
     }
 
-    // 3. Стандартные академические клише ChatGPT
     const aiCliches = [
         "furthermore", "it is crucial to note", "in conclusion", "moreover", 
         "delve into", "testament to", "pivotal role", "vibrant ecosystem",
-        "в данном контексте", "следует отметить", "таким образом", "важно подчеркнуть",
-        "необходимо заметить", "резюмируя вышесказанное", "играет ключевую роль"
+        "в данном контексте", "следует отметить", "таким образом", "важно подчеркнуть"
     ];
 
     let clichéCount = 0;
@@ -256,11 +307,8 @@ function runAIAudit(text) {
             detectedTriggers.push(`AI Cliché: "${cliche}"`);
         }
     });
-    if (clichéCount > 0) {
-        aiRisk += clichéCount * 15;
-    }
+    if (clichéCount > 0) aiRisk += clichéCount * 15;
 
-    // 4. Дисперсия предложений (Burstiness)
     const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
     const sentenceLengths = sentences.map(s => s.trim().split(/\s+/).length);
     const avgLen = sentenceLengths.reduce((a, b) => a + b, 0) / (sentenceLengths.length || 1);
