@@ -137,7 +137,6 @@
                     </h4>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                        <!-- Widget 1: Attendance -->
                         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center">
                             <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1">
                                 <i class="fa-solid fa-calendar-check"></i> Attendance (10%)
@@ -148,7 +147,6 @@
                             <div class="text-sm font-bold text-emerald-400 mt-2" id="val-att-text">0%</div>
                         </div>
 
-                        <!-- Widget 2: Continuous Assessment -->
                         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center">
                             <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider mb-2 flex items-center gap-1">
                                 <i class="fa-solid fa-bolt"></i> Assessment (30%)
@@ -159,7 +157,6 @@
                             <div class="text-sm font-bold text-blue-400 mt-2" id="val-act-text">Act, CA1, CA2</div>
                         </div>
 
-                        <!-- Widget 3: Midterm Controls -->
                         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center">
                             <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1">
                                 <i class="fa-solid fa-pen-ruler"></i> Midterms (20%)
@@ -170,7 +167,6 @@
                             <div class="text-sm font-bold text-amber-400 mt-2" id="val-ex-text">MC1 & MC2</div>
                         </div>
 
-                        <!-- Widget 4: Final Progress -->
                         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden">
                             <span class="text-[10px] font-bold text-violet-400 uppercase tracking-wider mb-3 flex items-center gap-1">
                                 <i class="fa-solid fa-circle-nodes"></i> Total Score
@@ -229,7 +225,7 @@
                     </div>
                 </div>
 
-                <!-- Expanded detailed attendance table -->
+                <!-- Attendance details -->
                 <div class="p-6 border-b border-slate-800 bg-slate-950/20">
                     <button onclick="toggleStudentAttDetails()" class="w-full flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider hover:text-slate-200 transition-colors">
                         <span class="flex items-center gap-2">
@@ -239,13 +235,10 @@
                         <span id="student-att-toggle-icon" class="text-[10px] bg-slate-800 px-2.5 py-1 rounded border border-slate-700 transition-all">Expand ▾</span>
                     </button>
                     <div id="student-att-details" class="hidden mt-4 pt-4 border-t border-slate-800/60">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="student-att-list-grid">
-                            <!-- Dynamic checklist status -->
-                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="student-att-list-grid"></div>
                     </div>
                 </div>
 
-                <!-- Bottom info box -->
                 <div class="bg-indigo-950/20 px-6 py-4 flex items-start space-x-3">
                     <i class="fa-solid fa-circle-info text-indigo-400 text-lg mt-0.5"></i>
                     <div>
@@ -349,17 +342,22 @@
                     <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-2xl">
                         <!-- Table controls -->
                         <div class="p-5 border-b border-slate-800 bg-slate-900/50 flex flex-col sm:flex-row justify-between items-center gap-4">
-                            <div class="relative w-full sm:w-72">
+                            <div class="relative w-full sm:w-64">
                                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-500"></i>
                                 <input type="text" id="teacher-search-input" placeholder="Search students..." 
                                     class="w-full pl-9 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder-slate-600">
                             </div>
                             <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
-                                <button onclick="exportToCSV()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-md transition-colors flex items-center space-x-2">
+                                <!-- Новая кнопка синхронизации MC1 -->
+                                <button onclick="syncMC1FromGoogleSheet(true)" class="px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-md transition-colors flex items-center space-x-1.5" title="Загрузить оценки MC1 из Google Таблицы">
+                                    <i class="fa-solid fa-rotate"></i>
+                                    <span>Загрузить MC1 из Google</span>
+                                </button>
+                                <button onclick="exportToCSV()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-md transition-colors flex items-center space-x-1.5">
                                     <i class="fa-solid fa-file-excel"></i>
                                     <span>Export Excel</span>
                                 </button>
-                                <button onclick="confirmReset()" class="px-4 py-2.5 bg-rose-950/40 text-rose-400 hover:bg-rose-900/40 rounded-xl text-xs font-semibold transition-colors flex items-center space-x-2 border border-rose-900/40">
+                                <button onclick="confirmReset()" class="px-3.5 py-2.5 bg-rose-950/40 text-rose-400 hover:bg-rose-900/40 rounded-xl text-xs font-semibold transition-colors flex items-center space-x-1.5 border border-rose-900/40">
                                     <i class="fa-solid fa-trash-can"></i>
                                     <span>Reset All</span>
                                 </button>
@@ -390,7 +388,6 @@
                             </table>
                         </div>
 
-                        <!-- Empty state banner -->
                         <div id="empty-state" class="hidden flex flex-col items-center justify-center py-12 px-4 text-center">
                             <div class="p-4 bg-slate-950 rounded-full text-slate-500 mb-3 text-3xl">
                                 <i class="fa-solid fa-user-slash"></i>
@@ -399,7 +396,6 @@
                             <p class="text-xs text-slate-500 mt-1">Add students manually or use bulk import.</p>
                         </div>
                         
-                        <!-- Real-time editing tips -->
                         <div class="bg-indigo-950/10 p-4 border-t border-slate-800/80 text-xs text-indigo-300 flex items-center space-x-3.5">
                             <i class="fa-solid fa-circle-info text-indigo-400 text-lg"></i>
                             <p><strong>Attendance tracking:</strong> Click percentage in the "Att" column to open the 15-week session checklist!</p>
@@ -409,7 +405,6 @@
 
                 <!-- Right Sidebar widgets (1/3 width) -->
                 <div class="space-y-6">
-                    
                     <!-- Mass Import widget -->
                     <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-2xl">
                         <h3 class="text-sm font-bold text-white mb-3.5 flex items-center space-x-2">
@@ -483,13 +478,9 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </main>
 
     <!-- Instructor Authentication Modal -->
@@ -500,12 +491,10 @@
             </div>
             <h3 class="text-lg font-extrabold text-white">Instructor Access</h3>
             <p class="text-slate-400 text-xs mt-1">Enter password to unlock instructor management panel.</p>
-            
             <div class="mt-4">
                 <input type="password" id="auth-password" onkeydown="handleAuthKeyDown(event)" placeholder="Enter password..." 
                     class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder-slate-700">
             </div>
-            
             <div class="mt-6 flex justify-end space-x-3">
                 <button onclick="closeAuthModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs transition-colors">Cancel</button>
                 <button onclick="verifyTeacherPassword()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition-colors shadow-lg shadow-indigo-600/30">Login</button>
@@ -546,7 +535,6 @@
                 </button>
             </div>
 
-            <!-- List content -->
             <div class="flex-grow overflow-y-auto custom-scrollbar my-4 pr-1">
                 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 mb-4 flex justify-between items-center">
                     <span class="text-xs text-slate-400 font-semibold">Total Attendance:</span>
@@ -555,21 +543,13 @@
                         <span id="att-modal-hours" class="text-slate-500 text-xs font-medium">(0 of 30 hrs)</span>
                     </div>
                 </div>
-                
-                <div class="space-y-2" id="attendance-dates-grid">
-                    <!-- Dynamic hour checklist -->
-                </div>
+                <div class="space-y-2" id="attendance-dates-grid"></div>
             </div>
 
-            <!-- Bottom action drawer -->
             <div class="pt-4 border-t border-slate-800 flex justify-between items-center">
                 <div class="flex space-x-1.5">
-                    <button onclick="toggleAllAttendance(true)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg text-[10px] transition-all border border-slate-700">
-                        Select All
-                    </button>
-                    <button onclick="toggleAllAttendance(false)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg text-[10px] transition-all border border-slate-700">
-                        Clear All
-                    </button>
+                    <button onclick="toggleAllAttendance(true)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg text-[10px] transition-all border border-slate-700">Select All</button>
+                    <button onclick="toggleAllAttendance(false)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg text-[10px] transition-all border border-slate-700">Clear All</button>
                 </div>
                 <button onclick="saveAttendanceDetails()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs transition-colors shadow-lg shadow-emerald-600/30 flex items-center space-x-1.5">
                     <i class="fa-solid fa-floppy-disk"></i>
@@ -591,8 +571,10 @@
     </footer>
 
     <script>
-        // Updated group list of 9 Software Engineering students
-        // Lecture 1 (Offline 1h + Online 1h) marked for: Shaziya, Aigerim, Azhar.
+        // URL Apps Script приложения (вставьте ваш /exec URL ниже)
+        const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbz-fH9jFhcBpC0g5DFh9mKhB9wSo4WKtYNsa1-Cqv06ND1-0GbNemCR4VH1j2uUefAY/exec";
+
+        // Group list of 9 Software Engineering students
         const initialGroupStudents = [
             { id: "st-1", name: "Азими Шазия", attendance: 7, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: [true, true, ...Array(28).fill(false)] },
             { id: "st-2", name: "Берікбай Нұрай Нұрғалиқызы", attendance: 0, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: Array(30).fill(false) },
@@ -605,7 +587,6 @@
             { id: "st-9", name: "Хамитбек Ажар Ғаниқызы", attendance: 7, activities: 0, ca1: 0, mc1: 0, ca2: 0, mc2: 0, exam: 0, attendanceHours: [true, true, ...Array(28).fill(false)] }
         ];
 
-        // Attendance Dates Configuration (15 weeks, 2 hours each: Hour 1 Offline, Hour 2 Online)
         const ATTENDANCE_DATES = Array.from({ length: 15 }, (_, i) => `Week ${i + 1}`);
 
         let students = [];
@@ -616,7 +597,6 @@
         let isTeacherMode = false;
         
         const correctPassword = 'SE-12122026';
-
         let activeEditingStudentId = null;
         let tempAttendanceHours = [];
 
@@ -628,7 +608,46 @@
             document.getElementById('teacher-search-input').addEventListener('input', function(e) {
                 renderTeacherTable(e.target.value);
             });
+
+            // Авто-синхронизация с Google Таблицей при запуске
+            syncMC1FromGoogleSheet(false);
         };
+
+        // Функция синхронизации с Google Apps Script (doGet)
+        async function syncMC1FromGoogleSheet(isManual = false) {
+            if (!GOOGLE_SHEET_API_URL || GOOGLE_SHEET_API_URL.includes("ВСТАВЬТЕ_СУДА")) {
+                if (isManual) showToast('Укажите URL Google Apps Script в коде grade.html!', 'error');
+                return;
+            }
+
+            if (isManual) showToast('Загрузка оценок из Google Таблицы...', 'info');
+
+            try {
+                const response = await fetch(GOOGLE_SHEET_API_URL);
+                const gradesMap = await response.json();
+
+                let updatedCount = 0;
+
+                students.forEach(student => {
+                    const cleanName = student.name.trim();
+                    if (gradesMap.hasOwnProperty(cleanName)) {
+                        student.mc1 = Number(gradesMap[cleanName]) || 0;
+                        updatedCount++;
+                    }
+                });
+
+                if (updatedCount > 0) {
+                    saveDatabase();
+                    updateDashboardData();
+                    showToast(`Обновлены оценки MC1 для ${updatedCount} студентов!`, 'success');
+                } else if (isManual) {
+                    showToast('Новых оценок в Google Таблице пока нет.', 'info');
+                }
+            } catch (err) {
+                console.error('Ошибка синхронизации MC1:', err);
+                if (isManual) showToast('Не удалось связаться с Google Таблицей', 'error');
+            }
+        }
 
         function ensureAttendanceHours(student) {
             if (!student.hasOwnProperty('attendanceHours') || !Array.isArray(student.attendanceHours) || student.attendanceHours.length !== 30) {
@@ -651,7 +670,6 @@
             localStorage.setItem('almau_economics_se_students_v1', JSON.stringify(students));
         }
 
-        // Weighted grade calculation formula
         function calculateWeightedScore(att, act, ca1, mc1, ca2, mc2, exam) {
             const wAtt = (att || 0) * 0.10;
             const wAct = (act || 0) * 0.10;
@@ -750,7 +768,6 @@
             if (personalActChart) personalActChart.destroy();
             if (personalExamChart) personalExamChart.destroy();
 
-            // 1. Attendance Chart
             const attCtx = document.getElementById('attendanceBarChart').getContext('2d');
             document.getElementById('val-att-text').textContent = `${student.attendance}%`;
             personalAttChart = new Chart(attCtx, {
@@ -775,7 +792,6 @@
                 }
             });
 
-            // 2. Continuous Assessment Trend
             const actCtx = document.getElementById('activityLineChart').getContext('2d');
             personalActChart = new Chart(actCtx, {
                 type: 'line',
@@ -803,7 +819,6 @@
                 }
             });
 
-            // 3. Midterm Gauge
             const exCtx = document.getElementById('examGaugeChart').getContext('2d');
             const avgMc = Math.round(((student.mc1 || 0) + (student.mc2 || 0)) / 2);
             personalExamChart = new Chart(exCtx, {
@@ -826,7 +841,6 @@
                 }
             });
 
-            // 4. Circle Score
             const circle = document.getElementById('finalScoreCircle');
             document.getElementById('finalCircleLetter').textContent = letter;
             document.getElementById('finalCircleScore').textContent = total.toFixed(1);
