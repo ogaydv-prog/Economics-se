@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midterm Control 1 • Economics (SE) • AlmaU SDTE 2026</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { 
+            background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%); 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: #e2e8f0;
+            user-select: none; /* Запрет стандартного выделения текста */
+            -webkit-user-select: none;
+        }
+        /* Разрешаем выделение и ввод текста ТОЛЬКО в полях ответов */
+        input, textarea {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+        .card { 
+            background: rgba(30, 41, 59, 0.7); 
+            border: 1px solid rgba(255,255,255,0.08); 
+            border-radius: 16px; 
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.15);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 3px; }
+        .tab-btn.active { background-color: rgb(79, 70, 229); color: white; border-color: rgb(99, 102, 241); }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col justify-between">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="toast-bg" class="bg-indigo-600 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 border border-indigo-400/30">
+            <i class="fas fa-info-circle text-lg"></i>
+            <span id="toast-msg" class="text-sm font-semibold">Notification</span>
+        </div>
+    </div>
+
+    <!-- Professor Auth Modal -->
+    <div id="teacher-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
+        <div class="card p-6 max-w-md w-full bg-slate-900 border border-slate-700/60 space-y-4">
+            <div class="flex items-center gap-3 text-indigo-400">
+                <i class="fas fa-key text-2xl"></i>
+                <h4 class="text-lg font-bold" data-lang-en="Professor Panel Auth" data-lang-ru="Панель Преподавателя">Professor Panel Auth</h4>
+            </div>
+            <p class="text-sm text-slate-300" data-lang-en="Enter master key to access grading & AI detection." data-lang-ru="Введите мастер-ключ для проверки работ и ИИ-анализа.">Enter master key to access grading & AI detection.</p>
+            <input type="password" id="teacher-key" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Master Key">
+            <div class="flex justify-end gap-3 pt-2">
+                <button onclick="toggleModal('teacher-modal', false)" class="px-4 py-2.5 rounded-lg text-xs md:text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-lang-en="Cancel" data-lang-ru="Отмена">Cancel</button>
+                <button onclick="verifyTeacherKey()" class="px-4 py-2.5 rounded-lg text-xs md:text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition" data-lang-en="Unlock" data-lang-ru="Войти">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Calculator Button -->
+    <button onclick="toggleCalc()" class="fixed bottom-5 right-5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold p-3.5 rounded-full shadow-2xl z-40 flex items-center justify-center transition border border-indigo-400/30" title="Calculator">
+        🧮 <span class="text-xs ml-1 font-mono">Calc</span>
+    </button>
+
+    <!-- Mini Floating Calculator Window -->
+    <div id="mini-calc" class="hidden fixed bottom-20 right-5 bg-slate-900 border border-slate-700 p-4 rounded-2xl shadow-2xl z-50 w-64 space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Калькулятор</span>
+            <button onclick="toggleCalc()" class="text-slate-400 hover:text-white font-bold text-xs">✕</button>
+        </div>
+        
+        <input type="text" id="calc-display" readonly class="w-full bg-slate-950 border border-slate-800 text-right p-2.5 rounded-lg text-emerald-400 font-mono text-lg font-bold outline-none" value="0">
+        
+        <div class="grid grid-cols-4 gap-1.5 text-xs font-mono font-bold">
+            <button onclick="calcClear()" class="col-span-2 bg-rose-950/60 text-rose-300 p-2.5 rounded-lg border border-rose-800/40 hover:bg-rose-900">C</button>
+            <button onclick="calcPress('/')" class="bg-indigo-950/80 text-indigo-300 p-2.5 rounded-lg border border-indigo-700/50 hover:bg-indigo-900">÷</button>
+            <button onclick="calcPress('*')" class="bg-indigo-950/80 text-indigo-300 p-2.5 rounded-lg border border-indigo-700/50 hover:bg-indigo-900">×</button>
+
+            <button onclick="calcPress('7')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">7</button>
+            <button onclick="calcPress('8')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">8</button>
+            <button onclick="calcPress('9')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">9</button>
+            <button onclick="calcPress('-')" class="bg-indigo-950/80 text-indigo-300 p-2.5 rounded-lg border border-indigo-700/50 hover:bg-indigo-900">-</button>
+
+            <button onclick="calcPress('4')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">4</button>
+            <button onclick="calcPress('5')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">5</button>
+            <button onclick="calcPress('6')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">6</button>
+            <button onclick="calcPress('+')" class="bg-indigo-950/80 text-indigo-300 p-2.5 rounded-lg border border-indigo-700/50 hover:bg-indigo-900">+</button>
+
+            <button onclick="calcPress('1')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">1</button>
+            <button onclick="calcPress('2')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">2</button>
+            <button onclick="calcPress('3')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">3</button>
+            <button onclick="calcEval()" class="row-span-2 bg-emerald-600 text-white p-2.5 rounded-lg hover:bg-emerald-500 font-black text-sm flex items-center justify-center">=</button>
+
+            <button onclick="calcPress('0')" class="col-span-2 bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">0</button>
+            <button onclick="calcPress('.')" class="bg-slate-800 text-white p-2.5 rounded-lg hover:bg-slate-700">.</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-[1500px] mx-auto w-full space-y-6">
+        
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center card p-6 border-t-2 border-t-indigo-500/50">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white" data-lang-en="Economics • Midterm Control 1" data-lang-ru="Экономика • Промежуточный контроль 1">Economics • Midterm Control 1</h1>
+                <div class="flex flex-wrap items-center gap-2 mt-1 text-xs text-slate-400">
+                    <span class="font-bold tracking-widest text-indigo-400 uppercase">Software Engineering</span>
+                    <span>•</span>
+                    <span class="uppercase tracking-wider">SDTE • AlmaU 2026</span>
+                </div>
+            </div>
+            <!-- Language Switcher -->
+            <div class="mt-4 md:mt-0 flex items-center gap-2 bg-slate-950/80 p-1.5 rounded-lg border border-slate-800">
+                <button onclick="setLanguage('en')" id="lang-btn-en" class="px-3 py-1 text-xs font-bold rounded bg-indigo-600 text-white transition">EN</button>
+                <button onclick="setLanguage('ru')" id="lang-btn-ru" class="px-3 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition">RU</button>
+            </div>
+        </header>
+
+        <!-- Student Verification -->
+        <section class="card p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs uppercase font-bold text-slate-400 tracking-wider mb-2" data-lang-en="Student Credentials (Select Your Name)" data-lang-ru="Идентификация студента (Выберите ФИО)">Student Credentials (Select Your Name)</label>
+                    <input type="text" id="student-name" list="students-list" placeholder="Begin typing your name..." 
+                           class="w-full bg-slate-950 border border-slate-800 p-3.5 rounded-lg text-base text-white focus:ring-2 focus:ring-indigo-500 outline-none transition"
+                           oninput="detectStudentAndLoadExam()" onchange="detectStudentAndLoadExam()" onkeyup="detectStudentAndLoadExam()">
+                    <datalist id="students-list">
+                        <option value="Азими Шазия"></option>
+                        <option value="Берікбай Нұрай Нұрғалиқызы"></option>
+                        <option value="Қалдыбай Алиянұр Ғалымқызы"></option>
+                        <option value="Қошан Нұрай Нұрланқызы (ДОТ)"></option>
+                        <option value="Марлен Бақтияр"></option>
+                        <option value="Мұрат Әмір Олжасұлы"></option>
+                        <option value="Нурхайдаров Бексултан Айдарович"></option>
+                        <option value="Төлегенқызы Айгерім"></option>
+                        <option value="Хамитбек Ажар Ғаниқызы"></option>
+                    </datalist>
+                    <p class="text-xs text-slate-500 mt-2" data-lang-en="Personalized variant parameters load automatically upon validation." data-lang-ru="Индивидуальные параметры варианта загружаются автоматически после выбора ФИО.">Personalized variant parameters load automatically upon validation.</p>
+                </div>
+                <div class="flex flex-col justify-center bg-slate-950/40 border border-slate-800/60 p-4 rounded-xl">
+                    <div class="text-xs uppercase font-bold text-slate-500 tracking-wider" data-lang-en="Assigned Variant Status" data-lang-ru="Статус персонального варианта">Assigned Variant Status</div>
+                    <div id="student-status-box" class="flex items-center gap-3 mt-2 text-indigo-300 font-bold text-lg">
+                        <i class="fas fa-user-graduate text-2xl text-slate-700 animate-pulse"></i>
+                        <span class="text-slate-500 font-normal" data-lang-en="Awaiting authentic name selection..." data-lang-ru="Ожидание выбора имени студента...">Awaiting authentic name selection...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exam Workspace -->
+        <div id="exam-hub" class="hidden space-y-6">
+            
+            <!-- Navigation Tabs -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-2">
+                <button onclick="switchTab('tab-part1')" class="tab-btn active px-4 py-2.5 text-xs md:text-sm font-semibold uppercase tracking-wider rounded-lg border border-slate-800 bg-slate-950 text-slate-400 transition hover:text-white">
+                    <i class="fas fa-brain mr-1.5"></i> <span data-lang-en="Part 1: Foundations (4 Qs)" data-lang-ru="Часть 1: Основы (4 вопр.)">Part 1: Foundations (4 Qs)</span>
+                </button>
+                <button onclick="switchTab('tab-part2')" class="tab-btn px-4 py-2.5 text-xs md:text-sm font-semibold uppercase tracking-wider rounded-lg border border-slate-800 bg-slate-950 text-slate-400 transition hover:text-white">
+                    <i class="fas fa-chart-line mr-1.5"></i> <span data-lang-en="Part 2: Markets & Supply (6 Qs)" data-lang-ru="Часть 2: Рынки и Предложение (6 вопр.)">Part 2: Markets & Supply (6 Qs)</span>
+                </button>
+                <button onclick="switchTab('tab-part3')" class="tab-btn px-4 py-2.5 text-xs md:text-sm font-semibold uppercase tracking-wider rounded-lg border border-slate-800 bg-slate-950 text-slate-400 transition hover:text-white">
+                    <i class="fas fa-calculator mr-1.5"></i> <span data-lang-en="Part 3: Computational Tasks" data-lang-ru="Часть 3: Задачи и Издержки">Part 3: Computational Tasks</span>
+                </button>
+                <button onclick="switchTab('tab-part4')" class="tab-btn px-4 py-2.5 text-xs md:text-sm font-semibold uppercase tracking-wider rounded-lg border border-slate-800 bg-slate-950 text-slate-400 transition hover:text-white">
+                    <i class="fas fa-lightbulb mr-1.5"></i> <span data-lang-en="Part 4: Case Analysis" data-lang-ru="Часть 4: Аналитический Кейс">Part 4: Case Analysis</span>
+                </button>
+                <button onclick="switchTab('tab-submit')" class="tab-btn px-4 py-2.5 text-xs md:text-sm font-bold uppercase tracking-wider rounded-lg border border-emerald-800 bg-emerald-950/20 text-emerald-400 ml-auto transition hover:bg-emerald-600 hover:text-white">
+                    <i class="fas fa-paper-plane mr-1.5"></i> <span data-lang-en="Finalize Session" data-lang-ru="Завершить и Отправить">Finalize Session</span>
+                </button>
+            </div>
+
+            <!-- TAB 1 -->
+            <div id="tab-part1" class="tab-pane space-y-6">
+                <div id="part1-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- TAB 2 -->
+            <div id="tab-part2" class="tab-pane space-y-6 hidden">
+                <div id="part2-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- TAB 3 -->
+            <div id="tab-part3" class="tab-pane space-y-6 hidden">
+                <div id="part3-container"></div>
+            </div>
+
+            <!-- TAB 4 -->
+            <div id="tab-part4" class="tab-pane space-y-6 hidden">
+                <div id="part4-container"></div>
+            </div>
+
+            <!-- TAB SUBMIT -->
+            <div id="tab-submit" class="tab-pane space-y-6 hidden">
+                <div class="text-center py-8 space-y-2">
+                    <div class="inline-flex p-4 bg-emerald-500/10 rounded-full text-emerald-400 border border-emerald-500/20 mb-2">
+                        <i class="fas fa-stamp text-4xl"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-100" data-lang-en="Finalize Exam Session" data-lang-ru="Финализация и Подтверждение">Finalize Exam Session</h2>
+                    <p class="text-xs md:text-sm text-slate-400 max-w-md mx-auto" data-lang-en="Compiles all responses into a secure token for evaluation." data-lang-ru="Формирует защищенный шифрованный токен для отправки преподавателю.">Compiles all responses into a secure token for evaluation.</p>
+                    <button onclick="compileFinalToken()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-8 rounded-lg text-sm tracking-wider uppercase transition shadow-lg shadow-emerald-950/50" data-lang-en="Compile & Generate Token" data-lang-ru="Сформировать Токен Проверки">
+                        Compile & Generate Token
+                    </button>
+                </div>
+
+                <div id="passport-block" class="hidden card p-6 border-t-4 border-emerald-500 bg-slate-900/20 space-y-6">
+                    <div class="flex justify-between items-start border-b border-slate-800 pb-4 flex-wrap gap-4">
+                        <div>
+                            <h3 class="text-md md:text-lg font-black text-white tracking-tight">ALMAU MIDTERM CONTROL 1 CERTIFICATE</h3>
+                            <p class="text-xs text-slate-400 font-mono">Economics • Software Engineering • Spring 2026</p>
+                        </div>
+                        <div class="text-right text-xs">
+                            <span class="text-slate-400" data-lang-en="Protocol Status:" data-lang-ru="Статус токена:">Protocol Status:</span>
+                            <span class="font-mono text-emerald-400 font-bold block">SECURED-TOKEN</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-slate-950/50 p-3 rounded border border-slate-800">
+                            <span class="text-xs text-slate-500 uppercase block" data-lang-en="Candidate Name:" data-lang-ru="Студент:">Candidate Name:</span>
+                            <span class="font-bold text-slate-200" id="p-student"></span>
+                        </div>
+                        <div class="bg-slate-950/50 p-3 rounded border border-slate-800">
+                            <span class="text-xs text-slate-500 uppercase block" data-lang-en="Assigned Variant:" data-lang-ru="Вариант:">Assigned Variant:</span>
+                            <span class="font-bold text-indigo-400" id="p-variant"></span>
+                        </div>
+                        <div class="bg-slate-950/50 p-3 rounded border border-slate-800">
+                            <span class="text-xs text-slate-500 uppercase block" data-lang-en="Completion Time:" data-lang-ru="Время сборки:">Completion Time:</span>
+                            <span class="font-bold text-slate-200" id="p-time"></span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 border border-emerald-500/20 p-4 rounded-lg text-center space-y-2">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block" data-lang-en="VERIFICATION KEY (CLICK TO COPY & TRANSMIT TO INSTRUCTOR)" data-lang-ru="КЛЮЧ ПРОВЕРКИ (НАЖМИТЕ ЧТОБЫ СКОПИРОВАТЬ И ОТПРАВИТЬ ПРЕПОДАВАТЕЛЮ)">VERIFICATION KEY (CLICK TO COPY & TRANSMIT TO INSTRUCTOR)</span>
+                        <div class="font-mono text-xs md:text-sm text-emerald-400 break-all select-all cursor-pointer bg-slate-900/60 p-3 rounded" id="p-token" onclick="copyToClipboard()">Compiling...</div>
+                    </div>
+                </div>
+
+                <!-- Professor Panel -->
+                <div id="prof-grade-panel" class="hidden card p-6 border-t-4 border-indigo-500 bg-indigo-950/10 space-y-4">
+                    <div class="border-b border-slate-800 pb-2">
+                        <h4 class="font-bold text-sm text-indigo-400 uppercase tracking-wider"><i class="fas fa-user-shield mr-1.5"></i> <span data-lang-en="Professor Verification & AI Audit Hub" data-lang-ru="Панель Оценки и ИИ-Аудита Эссе">Professor Verification & AI Audit Hub</span></h4>
+                        <p class="text-xs text-slate-400" data-lang-en="Paste student verification token below to decrypt answers, auto-grade and run AI generation check." data-lang-ru="Вставьте токен студента ниже для расшифровки, оценки и запуска детектора ИИ-генерации.">Paste student verification token below to decrypt answers, auto-grade and run AI generation check.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <textarea id="prof-token-input" class="w-full bg-slate-950 border border-slate-800 rounded-md p-2 text-xs text-slate-200 h-16 resize-none custom-scrollbar" placeholder="Insert compiled candidate token..."></textarea>
+                        <button onclick="decryptAndScoreToken()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 rounded text-xs uppercase tracking-wider transition" data-lang-en="Decrypt, Grade & Audit AI" data-lang-ru="Расшифровать, Оценить и Проверить ИИ">
+                            Decrypt, Grade & Audit AI
+                        </button>
+                    </div>
+
+                    <div id="grade-panel-output" class="hidden bg-slate-950/80 p-4 rounded-lg border border-slate-800 text-xs space-y-4">
+                        <h5 class="font-bold text-indigo-400 border-b border-slate-800 pb-1 uppercase text-xs">Session Audit Analytics</h5>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-slate-300">
+                            <div>Candidate: <span class="text-white font-bold block" id="dec-student"></span></div>
+                            <div>Variant: <span class="text-white font-bold block" id="dec-variant"></span></div>
+                            <div>Final Score: <span class="text-emerald-400 font-bold block text-sm" id="dec-score"></span></div>
+                            <div>Status: <span class="text-indigo-300 font-bold block" id="dec-tasks">Validated</span></div>
+                        </div>
+
+                        <!-- AI Generation Audit Result Box -->
+                        <div class="bg-slate-900/80 p-3.5 rounded-lg border border-slate-800 space-y-2">
+                            <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                                <span class="text-xs font-bold text-slate-400 uppercase"><i class="fas fa-robot mr-1 text-indigo-400"></i> AI Generation Likelihood Assessment</span>
+                                <span id="ai-score-badge" class="px-2 py-0.5 rounded text-xs font-bold">0% Risk</span>
+                            </div>
+                            <p class="text-slate-200 italic text-xs" id="dec-brief"></p>
+                            <div id="ai-analysis-details" class="text-xs text-slate-400 font-mono space-y-1 border-t border-slate-800/60 pt-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Centered Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/60 py-5 text-center text-xs text-slate-500 w-full mt-10">
+        <div class="max-w-[1500px] mx-auto px-4 flex justify-center items-center gap-4 relative">
+            <p class="text-slate-500 text-center">School of Digital Technologies & Economics • Software Engineering • AlmaU 2026</p>
+            <button onclick="toggleModal('teacher-modal', true)" class="text-slate-800 hover:text-indigo-500/30 transition text-sm focus:outline-none absolute right-4" title="Professor Entry">
+                <i class="fas fa-key"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Load Sub-Modules -->
+    <script src="questions_p1_p2.js"></script>
+    <script src="tasks_p3.js"></script>
+    <script src="case_p4.js"></script>
+    <script src="grading_ai_engine.js"></script>
+
+    <!-- Main Logic Script -->
+    <script>
+        let currentLang = 'en';
+        let currentStudentIdx = -1;
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('lang-btn-en').className = lang === 'en' ? 'px-3 py-1 text-xs font-bold rounded bg-indigo-600 text-white transition' : 'px-3 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition';
+            document.getElementById('lang-btn-ru').className = lang === 'ru' ? 'px-3 py-1 text-xs font-bold rounded bg-indigo-600 text-white transition' : 'px-3 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition';
+
+            document.querySelectorAll('[data-lang-en]').forEach(el => {
+                el.innerText = lang === 'en' ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-ru');
+            });
+
+            if (currentStudentIdx !== -1) {
+                generatePersonalizedExam(currentStudentIdx);
+            }
+        }
+
+        function notify(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const bg = document.getElementById('toast-bg');
+            document.getElementById('toast-msg').innerText = msg;
+            if (isError) {
+                bg.classList.remove('bg-indigo-600', 'border-indigo-400/30');
+                bg.classList.add('bg-rose-600', 'border-rose-400/30');
+            } else {
+                bg.classList.add('bg-indigo-600', 'border-indigo-400/30');
+                bg.classList.remove('bg-rose-600', 'border-rose-400/30');
+            }
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 4000);
+        }
+
+        function toggleModal(id, show) {
+            document.getElementById(id).classList.toggle('hidden', !show);
+        }
+
+        function detectStudentAndLoadExam() {
+            const val = document.getElementById('student-name').value.trim().toLowerCase();
+            const statusBox = document.getElementById('student-status-box');
+            const examHub = document.getElementById('exam-hub');
+
+            if (typeof STUDENTS_LIST === 'undefined') {
+                console.error("STUDENTS_LIST не найден в questions_p1_p2.js!");
+                return;
+            }
+
+            let foundIdx = STUDENTS_LIST.findIndex(s => s.toLowerCase().includes(val) && val.length >= 3);
+
+            if (foundIdx !== -1) {
+                currentStudentIdx = foundIdx;
+                const name = STUDENTS_LIST[foundIdx];
+                statusBox.innerHTML = `
+                    <i class="fas fa-check-circle text-2xl text-emerald-400"></i>
+                    <span class="text-emerald-300 font-bold">Variant #${foundIdx + 1} (${name})</span>
+                `;
+                examHub.classList.remove('hidden');
+                generatePersonalizedExam(foundIdx);
+            } else {
+                currentStudentIdx = -1;
+                statusBox.innerHTML = `
+                    <i class="fas fa-user-graduate text-2xl text-slate-700 animate-pulse"></i>
+                    <span class="text-slate-500 font-normal">Awaiting authentic name selection...</span>
+                `;
+                examHub.classList.add('hidden');
+            }
+        }
+
+        function generatePersonalizedExam(idx) {
+            try {
+                if (typeof renderQuestionsP1P2 === 'function') renderQuestionsP1P2(idx, currentLang);
+            } catch(e) { console.error("Error in Questions P1/P2:", e); }
+
+            try {
+                if (typeof renderTasksP3 === 'function') renderTasksP3(idx, currentLang);
+            } catch(e) { console.error("Error in Tasks P3:", e); }
+
+            try {
+                if (typeof renderCaseP4 === 'function') renderCaseP4(idx, currentLang);
+            } catch(e) { console.error("Error in Case P4:", e); }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        function copyToClipboard() {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('p-token'));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            notify("Verification token copied to clipboard!");
+        }
+
+        // ==========================================
+        // MINI CALCULATOR CONTROLLER
+        // ==========================================
+        let calcExpr = "";
+        function toggleCalc() {
+            document.getElementById('mini-calc').classList.toggle('hidden');
+        }
+        function calcPress(val) {
+            if (calcExpr === "0") calcExpr = "";
+            calcExpr += val;
+            document.getElementById('calc-display').
