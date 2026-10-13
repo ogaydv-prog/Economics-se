@@ -1,7 +1,7 @@
 /* grading_ai_engine.js — Secure AI Audit & Auto-Submit Engine for PE12092026 */
 
 // URL Вашей Google Таблицы:
-const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyNhILEnu1_Le-i9AtRD1ZK9BZL3FGPgpXMHc3eJUB2plQGHO2VqkdK-iHPilmKAf9SsA/exec";
+const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz-fH9jFhcBpC0g5DFh9mKhB9wSo4WKtYNsa1-Cqv06ND1-0GbNemCR4VH1j2uUefAY/exec";
 
 // ==========================================
 // 1. АВТОРИЗАЦИЯ ПРЕПОДАВАТЕЛЯ (БЕЗ ПАРОЛЯ, ПО НАЖАТИЮ)
