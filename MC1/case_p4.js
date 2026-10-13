@@ -386,8 +386,8 @@ function p4_checkWordCount() {
     const words = txt ? txt.split(/\s+/).length : 0;
     const counter = document.getElementById('p4-word-counter');
     if (counter) {
-        counter.innerText = `${words} / 100 ${typeof currentLang !== 'undefined' && currentLang === 'en' ? 'words' : 'слов'}`;
-        counter.className = words >= 100 ? "text-[10px] font-mono font-bold text-emerald-400" : "text-[10px] font-mono font-bold text-rose-400";
+        counter.innerText = `${words} / 60 ${typeof currentLang !== 'undefined' && currentLang === 'en' ? 'words' : 'слов'}`;
+        counter.className = words >= 60 ? "text-[10px] font-mono font-bold text-emerald-400" : "text-[10px] font-mono font-bold text-rose-400";
     }
 }
 
