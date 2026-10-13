@@ -347,6 +347,7 @@
         // SHA-256 ХЭШ ПАРОЛЯ "SE-14092026MC1"
         const MC1_HASH = "809a47ef0e8ddcbdf6f7cdbc37be1e6498ee52bb6c04f9dfc6a38096232d3f92";
 
+       <script>
         function openMC1Modal() {
             const modal = document.getElementById('mc1-modal');
             const input = document.getElementById('mc1-pass-input');
@@ -362,28 +363,20 @@
             document.getElementById('mc1-modal').classList.remove('active');
         }
 
-        async function hashString(str) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(str);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function checkMC1Password() {
+        function checkMC1Password() {
             const input = document.getElementById('mc1-pass-input');
             const err = document.getElementById('mc1-error');
             
-            // Автоматическое приведение к верхнему регистру и очистка от пробелов
-            const enteredPass = input.value.trim().toUpperCase();
+            // Нормализуем ввод: верхний регистр, убираем пробелы и дефисы
+            const cleanEntered = input.value.trim().toUpperCase().replace(/[\s\-]/g, '');
             
-            if (!enteredPass) return;
+            // Эталонное значение (SE14092026MC1)
+            const TARGET_KEY = "SE14092026MC1";
 
-            const enteredHash = await hashString(enteredPass);
+            if (!cleanEntered) return;
 
-            if (enteredHash === MC1_HASH) {
+            if (cleanEntered === TARGET_KEY) {
                 closeMC1Modal();
-                // Переход в папку MC1
                 window.location.href = "MC1/index.html";
             } else {
                 err.style.display = 'block';
