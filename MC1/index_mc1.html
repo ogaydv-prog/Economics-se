@@ -303,6 +303,79 @@
         let currentLang = 'en';
         let currentStudentIdx = -1;
 
+        // Сохранение состояния ответов и настроек слайдеров
+        function saveExamState() {
+            const state = {
+                radios: {},
+                inputs: {},
+                ranges: {},
+                textareas: {}
+            };
+
+            // 1. Сохраняем радио-кнопки (тесты)
+            document.querySelectorAll('#exam-hub input[type="radio"]:checked').forEach(r => {
+                if (r.name) state.radios[r.name] = r.value;
+            });
+
+            // 2. Сохраняем текстовые и числовые инпуты (задачи)
+            document.querySelectorAll('#exam-hub input[type="text"], #exam-hub input[type="number"]').forEach(inp => {
+                if (inp.id) state.inputs[inp.id] = inp.value;
+            });
+
+            // 3. Сохраняем слайдеры (симуляторы)
+            document.querySelectorAll('#exam-hub input[type="range"]').forEach(rng => {
+                if (rng.id) state.ranges[rng.id] = rng.value;
+            });
+
+            // 4. Сохраняем эссе
+            document.querySelectorAll('#exam-hub textarea').forEach(ta => {
+                if (ta.id) state.textareas[ta.id] = ta.value;
+            });
+
+            return state;
+        }
+
+        // Восстановление состояния ответов и настроек
+        function restoreExamState(state) {
+            if (!state) return;
+
+            // Восстанавливаем эссе
+            for (const [id, val] of Object.entries(state.textareas)) {
+                const ta = document.getElementById(id);
+                if (ta) {
+                    ta.value = val;
+                    ta.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+
+            // Восстанавливаем текстовые инпуты задач
+            for (const [id, val] of Object.entries(state.inputs)) {
+                const inp = document.getElementById(id);
+                if (inp) {
+                    inp.value = val;
+                    inp.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+
+            // Восстанавливаем выбранные ответы в тестах
+            for (const [name, val] of Object.entries(state.radios)) {
+                const radio = document.querySelector(`#exam-hub input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(val)}"]`);
+                if (radio) {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+
+            // Восстанавливаем слайдеры и графики
+            for (const [id, val] of Object.entries(state.ranges)) {
+                const rng = document.getElementById(id);
+                if (rng) {
+                    rng.value = val;
+                    rng.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+        }
+
         function setLanguage(lang) {
             currentLang = lang;
             document.getElementById('lang-btn-en').className = lang === 'en' ? 'px-3 py-1 text-xs font-bold rounded bg-indigo-600 text-white transition' : 'px-3 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition';
@@ -313,7 +386,11 @@
             });
 
             if (currentStudentIdx !== -1) {
+                const savedState = saveExamState();
                 generatePersonalizedExam(currentStudentIdx);
+                setTimeout(() => {
+                    restoreExamState(savedState);
+                }, 80);
             }
         }
 
@@ -413,4 +490,22 @@
         function calcPress(val) {
             if (calcExpr === "0") calcExpr = "";
             calcExpr += val;
-            document.getElementById('calc-display').
+            document.getElementById('calc-display').value = calcExpr;
+        }
+        function calcClear() {
+            calcExpr = "";
+            document.getElementById('calc-display').value = "0";
+        }
+        function calcEval() {
+            try {
+                const res = eval(calcExpr);
+                calcExpr = res.toString();
+                document.getElementById('calc-display').value = res;
+            } catch(e) {
+                document.getElementById('calc-display').value = "Error";
+                calcExpr = "";
+            }
+        }
+    </script>
+</body>
+</html>
