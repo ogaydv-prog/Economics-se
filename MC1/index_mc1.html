@@ -16,10 +16,9 @@
             background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%); 
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             color: #e2e8f0;
-            user-select: none; /* Запрет стандартного выделения текста */
+            user-select: none;
             -webkit-user-select: none;
         }
-        /* Разрешаем выделение и ввод текста ТОЛЬКО в полях ответов */
         input, textarea {
             user-select: text !important;
             -webkit-user-select: text !important;
@@ -47,22 +46,6 @@
         <div id="toast-bg" class="bg-indigo-600 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 border border-indigo-400/30">
             <i class="fas fa-info-circle text-lg"></i>
             <span id="toast-msg" class="text-sm font-semibold">Notification</span>
-        </div>
-    </div>
-
-    <!-- Professor Auth Modal -->
-    <div id="teacher-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
-        <div class="card p-6 max-w-md w-full bg-slate-900 border border-slate-700/60 space-y-4">
-            <div class="flex items-center gap-3 text-indigo-400">
-                <i class="fas fa-key text-2xl"></i>
-                <h4 class="text-lg font-bold" data-lang-en="Professor Panel Auth" data-lang-ru="Панель Преподавателя">Professor Panel Auth</h4>
-            </div>
-            <p class="text-sm text-slate-300" data-lang-en="Enter master key to access grading & AI detection." data-lang-ru="Введите мастер-ключ для проверки работ и ИИ-анализа.">Enter master key to access grading & AI detection.</p>
-            <input type="password" id="teacher-key" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Master Key">
-            <div class="flex justify-end gap-3 pt-2">
-                <button onclick="toggleModal('teacher-modal', false)" class="px-4 py-2.5 rounded-lg text-xs md:text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-lang-en="Cancel" data-lang-ru="Отмена">Cancel</button>
-                <button onclick="verifyTeacherKey()" class="px-4 py-2.5 rounded-lg text-xs md:text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition" data-lang-en="Unlock" data-lang-ru="Войти">Unlock</button>
-            </div>
         </div>
     </div>
 
@@ -286,7 +269,7 @@
     <footer class="border-t border-slate-800/80 bg-slate-950/60 py-5 text-center text-xs text-slate-500 w-full mt-10">
         <div class="max-w-[1500px] mx-auto px-4 flex justify-center items-center gap-4 relative">
             <p class="text-slate-500 text-center">School of Digital Technologies & Economics • Software Engineering • AlmaU 2026</p>
-            <button onclick="toggleModal('teacher-modal', true)" class="text-slate-800 hover:text-indigo-500/30 transition text-sm focus:outline-none absolute right-4" title="Professor Entry">
+            <button onclick="openProfessorPanelDirectly()" class="text-slate-800 hover:text-indigo-500/30 transition text-sm focus:outline-none absolute right-4" title="Professor Entry">
                 <i class="fas fa-key"></i>
             </button>
         </div>
@@ -297,13 +280,19 @@
     <script src="tasks_p3.js"></script>
     <script src="case_p4.js"></script>
     <script src="grading_ai_engine.js"></script>
-
     <!-- Main Logic Script -->
     <script>
         let currentLang = 'en';
         let currentStudentIdx = -1;
 
-        // Сохранение состояния ответов и настроек слайдеров
+        // ПРЯМОЙ ВХОД В ПАНЕЛЬ ПРЕПОДАВАТЕЛЯ БЕЗ ПАРОЛЯ
+        function openProfessorPanelDirectly() {
+            document.getElementById('prof-grade-panel').classList.remove('hidden');
+            switchTab('tab-submit');
+            notify("Панель преподавателя открыта!", false);
+        }
+
+        // СОХРАНЕНИЕ СОСТОЯНИЯ (ОТВЕТОВ) ПРИ СМЕНЕ ЯЗЫКА ИЛИ ВКЛАДОК
         function saveExamState() {
             const state = {
                 radios: {},
@@ -312,22 +301,18 @@
                 textareas: {}
             };
 
-            // 1. Сохраняем радио-кнопки (тесты)
             document.querySelectorAll('#exam-hub input[type="radio"]:checked').forEach(r => {
                 if (r.name) state.radios[r.name] = r.value;
             });
 
-            // 2. Сохраняем текстовые и числовые инпуты (задачи)
             document.querySelectorAll('#exam-hub input[type="text"], #exam-hub input[type="number"]').forEach(inp => {
                 if (inp.id) state.inputs[inp.id] = inp.value;
             });
 
-            // 3. Сохраняем слайдеры (симуляторы)
             document.querySelectorAll('#exam-hub input[type="range"]').forEach(rng => {
                 if (rng.id) state.ranges[rng.id] = rng.value;
             });
 
-            // 4. Сохраняем эссе
             document.querySelectorAll('#exam-hub textarea').forEach(ta => {
                 if (ta.id) state.textareas[ta.id] = ta.value;
             });
@@ -335,11 +320,10 @@
             return state;
         }
 
-        // Восстановление состояния ответов и настроек
+        // ВОССТАНОВЛЕНИЕ ВСЕХ ВВЕДЕННЫХ ДАННЫХ
         function restoreExamState(state) {
             if (!state) return;
 
-            // Восстанавливаем эссе
             for (const [id, val] of Object.entries(state.textareas)) {
                 const ta = document.getElementById(id);
                 if (ta) {
@@ -348,7 +332,6 @@
                 }
             }
 
-            // Восстанавливаем текстовые инпуты задач
             for (const [id, val] of Object.entries(state.inputs)) {
                 const inp = document.getElementById(id);
                 if (inp) {
@@ -357,7 +340,6 @@
                 }
             }
 
-            // Восстанавливаем выбранные ответы в тестах
             for (const [name, val] of Object.entries(state.radios)) {
                 const radio = document.querySelector(`#exam-hub input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(val)}"]`);
                 if (radio) {
@@ -366,7 +348,6 @@
                 }
             }
 
-            // Восстанавливаем слайдеры и графики
             for (const [id, val] of Object.entries(state.ranges)) {
                 const rng = document.getElementById(id);
                 if (rng) {
@@ -498,14 +479,183 @@
         }
         function calcEval() {
             try {
-                const res = eval(calcExpr);
-                calcExpr = res.toString();
-                document.getElementById('calc-display').value = res;
-            } catch(e) {
+                let res = eval(calcExpr);
+                if (res !== undefined) {
+                    res = Math.round(res * 100) / 100;
+                    document.getElementById('calc-display').value = res;
+                    calcExpr = res.toString();
+                }
+            } catch (e) {
                 document.getElementById('calc-display').value = "Error";
                 calcExpr = "";
             }
         }
+
+        // ==========================================
+        // SAFE ANTI-CHEATING SYSTEM
+        // ==========================================
+        let tabSwitchCount = 0;
+        let isLockActive = false;
+
+        function playWarningSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sawtooth'; 
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.4);
+
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } catch (e) {
+                console.log("AudioContext blocked", e);
+            }
+        }
+
+        function handleViolation(reason) {
+            if (typeof currentStudentIdx === 'undefined' || currentStudentIdx === -1) return;
+            if (isLockActive) return;
+
+            tabSwitchCount++;
+            playWarningSound();
+
+            if (tabSwitchCount === 1) {
+                showTeacherUnlockModal(reason);
+            } else {
+                triggerPermanentLock(reason);
+            }
+        }
+
+        function showTeacherUnlockModal(reason) {
+            if (document.getElementById('exam-warning-overlay')) return;
+            isLockActive = true;
+
+            const warnOverlay = document.createElement('div');
+            warnOverlay.id = 'exam-warning-overlay';
+            warnOverlay.className = 'fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9998] flex flex-col items-center justify-center p-6 text-center select-none';
+
+            warnOverlay.innerHTML = `
+                <div class="max-w-md w-full bg-slate-900 border-2 border-amber-500 rounded-2xl p-6 space-y-5 shadow-2xl">
+                    <div class="w-16 h-16 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto text-amber-400 text-3xl">
+                        ⚠️
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest bg-amber-950/60 border border-amber-800/50 px-3 py-1 rounded-full">
+                            Предупреждение №1
+                        </span>
+                        <h3 class="text-xl font-bold text-white">ДОСТУП ПРИОСТАНОВЛЕН</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Зафиксирована попытка ухода со страницы:<br>
+                            <span class="text-amber-400 font-mono font-bold">${reason}</span>.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs text-center font-bold">
+                        Обратитесь к преподавателю (Ogay D.V.) для разблокировки страницы.
+                    </div>
+
+                    <div class="bg-slate-950/80 p-4 rounded-xl border border-indigo-900/50 space-y-3 text-left">
+                        <label class="block text-[11px] uppercase font-bold text-indigo-400 tracking-wider">
+                            <i class="fas fa-key mr-1"></i> Введите пароль преподавателя
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="password" id="first-unlock-pass" placeholder="Пароль преподавателя" 
+                                   class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-xs text-white focus:border-indigo-500 outline-none font-mono">
+                            <button onclick="unlockFirstWarning()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-lg text-xs uppercase tracking-wider transition whitespace-nowrap">
+                                Разблокировать
+                            </button>
+                        </div>
+                        <p id="first-unlock-err" class="text-[11px] text-rose-400 font-bold hidden">Неверный пароль!</p>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(warnOverlay);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function unlockFirstWarning() {
+            const inputVal = document.getElementById('first-unlock-pass')?.value.trim();
+            const errMsg = document.getElementById('first-unlock-err');
+
+            // Пароль разблокировки 1-го предупреждения
+            if (inputVal === "SE-14092026MC1OK") {
+                const el = document.getElementById('exam-warning-overlay');
+                if (el) el.remove();
+                document.body.style.overflow = 'auto';
+                
+                setTimeout(() => { isLockActive = false; }, 1000);
+                notify("Экзамен разблокирован преподавателем!");
+            } else {
+                if (errMsg) errMsg.classList.remove('hidden');
+            }
+        }
+
+        function triggerPermanentLock(reason) {
+            const warnEl = document.getElementById('exam-warning-overlay');
+            if (warnEl) warnEl.remove();
+
+            if (document.getElementById('exam-lock-overlay')) return;
+            isLockActive = true;
+
+            const lockOverlay = document.createElement('div');
+            lockOverlay.id = 'exam-lock-overlay';
+            lockOverlay.className = 'fixed inset-0 bg-slate-950 z-[9999] flex flex-col items-center justify-center p-6 text-center select-none';
+
+            lockOverlay.innerHTML = `
+                <div class="max-w-md w-full bg-slate-900 border-2 border-rose-600 rounded-2xl p-8 space-y-5 shadow-2xl">
+                    <div class="w-20 h-20 bg-rose-500/10 border border-rose-500/30 rounded-full flex items-center justify-center mx-auto text-rose-500 text-3xl font-bold">
+                        🔒
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest bg-rose-950/60 border border-rose-800/50 px-3 py-1 rounded-full">
+                            Disqualified / Окончательно Заблокировано
+                        </span>
+                        <h2 class="text-2xl font-black text-white">ЭКЗАМЕН АННУЛИРОВАН</h2>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Зафиксировано повторное нарушение правил:<br>
+                            <span class="text-rose-400 font-mono font-bold">${reason}</span>.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-left space-y-1 text-xs">
+                        <div class="text-slate-500 font-mono">Статус: <span class="text-rose-400 font-bold">Полная дисквалификация</span></div>
+                        <div class="text-slate-500 font-mono">Время фиксации: <span class="text-slate-300">${new Date().toLocaleTimeString()}</span></div>
+                    </div>
+
+                    <p class="text-[11px] text-slate-500">
+                        Работа заблокирована без права повторного восстановления.
+                    </p>
+                </div>
+            `;
+
+            document.body.appendChild(lockOverlay);
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ДЕТЕКТОРЫ
+        document.addEventListener('selectstart', (e) => {
+            const tag = e.target.tagName.toLowerCase();
+            if (tag !== 'input' && tag !== 'textarea') {
+                handleViolation("Попытка выделения текста задания");
+            }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                handleViolation("Смена вкладки, открытие нового окна или сворачивание браузера");
+            }
+        });
     </script>
 </body>
 </html>
