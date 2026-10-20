@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 8 | Principles of Economics</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px 20px;
+            position: relative;
+        }
+
+        .top-left-logo {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 35px;
+            right: 30px;
+            text-decoration: none;
+            background-color: #001e50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #003380;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 700;
+            color: #001e50;
+            margin-bottom: 8px;
+            margin-top: 15px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #555555;
+            max-width: 680px;
+            line-height: 1.5;
+            margin: 0 auto;
+        }
+
+        /* Контейнер карточек */
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            max-width: 1450px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 40px;
+        }
+
+        /* ТОЧНАЯ РАМКА ПОД ИСХОДНЫЕ PNG КАРТИНКИ */
+        .card {
+            display: block;
+            text-decoration: none;
+            background: #ffffff;
+            border: 2px solid #001e50;
+            border-radius: 6px 6px 12px 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 30, 80, 0.08);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 185px; 
+            height: 300px; 
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Картинка полностью заполняет карточку без белых зазоров */
+        .card img {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            object-fit: cover !important;
+            object-position: center top !important;
+            border: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: #0284c7;
+            box-shadow: 0 18px 35px rgba(0, 30, 80, 0.25);
+        }
+
+        /* 3D-Flip карточка */
+        .flip-card {
+            perspective: 1000px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 6px 6px 12px 12px;
+            overflow: hidden;
+            border: 2px solid #001e50;
+        }
+
+        .flip-card-front {
+            background-color: #ffffff;
+        }
+
+        .flip-card-back {
+            background: #001e50;
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px 10px;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(0, 30, 80, 0.3);
+        }
+
+        .flip-card-back h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #38bdf8;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .video-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.2s ease;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .video-btn:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: #ffffff;
+        }
+
+        footer {
+            margin-top: auto;
+            font-size: 14px;
+            color: #718096;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Адаптивность под мобильные устройства (сотки) */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px 15px;
+            }
+
+            .top-left-logo {
+                position: static;
+                margin: 0 auto 10px auto;
+                display: block;
+                width: 48px;
+                height: 48px;
+            }
+
+            .back-button {
+                position: static;
+                display: inline-block;
+                margin: 0 auto 15px auto;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            header {
+                margin-top: 5px;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                max-width: 380px;
+            }
+
+            .card {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 185 / 300;
+            }
+
+            .flip-card-back {
+                padding: 8px;
+                gap: 6px;
+            }
+
+            .video-btn {
+                font-size: 9px;
+                padding: 6px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AlmaU Logo -->
+    <img src="almau.jpg" alt="AlmaU Logo" class="top-left-logo">
+    
+    <!-- Back Button -->
+    <a href="topics.html" class="back-button">← Back to Topics</a>
+
+    <header>
+        <h1>Topic 8: Macroeconomic Concepts & Measuring GDP</h1>
+        <p class="subtitle">
+            Select a learning resource below: presentation, interactive macroeconomic simulators, lab task, or video lectures.
+        </p>
+    </header>
+
+    <main class="grid-container">
+        <!-- 1. Lecture Notes -->
+        <a href="gdp-lecture-pro.html" class="card" title="Lecture Notes">
+            <img src="pic-lecture8-se.png" alt="Lecture Notes">
+        </a>
+
+        <!-- 2. Presentation -->
+        <a href="https://canva.link/7zj9k5kvyhgntcb" 
+           target="_blank" rel="noopener noreferrer" class="card" title="Presentation">
+            <img src="pic-preza8-se.png" alt="Presentation">
+        </a>
+
+        <!-- 3. Global GDP Simulator -->
+        <a href="gdp-us-202518.html" class="card" title="Global GDP Simulator">
+            <img src="pic-global-gdp-se.png" alt="Global GDP Simulator">
+        </a>
+
+        <!-- 4. Measuring GDP Simulator -->
+        <a href="sim-gdp-measure-mac-pro-g-bal.html" class="card" title="Measuring GDP Simulator">
+            <img src="pic-sim-gdp-measur-se.png" alt="Measuring GDP Simulator">
+        </a>
+
+        <!-- 5. Lab Task -->
+        <a href="sim-gdp-task-pro.html" class="card" title="GDP Balance Lab Task">
+            <img src="pic-sim-task-gdp-se.png" alt="GDP Balance Lab Task">
+        </a>
+
+        <!-- 6. Video Lectures (3D-Flip) -->
+        <div class="card flip-card" title="Video Lectures">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="pic-video8-se.png" alt="Video Lectures">
+                </div>
+                <div class="flip-card-back">
+                    <h4>🎬 Video Lectures</h4>
+                    <a href="https://www.youtube.com/watch?v=BnrBRuoVefY&list=PL11ADD17785C9C9A4&index=2" target="_blank" rel="noopener noreferrer" class="video-btn">
+                        ▶ Nominal vs Real GDP
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=2YxVvhbgV1I&list=PL11ADD17785C9C9A4&index=4" target="_blank" rel="noopener noreferrer" class="video-btn">
+                        ▶ Measuring GDP
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=iV4DS9aAQqM&list=PL11ADD17785C9C9A4&index=7" target="_blank" rel="noopener noreferrer" class="video-btn">
+                        ▶ GDP Deflator & CPI
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Developed for Principles of Economics Course AlmaU 2026</p>
+        <p>© Almaty Management University | School of Digital Technologies & Economics</p>
+    </footer>
+
+</body>
+</html>
