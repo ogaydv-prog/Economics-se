@@ -23,12 +23,17 @@
             <div class="flex items-center gap-3">
                 <div class="bg-indigo-600 text-white p-2 rounded-lg font-bold text-xl tracking-wider">GDP</div>
                 <div>
-                    <h1 class="text-xl font-extrabold tracking-tight text-white">Макро-Анализ ВВП 2025</h1>
-                    <p class="text-xs text-slate-400">Интерактивный анализ затратного и доходного методов</p>
+                    <h1 id="i18n-header-title" class="text-xl font-extrabold tracking-tight text-white">Макро-Анализ ВВП 2025</h1>
+                    <p id="i18n-header-subtitle" class="text-xs text-slate-400">Интерактивный анализ затратного и доходного методов</p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-indigo-500/20">Данные: BEA & OECD (2025/2026)</span>
+            <div class="flex items-center gap-3">
+                <span id="i18n-header-badge" class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-indigo-500/20">Данные: BEA & OECD (2025/2026)</span>
+                <!-- Language Switcher Button -->
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5 shadow-sm">
+                    <span>🌐</span>
+                    <span id="langLabel">EN</span>
+                </button>
             </div>
         </div>
     </header>
@@ -37,13 +42,13 @@
         <!-- Navigation Tabs -->
         <div class="flex border-b border-slate-800 mb-8 overflow-x-auto gap-2 scrollbar-none">
             <button onclick="switchTab('us-compare')" id="btn-us-compare" class="tab-btn px-5 py-3 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 whitespace-nowrap transition-all">
-                🇺🇸 США: Детальное сравнение (2010 vs 2025)
+                🇺🇸 <span id="i18n-tab-us">США: Детальное сравнение (2010 vs 2025)</span>
             </button>
             <button onclick="switchTab('global-compare')" id="btn-global-compare" class="tab-btn px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap transition-all">
-                🌍 Сравнение стран (Процентные доли)
+                🌍 <span id="i18n-tab-global">Сравнение стран (Процентные доли)</span>
             </button>
             <button onclick="switchTab('raw-data')" id="btn-raw-data" class="tab-btn px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap transition-all">
-                📊 Исходные таблицы
+                📊 <span id="i18n-tab-raw">Исходные таблицы</span>
             </button>
         </div>
 
@@ -54,26 +59,26 @@
                 <!-- 2010 Card -->
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-slate-800/10 rounded-full blur-2xl"></div>
-                    <span class="text-xs uppercase tracking-wider text-slate-500 font-bold">ВВП США (из источника GDP US 2012.docx)</span>
-                    <h2 class="text-3xl font-black text-slate-400 mt-1">2010 Год</h2>
+                    <span id="i18n-card10-tag" class="text-xs uppercase tracking-wider text-slate-500 font-bold">ВВП США (из источника GDP US 2012.docx)</span>
+                    <h2 id="i18n-card10-title" class="text-3xl font-black text-slate-400 mt-1">2010 Год</h2>
                     <div class="mt-4 flex items-baseline gap-2">
                         <span class="text-5xl font-extrabold text-white tracking-tight">$14,600.0</span>
-                        <span class="text-slate-400 text-lg font-medium">млрд</span>
+                        <span id="i18n-card10-unit" class="text-slate-400 text-lg font-medium">млрд</span>
                     </div>
-                    <p class="text-slate-500 text-xs mt-2">Базовый исторический период для сравнения структуры долей</p>
+                    <p id="i18n-card10-desc" class="text-slate-500 text-xs mt-2">Базовый исторический период для сравнения структуры долей</p>
                 </div>
 
                 <!-- 2025 Card -->
                 <div class="bg-slate-950 border border-indigo-900/50 rounded-2xl p-6 relative overflow-hidden ring-1 ring-indigo-500/20">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl"></div>
-                    <span class="text-xs uppercase tracking-wider text-indigo-400 font-bold">ВВП США (Новейшие данные BEA)</span>
-                    <h2 class="text-3xl font-black text-indigo-300 mt-1">2025 Год</h2>
+                    <span id="i18n-card25-tag" class="text-xs uppercase tracking-wider text-indigo-400 font-bold">ВВП США (Новейшие данные BEA)</span>
+                    <h2 id="i18n-card25-title" class="text-3xl font-black text-indigo-300 mt-1">2025 Год</h2>
                     <div class="mt-4 flex items-baseline gap-2">
                         <span class="text-5xl font-extrabold text-indigo-400 tracking-tight">$30,762.1</span>
-                        <span class="text-indigo-300 text-lg font-medium">млрд</span>
+                        <span id="i18n-card25-unit" class="text-indigo-300 text-lg font-medium">млрд</span>
                     </div>
                     <div class="text-emerald-500 text-xs font-semibold mt-2 flex items-center gap-1">
-                        <span>↑ +110.7% номинального роста с 2010 года</span>
+                        <span id="i18n-card25-growth">↑ +110.7% номинального роста с 2010 года</span>
                     </div>
                 </div>
             </div>
@@ -83,16 +88,16 @@
                 <div class="mb-6">
                     <h3 class="text-lg font-bold text-white flex items-center gap-2">
                         <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-                        Структурный анализ: Сравнение долей расходов (2010 vs 2025)
+                        <span id="i18n-doughnut-title">Структурный анализ: Сравнение долей расходов (2010 vs 2025)</span>
                     </h3>
-                    <p class="text-xs text-slate-400 mt-1">
+                    <p id="i18n-doughnut-desc" class="text-xs text-slate-400 mt-1">
                         Наглядное сопоставление структуры американского ВВП по конечному использованию. Внутренний потребительский рынок детализирован благородными оттенками зелёного, а отрицательный чистый экспорт (NX) органично интегрирован в площадь диаграммы.
                     </p>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     <!-- 2010 US Doughnut Card -->
                     <div class="lg:col-span-4 bg-slate-900/30 border border-slate-850 rounded-xl p-6 relative flex flex-col items-center">
-                        <h4 class="text-sm font-bold text-slate-300 mb-4 text-center">США: Структура ВВП (2010)</h4>
+                        <h4 id="i18n-pie10-title" class="text-sm font-bold text-slate-300 mb-4 text-center">США: Структура ВВП (2010)</h4>
                         <div class="w-full h-[260px] relative flex justify-center">
                             <div class="w-[260px] h-[260px] relative">
                                 <canvas id="usPie2010Canvas"></canvas>
@@ -102,7 +107,7 @@
 
                     <!-- 2025 US Doughnut Card -->
                     <div class="lg:col-span-4 bg-slate-900/30 border border-slate-850 rounded-xl p-6 relative flex flex-col items-center">
-                        <h4 class="text-sm font-bold text-slate-300 mb-4 text-center">США: Структура ВВП (2025)</h4>
+                        <h4 id="i18n-pie25-title" class="text-sm font-bold text-slate-300 mb-4 text-center">США: Структура ВВП (2025)</h4>
                         <div class="w-full h-[260px] relative flex justify-center">
                             <div class="w-[260px] h-[260px] relative">
                                 <canvas id="usPie2025Canvas"></canvas>
@@ -113,33 +118,31 @@
                     <!-- Explanatory Text Box -->
                     <div class="lg:col-span-4 flex flex-col justify-center space-y-4">
                         <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-xl">
-                            <h5 class="text-xs uppercase tracking-wider text-emerald-400 font-bold mb-2">Глоссарий и Пояснения</h5>
+                            <h5 id="i18n-glossary-title" class="text-xs uppercase tracking-wider text-emerald-400 font-bold mb-2">Глоссарий и Пояснения</h5>
                             <ul class="space-y-2.5 text-xs text-slate-300">
                                 <li class="flex items-start gap-2">
                                     <span class="w-2.5 h-2.5 rounded bg-[#064e3b] shrink-0 mt-0.5"></span>
-                                    <span><strong>Services (Услуги):</strong> Здравоохранение, финансы, образование. Абсолютный гигант экономики США (~47% ВВП).</span>
+                                    <span id="i18n-glossary-services"><strong>Services (Услуги):</strong> Здравоохранение, финансы, образование. Абсолютный гигант экономики США (~47% ВВП).</span>
                                 </li>
                                 <li class="flex items-start gap-2">
                                     <span class="w-2.5 h-2.5 rounded bg-[#0f766e] shrink-0 mt-0.5"></span>
-                                    <span><strong>FMCG (Товары краткосрочного спроса):</strong> Еда, топливо, одежда. Наблюдается снижение доли с 16.4% до 13.8%.</span>
+                                    <span id="i18n-glossary-fmcg"><strong>FMCG (Товары краткосрочного спроса):</strong> Еда, топливо, одежда. Наблюдается снижение доли с 16.4% до 13.8%.</span>
                                 </li>
                                 <li class="flex items-start gap-2">
                                     <span class="w-2.5 h-2.5 rounded bg-[#34d399] shrink-0 mt-0.5"></span>
-                                    <span><strong>Durable Goods (Длительный спрос):</strong> Автомобили, техника. Стабильно удерживает около 7.3-7.8%.</span>
+                                    <span id="i18n-glossary-durable"><strong>Durable Goods (Длительный спрос):</strong> Автомобили, техника. Стабильно удерживает около 7.3-7.8%.</span>
                                 </li>
                                 <li class="flex items-start gap-2">
                                     <span class="w-2.5 h-2.5 rounded bg-[#1d4ed8] shrink-0 mt-0.5"></span>
-                                    <span><strong>Investments (Инвестиции):</strong>
-
-Основной драйвер технологического роста последних 15 лет (рост с 13.1% до 17.7%).</span>
+                                    <span id="i18n-glossary-investments"><strong>Investments (Инвестиции):</strong> Основной драйвер технологического роста последних 15 лет (рост с 13.1% до 17.7%).</span>
                                 </li>
                                 <li class="flex items-start gap-2">
                                     <span class="w-2.5 h-2.5 rounded bg-[#d97706] shrink-0 mt-0.5"></span>
-                                    <span><strong>Government (Госрасходы):</strong> Госзакупки федерального и местного уровней. Стабильные 17-19%.</span>
+                                    <span id="i18n-glossary-gov"><strong>Government (Госрасходы):</strong> Госзакупки федерального и местного уровней. Стабильные 17-19%.</span>
                                 </li>
                                 <li class="flex items-start gap-2">
                                     <span class="w-2.5 h-2.5 rounded bg-[#e11d48] shrink-0 mt-0.5"></span>
-                                    <span><strong>Net Exports (NX):</strong> Отрицательное сальдо торговли (Импорт > Экспорт). Отражает дефицит торгового баланса США.</span>
+                                    <span id="i18n-glossary-nx"><strong>Net Exports (NX):</strong> Отрицательное сальдо торговли (Импорт > Экспорт). Отражает дефицит торгового баланса США.</span>
                                 </li>
                             </ul>
                         </div>
@@ -154,14 +157,14 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-white flex items-center gap-2">
                             <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-                            Сравнение структуры расходов (Затратный метод)
+                            <span id="i18n-exp-chart-title">Сравнение структуры расходов (Затратный метод)</span>
                         </h3>
-                        <span class="text-xs text-slate-400">(% от ВВП)</span>
+                        <span id="i18n-exp-chart-subtitle" class="text-xs text-slate-400">(% от ВВП)</span>
                     </div>
                     <div class="h-[350px] relative">
                         <canvas id="usExpendituresChart"></canvas>
                     </div>
-                    <p class="text-xs text-slate-400 mt-4 leading-relaxed italic">
+                    <p id="i18n-exp-chart-desc" class="text-xs text-slate-400 mt-4 leading-relaxed italic">
                         Пример: Личные потребительские расходы (Consumption) остаются ключевой опорой американской экономики, стабилизируясь в районе 68% ВВП. Доля инвестиционного капитала за 15 лет выросла до 17.7%, компенсируя сокращение доли классических товарных расходов.
                     </p>
                 </div>
@@ -169,12 +172,12 @@
                 <!-- Expense Quick Table -->
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
                     <div>
-                        <h3 class="text-lg font-bold text-white mb-4">Основные изменения долей</h3>
+                        <h3 id="i18n-changes-title" class="text-lg font-bold text-white mb-4">Основные изменения долей</h3>
                         <div class="space-y-4">
                             <!-- Row 1 -->
                             <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
                                 <div>
-                                    <p class="text-sm font-semibold text-slate-300">Consumption (Потребление)</p>
+                                    <p id="i18n-change1-title" class="text-sm font-semibold text-slate-300">Consumption (Потребление)</p>
                                     <p class="text-xs text-slate-500">2010: 71.0% | 2025: 68.1%</p>
                                 </div>
                                 <span class="text-red-400 text-xs font-semibold bg-red-500/10 px-2 py-1 rounded">-2.9%</span>
@@ -182,7 +185,7 @@
                             <!-- Row 2 -->
                             <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
                                 <div>
-                                    <p class="text-sm font-semibold text-slate-300">FMCG (Непродовольственные товары)</p>
+                                    <p id="i18n-change2-title" class="text-sm font-semibold text-slate-300">FMCG (Непродовольственные товары)</p>
                                     <p class="text-xs text-slate-500">2010: 16.4% | 2025: 13.8%</p>
                                 </div>
                                 <span class="text-red-400 text-xs font-semibold bg-red-500/10 px-2 py-1 rounded">-2.6%</span>
@@ -190,7 +193,7 @@
                             <!-- Row 3 -->
                             <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
                                 <div>
-                                    <p class="text-sm font-semibold text-slate-300">Investment (Инвестиции)</p>
+                                    <p id="i18n-change3-title" class="text-sm font-semibold text-slate-300">Investment (Инвестиции)</p>
                                     <p class="text-xs text-slate-500">2010: 13.1% | 2025: 17.7%</p>
                                 </div>
                                 <span class="text-emerald-400 text-xs font-semibold bg-emerald-500/10 px-2 py-1 rounded">+4.6%</span>
@@ -198,7 +201,7 @@
                             <!-- Row 4 -->
                             <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
                                 <div>
-                                    <p class="text-sm font-semibold text-slate-300">Government (Госзакупки)</p>
+                                    <p id="i18n-change4-title" class="text-sm font-semibold text-slate-300">Government (Госзакупки)</p>
                                     <p class="text-xs text-slate-500">2010: 19.7% | 2025: 17.2%</p>
                                 </div>
                                 <span class="text-red-400 text-xs font-semibold bg-red-500/10 px-2 py-1 rounded">-2.5%</span>
@@ -206,7 +209,7 @@
                             <!-- Row 5 -->
                             <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
                                 <div>
-                                    <p class="text-sm font-bold text-rose-300">Net Exports (Чистый экспорт, NX)</p>
+                                    <p id="i18n-change5-title" class="text-sm font-bold text-rose-300">Net Exports (Чистый экспорт, NX)</p>
                                     <p class="text-xs text-slate-500">2010: -3.8% | 2025: -3.01%</p>
                                 </div>
                                 <span class="text-rose-400 text-xs font-bold bg-rose-500/10 px-2 py-1 rounded">+0.79%</span>
@@ -214,7 +217,7 @@
                         </div>
                     </div>
                     <div class="mt-6 pt-4 border-t border-slate-800 bg-slate-900/30 -mx-6 -mb-6 p-6 rounded-b-2xl">
-                        <span class="text-xs text-slate-400">Инвестиции в оборудование (Equipment) выросли до $1,643.7 млрд в 2025 г., отражая цифровизацию и технологический бум. Чистый экспорт остается дефицитным (около -$926 млрд), но его доля в общем объеме ВВП уменьшилась.</span>
+                        <span id="i18n-changes-footer" class="text-xs text-slate-400">Инвестиции в оборудование (Equipment) выросли до $1,643.7 млрд в 2025 г., отражая цифровизацию и технологический бум. Чистый экспорт остается дефицитным (около -$926 млрд), но его доля в общем объеме ВВП уменьшилась.</span>
                     </div>
                 </div>
             </div>
@@ -223,29 +226,29 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Income Side Description -->
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6">
-                    <h3 class="text-lg font-bold text-indigo-400 mb-3">Доходный метод (GDI 2025)</h3>
-                    <p class="text-sm text-slate-300 leading-relaxed">
+                    <h3 id="i18n-gdi-title" class="text-lg font-bold text-indigo-400 mb-3">Доходный метод (GDI 2025)</h3>
+                    <p id="i18n-gdi-desc" class="text-sm text-slate-300 leading-relaxed">
                         Детальная структура национального дохода США по данным BEA за 2025 год демонстрирует, как распределяется стоимость, созданная в экономике.
                     </p>
                     <div class="mt-6 space-y-4">
                         <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                            <span class="text-xs text-slate-500 uppercase block">Структура оплаты труда сотрудников</span>
+                            <span id="i18n-gdi-comp-label" class="text-xs text-slate-500 uppercase block">Структура оплаты труда сотрудников</span>
                             <div class="flex justify-between items-baseline mt-1">
                                 <span class="text-lg font-bold text-white">$15,749.6 млрд</span>
                                 <span class="text-xs text-indigo-400 font-semibold">(51.6% GDI)</span>
                             </div>
-                            <p class="text-xs text-slate-400 mt-1">Зарплаты: $12,981.4 млрд (42.5%), социальные надбавки/взносы: $2,768.3 млрд (9.1%).</p>
+                            <p id="i18n-gdi-comp-sub" class="text-xs text-slate-400 mt-1">Зарплаты: $12,981.4 млрд (42.5%), социальные надбавки/взносы: $2,768.3 млрд (9.1%).</p>
                         </div>
                         <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                            <span class="text-xs text-slate-500 uppercase block">Прибыль корпораций и её деление</span>
+                            <span id="i18n-gdi-corp-label" class="text-xs text-slate-500 uppercase block">Прибыль корпораций и её деление</span>
                             <div class="flex justify-between items-baseline mt-1">
                                 <span class="text-lg font-bold text-white">$3,550.9 млрд</span>
                                 <span class="text-xs text-emerald-400 font-semibold">(11.6% GDI)</span>
                             </div>
                             <div class="text-xs text-slate-400 mt-1 space-y-0.5">
-                                <p>• Налоги корпораций: <strong>$695.2 млрд</strong> (19.6% прибыли)</p>
-                                <p>• Выплаченные дивиденды: <strong>$1,706.9 млрд</strong> (48.1%)</p>
-                                <p>• Нераспределенная прибыль: <strong>$1,148.9 млрд</strong> (32.3%)</p>
+                                <p id="i18n-gdi-corp-tax">• Налоги корпораций: <strong>$695.2 млрд</strong> (19.6% прибыли)</p>
+                                <p id="i18n-gdi-corp-div">• Выплаченные дивиденды: <strong>$1,706.9 млрд</strong> (48.1%)</p>
+                                <p id="i18n-gdi-corp-undiv">• Нераспределенная прибыль: <strong>$1,148.9 млрд</strong> (32.3%)</p>
                             </div>
                         </div>
                     </div>
@@ -255,7 +258,7 @@
                 <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-2xl p-6">
                     <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
                         <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-                        Полная детализация структуры доходов США (2010 vs 2025)
+                        <span id="i18n-gdi-chart-title">Полная детализация структуры доходов США (2010 vs 2025)</span>
                     </h3>
                     <div class="h-[400px] relative">
                         <canvas id="usIncomeChart"></canvas>
@@ -269,8 +272,8 @@
             <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                     <div>
-                        <h3 class="text-xl font-bold text-white">Структура ВВП по расходам по странам мира (2025)</h3>
-                        <p class="text-sm text-slate-400">Выберите страну, чтобы визуализировать её структуру потребления, инвестиций и внешней торговли.</p>
+                        <h3 id="i18n-global-title" class="text-xl font-bold text-white">Структура ВВП по расходам по странам мира (2025)</h3>
+                        <p id="i18n-global-subtitle" class="text-sm text-slate-400">Выберите страну, чтобы визуализировать её структуру потребления, инвестиций и внешней торговли.</p>
                     </div>
                     <div>
                         <select id="countrySelector" onchange="updateGlobalChart()" class="bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -299,19 +302,19 @@
                         <!-- Mini breakdown cards -->
                         <div class="grid grid-cols-2 gap-4">
                             <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                                <span class="text-xs text-slate-500 block">Личное потребление</span>
+                                <span id="i18n-mini-cons" class="text-xs text-slate-500 block">Личное потребление</span>
                                 <span id="valConsumption" class="text-xl font-bold text-emerald-400">53.5%</span>
                             </div>
                             <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                                <span class="text-xs text-slate-500 block">Валовые инвестиции</span>
+                                <span id="i18n-mini-inv" class="text-xs text-slate-500 block">Валовые инвестиции</span>
                                 <span id="valInvestment" class="text-xl font-bold text-indigo-400">20.4%</span>
                             </div>
                             <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                                <span class="text-xs text-slate-500 block">Госрасходы</span>
+                                <span id="i18n-mini-gov" class="text-xs text-slate-500 block">Госрасходы</span>
                                 <span id="valGovernment" class="text-xl font-bold text-amber-400">19.7%</span>
                             </div>
                             <div class="p-4 bg-rose-950/20 rounded-xl border border-rose-500/30 ring-1 ring-rose-500/20">
-                                <span class="text-xs text-rose-300 font-semibold block">Чистый экспорт (NX)</span>
+                                <span id="i18n-mini-nx" class="text-xs text-rose-300 font-semibold block">Чистый экспорт (NX)</span>
                                 <span id="valNX" class="text-xl font-black text-rose-500">+6.3%</span>
                             </div>
                         </div>
@@ -322,15 +325,15 @@
             <!-- Global Matrix Bar Chart Comparison -->
             <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6">
                 <div class="mb-6">
-                    <h3 class="text-lg font-bold text-white">Сводный визуальный анализ структуры спроса</h3>
+                    <h3 id="i18n-matrix-title" class="text-lg font-bold text-white">Сводный визуальный анализ структуры спроса</h3>
                 </div>
                 <div class="h-[400px] relative">
                     <canvas id="globalComparisonMatrixChart"></canvas>
                 </div>
                 <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-400 italic">
-                    <p>💡 <strong>Потребление:</strong> Максимальные значения в США, Великобритании, Греции (более 65% ВВП).</p>
-                    <p>🏭 <strong>Инвестиции:</strong> Абсолютный лидер — Китай (около 40% ВВП инвестируется в капитал).</p>
-                    <p>🛢️ <strong>Чистый экспорт:</strong> Нефтяные гиганты (Норвегия, ОАЭ, Саудовская Аравия) имеют огромную долю NX (выделена красным).</p>
+                    <p id="i18n-matrix-note1">💡 <strong>Потребление:</strong> Максимальные значения в США, Великобритании, Греции (более 65% ВВП).</p>
+                    <p id="i18n-matrix-note2">🏭 <strong>Инвестиции:</strong> Абсолютный лидер — Китай (около 40% ВВП инвестируется в капитал).</p>
+                    <p id="i18n-matrix-note3">🛢️ <strong>Чистый экспорт:</strong> Нефтяные гиганты (Норвегия, ОАЭ, Саудовская Аравия) имеют огромную долю NX (выделена красным).</p>
                 </div>
             </div>
         </div>
@@ -339,112 +342,112 @@
         <div id="tab-raw-data" class="tab-content hidden space-y-8">
             <!-- USA Expenditures Table -->
             <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 overflow-hidden">
-                <h3 class="text-lg font-bold text-white mb-4">США: Метод расходов (Затратный) — Подробная детализация</h3>
+                <h3 id="i18n-table-exp-title" class="text-lg font-bold text-white mb-4">США: Метод расходов (Затратный) — Подробная детализация</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-slate-800 text-slate-400 text-xs uppercase">
-                                <th class="py-3 px-4">Компонент ВВП</th>
-                                <th class="py-3 px-4 text-right">2010 (млрд $)</th>
+                                <th id="i18n-th-exp-comp" class="py-3 px-4">Компонент ВВП</th>
+                                <th id="i18n-th-exp-10b" class="py-3 px-4 text-right">2010 (млрд $)</th>
                                 <th class="py-3 px-4 text-right">2010 (%)</th>
-                                <th class="py-3 px-4 text-right">2025 (млрд $)</th>
+                                <th id="i18n-th-exp-25b" class="py-3 px-4 text-right">2025 (млрд $)</th>
                                 <th class="py-3 px-4 text-right">2025 (%)</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/50 text-sm text-slate-300">
                             <tr>
-                                <td class="py-3 px-4 font-bold text-white">Consumption (Потребительские расходы)</td>
+                                <td id="i18n-t-c" class="py-3 px-4 font-bold text-white">Consumption (Потребительские расходы)</td>
                                 <td class="py-3 px-4 text-right font-semibold">10,366.0</td>
                                 <td class="py-3 px-4 text-right">71.0%</td>
                                 <td class="py-3 px-4 text-right font-semibold text-emerald-400">20,954.9</td>
                                 <td class="py-3 px-4 text-right">68.12%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 pl-8">FMCG (Nondurable / Товары краткосрочного спроса)</td>
+                                <td id="i18n-t-fmcg" class="py-3 px-4 pl-8">FMCG (Nondurable / Товары краткосрочного спроса)</td>
                                 <td class="py-3 px-4 text-right">2,394.0</td>
                                 <td class="py-3 px-4 text-right">16.4%</td>
                                 <td class="py-3 px-4 text-right text-emerald-400/80">4,242.6</td>
                                 <td class="py-3 px-4 text-right">13.79%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 pl-8">Durable Goods (Товары длительного пользования)</td>
+                                <td id="i18n-t-dur" class="py-3 px-4 pl-8">Durable Goods (Товары длительного пользования)</td>
                                 <td class="py-3 px-4 text-right">1,139.0</td>
                                 <td class="py-3 px-4 text-right">7.8%</td>
                                 <td class="py-3 px-4 text-right text-emerald-400/80">2,265.4</td>
                                 <td class="py-3 px-4 text-right">7.36%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 pl-8">Services (Услуги)</td>
+                                <td id="i18n-t-serv" class="py-3 px-4 pl-8">Services (Услуги)</td>
                                 <td class="py-3 px-4 text-right">6,833.0</td>
                                 <td class="py-3 px-4 text-right">46.8%</td>
                                 <td class="py-3 px-4 text-right text-emerald-400/80">14,446.8</td>
                                 <td class="py-3 px-4 text-right">46.96%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 font-bold text-white">Investment (Валовые частные инвестиции)</td>
+                                <td id="i18n-t-i" class="py-3 px-4 font-bold text-white">Investment (Валовые частные инвестиции)</td>
                                 <td class="py-3 px-4 text-right font-semibold">1,913.0</td>
                                 <td class="py-3 px-4 text-right">13.1%</td>
                                 <td class="py-3 px-4 text-right font-semibold text-indigo-400">5,458.6</td>
                                 <td class="py-3 px-4 text-right">17.74%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 pl-8">Fixed investment (Фиксированные инвестиции)</td>
+                                <td id="i18n-t-fi" class="py-3 px-4 pl-8">Fixed investment (Фиксированные инвестиции)</td>
                                 <td class="py-3 px-4 text-right">1,840.0</td>
                                 <td class="py-3 px-4 text-right">12.6%</td>
                                 <td class="py-3 px-4 text-right text-indigo-400/80">5,443.5</td>
                                 <td class="py-3 px-4 text-right">17.70%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 pl-12">Nonresidential Structures & IP (Здания, ПО, НИОКР)</td>
+                                <td id="i18n-t-nonres" class="py-3 px-4 pl-12">Nonresidential Structures & IP (Здания, ПО, НИОКР)</td>
                                 <td class="py-3 px-4 text-right">1,110.0</td>
                                 <td class="py-3 px-4 text-right">7.6%</td>
                                 <td class="py-3 px-4 text-right">4,250.8</td>
                                 <td class="py-3 px-4 text-right">13.82%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 pl-12">Residential (Жилая недвижимость)</td>
+                                <td id="i18n-t-res" class="py-3 px-4 pl-12">Residential (Жилая недвижимость)</td>
                                 <td class="py-3 px-4 text-right">745.0</td>
                                 <td class="py-3 px-4 text-right">5.3%</td>
                                 <td class="py-3 px-4 text-right">1,192.7</td>
                                 <td class="py-3 px-4 text-right">3.88%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 pl-8">Inventory Change (Изменение запасов)</td>
+                                <td id="i18n-t-invch" class="py-3 px-4 pl-8">Inventory Change (Изменение запасов)</td>
                                 <td class="py-3 px-4 text-right">73.0</td>
                                 <td class="py-3 px-4 text-right">0.5%</td>
                                 <td class="py-3 px-4 text-right text-indigo-400/80">15.1</td>
                                 <td class="py-3 px-4 text-right">0.05%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 font-bold text-white">Government Purchases (Государственные закупки)</td>
+                                <td id="i18n-t-g" class="py-3 px-4 font-bold text-white">Government Purchases (Государственные закупки)</td>
                                 <td class="py-3 px-4 text-right font-semibold">2,876.0</td>
                                 <td class="py-3 px-4 text-right">19.7%</td>
                                 <td class="py-3 px-4 text-right font-semibold text-amber-400">5,275.1</td>
                                 <td class="py-3 px-4 text-right">17.15%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 font-bold text-white">Net Export (Чистый экспорт, NX)</td>
+                                <td id="i18n-t-nx" class="py-3 px-4 font-bold text-white">Net Export (Чистый экспорт, NX)</td>
                                 <td class="py-3 px-4 text-right font-semibold text-red-300">-555.0</td>
                                 <td class="py-3 px-4 text-right">-3.8%</td>
                                 <td class="py-3 px-4 text-right font-semibold text-red-400">-926.5</td>
                                 <td class="py-3 px-4 text-right">-3.01%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 pl-8">Export (Экспорт)</td>
+                                <td id="i18n-t-exp" class="py-3 px-4 pl-8">Export (Экспорт)</td>
                                 <td class="py-3 px-4 text-right">2,029.0</td>
                                 <td class="py-3 px-4 text-right">13.9%</td>
                                 <td class="py-3 px-4 text-right">3,319.7</td>
                                 <td class="py-3 px-4 text-right">10.79%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 pl-8">Import (Импорт)</td>
+                                <td id="i18n-t-imp" class="py-3 px-4 pl-8">Import (Импорт)</td>
                                 <td class="py-3 px-4 text-right">2,584.0</td>
                                 <td class="py-3 px-4 text-right">17.7%</td>
                                 <td class="py-3 px-4 text-right text-red-300">4,246.1</td>
                                 <td class="py-3 px-4 text-right">13.80%</td>
                             </tr>
                             <tr class="border-t border-slate-700 bg-slate-900 font-extrabold text-white">
-                                <td class="py-4 px-4 text-lg">ИТОГО ВВП (Total GDP)</td>
+                                <td id="i18n-t-totexp" class="py-4 px-4 text-lg">ИТОГО ВВП (Total GDP)</td>
                                 <td class="py-4 px-4 text-right text-lg">14,600.0</td>
                                 <td class="py-4 px-4 text-right text-lg">100.0%</td>
                                 <td class="py-4 px-4 text-right text-lg text-indigo-400">30,762.1</td>
@@ -457,98 +460,98 @@
 
             <!-- USA Income Table -->
             <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 overflow-hidden">
-                <h3 class="text-lg font-bold text-white mb-4">США: Метод доходов (Gross Domestic Income) — Подробная детализация</h3>
+                <h3 id="i18n-table-inc-title" class="text-lg font-bold text-white mb-4">США: Метод доходов (Gross Domestic Income) — Подробная детализация</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-slate-800 text-slate-400 text-xs uppercase">
-                                <th class="py-3 px-4">Категория дохода</th>
-                                <th class="py-3 px-4 text-right">2010 (млрд $)</th>
-                                <th class="py-3 px-4 text-right">2025 (млрд $)</th>
-                                <th class="py-3 px-4 text-right">Доля в GDI 2025 (%)</th>
+                                <th id="i18n-th-inc-cat" class="py-3 px-4">Категория дохода</th>
+                                <th id="i18n-th-inc-10b" class="py-3 px-4 text-right">2010 (млрд $)</th>
+                                <th id="i18n-th-inc-25b" class="py-3 px-4 text-right">2025 (млрд $)</th>
+                                <th id="i18n-th-inc-25s" class="py-3 px-4 text-right">Доля в GDI 2025 (%)</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/50 text-sm text-slate-300">
                             <tr>
-                                <td class="py-3 px-4 font-bold text-white">Compensation of Employees (Оплата труда сотрудников)</td>
+                                <td id="i18n-ti-comp" class="py-3 px-4 font-bold text-white">Compensation of Employees (Оплата труда сотрудников)</td>
                                 <td class="py-3 px-4 text-right font-semibold">8,441.3</td>
                                 <td class="py-3 px-4 text-right font-semibold text-emerald-400">15,749.6</td>
                                 <td class="py-3 px-4 text-right">51.58%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4">Rental income of Persons (Рентный доход физлиц)</td>
+                                <td id="i18n-ti-rent" class="py-3 px-4">Rental income of Persons (Рентный доход физлиц)</td>
                                 <td class="py-3 px-4 text-right">428.6</td>
                                 <td class="py-3 px-4 text-right text-emerald-400/80">1,114.5</td>
                                 <td class="py-3 px-4 text-right">3.65%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4">Net interest (Чистый процент)</td>
+                                <td id="i18n-ti-int" class="py-3 px-4">Net interest (Чистый процент)</td>
                                 <td class="py-3 px-4 text-right">525.0</td>
                                 <td class="py-3 px-4 text-right text-emerald-400/80">611.5</td>
                                 <td class="py-3 px-4 text-right">2.00%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 font-bold text-white">Proprietors' & Corporate Income (Доходы собственников и корпораций)</td>
+                                <td id="i18n-ti-propcorp" class="py-3 px-4 font-bold text-white">Proprietors' & Corporate Income (Доходы собственников и корпораций)</td>
                                 <td class="py-3 px-4 text-right font-semibold">3,063.5</td>
                                 <td class="py-3 px-4 text-right font-semibold text-indigo-400">5,660.2</td>
                                 <td class="py-3 px-4 text-right">18.54%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 pl-8">Proprietor's Income (Доходы малого/ИП бизнеса)</td>
+                                <td id="i18n-ti-prop" class="py-3 px-4 pl-8">Proprietor's Income (Доходы малого/ИП бизнеса)</td>
                                 <td class="py-3 px-4 text-right">1,119.3</td>
                                 <td class="py-3 px-4 text-right">2,109.4</td>
                                 <td class="py-3 px-4 text-right">6.91%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 pl-8">Corporate Profits (Прибыль корпораций)</td>
+                                <td id="i18n-ti-corp" class="py-3 px-4 pl-8">Corporate Profits (Прибыль корпораций)</td>
                                 <td class="py-3 px-4 text-right">1,148.9</td>
                                 <td class="py-3 px-4 text-right">3,550.9</td>
                                 <td class="py-3 px-4 text-right">11.63%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 pl-12">Corporate income taxes (Налог на прибыль)</td>
+                                <td id="i18n-ti-tax" class="py-3 px-4 pl-12">Corporate income taxes (Налог на прибыль)</td>
                                 <td class="py-3 px-4 text-right">413.0</td>
                                 <td class="py-3 px-4 text-right text-red-300">695.2</td>
                                 <td class="py-3 px-4 text-right">2.28%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4 pl-12">Dividends (Выплаченные дивиденды)</td>
+                                <td id="i18n-ti-div" class="py-3 px-4 pl-12">Dividends (Выплаченные дивиденды)</td>
                                 <td class="py-3 px-4 text-right">834.6</td>
                                 <td class="py-3 px-4 text-right">1,706.9</td>
                                 <td class="py-3 px-4 text-right">5.59%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 pl-12">Undistributed profits (Нераспределенная чистая прибыль)</td>
+                                <td id="i18n-ti-undiv" class="py-3 px-4 pl-12">Undistributed profits (Нераспределенная чистая прибыль)</td>
                                 <td class="py-3 px-4 text-right">696.6</td>
                                 <td class="py-3 px-4 text-right">1,148.9</td>
                                 <td class="py-3 px-4 text-right">3.76%</td>
                             </tr>
                             <tr class="bg-slate-900/30 font-bold text-white border-t border-slate-800">
-                                <td class="py-3 px-4">НАЦИОНАЛЬНЫЙ ДОХОД (The National Income)</td>
+                                <td id="i18n-ti-natinc" class="py-3 px-4">НАЦИОНАЛЬНЫЙ ДОХОД (The National Income)</td>
                                 <td class="py-3 px-4 text-right">12,458.4</td>
                                 <td class="py-3 px-4 text-right">23,135.8</td>
                                 <td class="py-3 px-4 text-right">75.77%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4">Indirect business taxes less subsidies (Косвенные налоги за вычетом субсидий)</td>
+                                <td id="i18n-ti-indtax" class="py-3 px-4">Indirect business taxes less subsidies (Косвенные налоги за вычетом субсидий)</td>
                                 <td class="py-3 px-4 text-right">1,106.0</td>
                                 <td class="py-3 px-4 text-right">2,101.7</td>
                                 <td class="py-3 px-4 text-right">6.88%</td>
                             </tr>
                             <tr class="bg-slate-900/30">
-                                <td class="py-3 px-4">Capital consumption / depreciation (Амортизация капитала)</td>
+                                <td id="i18n-ti-depr" class="py-3 px-4">Capital consumption / depreciation (Амортизация капитала)</td>
                                 <td class="py-3 px-4 text-right">1,087.3</td>
                                 <td class="py-3 px-4 text-right text-indigo-400">5,065.0</td>
                                 <td class="py-3 px-4 text-right">16.59%</td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4">Statistical discrepancy / Net foreign factor (Разница / чистый фактор)</td>
+                                <td id="i18n-ti-disc" class="py-3 px-4">Statistical discrepancy / Net foreign factor (Разница / чистый фактор)</td>
                                 <td class="py-3 px-4 text-right font-semibold text-slate-500">-49.7</td>
                                 <td class="py-3 px-4 text-right font-semibold text-indigo-400/80">229.6</td>
                                 <td class="py-3 px-4 text-right">0.75%</td>
                             </tr>
                             <tr class="border-t border-slate-700 bg-slate-900 font-extrabold text-white text-base">
-                                <td class="py-4 px-4">ИТОГО ВВП по доходам (Total GDI/GDP)</td>
+                                <td id="i18n-ti-totgdi" class="py-4 px-4">ИТОГО ВВП по доходам (Total GDI/GDP)</td>
                                 <td class="py-4 px-4 text-right font-black">14,602.0</td>
                                 <td class="py-4 px-4 text-right font-black text-indigo-400">30,762.1</td>
                                 <td class="py-4 px-4 text-right font-black">100.0%</td>
@@ -556,8 +559,8 @@
                         </tbody>
                     </table>
                 </div>
-                <p class="text-xs text-slate-500 mt-4 leading-relaxed">
-                    * GDI (Валовой внутренний доход) в США по закону равен ВВП, но из-за разных источников сбора информации возникает статистическое расхождение (Statistical discrepancy), которое за 2025 год составило около $229.6 млрд.
+                <p id="i18n-gdi-table-note" class="text-xs text-slate-500 mt-4 leading-relaxed">
+                    * GDI (Валовой внутренний доход) в США по закону равен ВВП, но из-за разных источников сбора информации возникает статистическое расхождение (Statistical discrepancy), которое за 2025 год составило около \$229.6 млрд.
                 </p>
             </div>
         </div>
@@ -565,13 +568,11 @@
 
     <!-- JS Logic -->
     <script>
-   Chart.register({
+    Chart.register({
         id: 'centerGraphFlag',
         afterDraw: function(chart) {
             const { ctx, canvas } = chart;
             
-            // ЖЕСТКОЕ ПРАВИЛО: Рисуем флаги ТОЛЬКО на трех кольцевых графиках (бубликах). 
-            // На любых бар-чартах (столбцах) работа плагина сразу прекращается.
             if (chart.config.type !== 'doughnut') return;
             if (canvas.id !== 'usPie2010Canvas' && canvas.id !== 'usPie2025Canvas' && canvas.id !== 'globalStructureChart') return;
 
@@ -605,10 +606,8 @@
 
             let url = '';
             if (canvas.id === 'usPie2010Canvas' || canvas.id === 'usPie2025Canvas') {
-                // Возвращаем флаг США в оба американских бублика на первой вкладке
                 url = 'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg';
             } else if (canvas.id === 'globalStructureChart') {
-                // На второй вкладке — флаг выбранной страны
                 const selector = document.getElementById('countrySelector');
                 url = selector ? flagMap[selector.value] : '';
             }
@@ -625,586 +624,1055 @@
             }
         }
     });
-        // Tab switching logic
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-                tab.classList.remove('block');
-            });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('border-indigo-500', 'text-indigo-400');
-                btn.classList.add('border-transparent', 'text-slate-400');
-            });
 
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
-            document.getElementById('tab-' + tabId).classList.add('block');
-            document.getElementById('btn-' + tabId).classList.add('border-indigo-500', 'text-indigo-400');
-            document.getElementById('btn-' + tabId).classList.remove('border-transparent', 'text-slate-400');
+    // --- i18n Translation Dictionary ---
+    let currentLang = 'ru';
+
+    const translations = {
+        ru: {
+            headerTitle: "Макро-Анализ ВВП 2025",
+            headerSubtitle: "Интерактивный анализ затратного и доходного методов",
+            headerBadge: "Данные: BEA & OECD (2025/2026)",
+            tabUs: "США: Детальное сравнение (2010 vs 2025)",
+            tabGlobal: "Сравнение стран (Процентные доли)",
+            tabRaw: "Исходные таблицы",
+            
+            card10Tag: "ВВП США (из источника GDP US 2012.docx)",
+            card10Title: "2010 Год",
+            card10Unit: "млрд",
+            card10Desc: "Базовый исторический период для сравнения структуры долей",
+            
+            card25Tag: "ВВП США (Новейшие данные BEA)",
+            card25Title: "2025 Год",
+            card25Unit: "млрд",
+            card25Growth: "↑ +110.7% номинального роста с 2010 года",
+            
+            doughnutTitle: "Структурный анализ: Сравнение долей расходов (2010 vs 2025)",
+            doughnutDesc: "Наглядное сопоставление структуры американского ВВП по конечному использованию. Внутренний потребительский рынок детализирован благородными оттенками зелёного, а отрицательный чистый экспорт (NX) органично интегрирован в площадь диаграммы.",
+            pie10Title: "США: Структура ВВП (2010)",
+            pie25Title: "США: Структура ВВП (2025)",
+            
+            glossaryTitle: "Глоссарий и Пояснения",
+            glossaryServices: "<strong>Services (Услуги):</strong> Здравоохранение, финансы, образование. Абсолютный гигант экономики США (~47% ВВП).",
+            glossaryFmcg: "<strong>FMCG (Товары краткосрочного спроса):</strong> Еда, топливо, одежда. Наблюдается снижение доли с 16.4% до 13.8%.",
+            glossaryDurable: "<strong>Durable Goods (Длительный спрос):</strong> Автомобили, техника. Стабильно удерживает около 7.3-7.8%.",
+            glossaryInvestments: "<strong>Investments (Инвестиции):</strong> Основной драйвер технологического роста последних 15 лет (рост с 13.1% до 17.7%).",
+            glossaryGov: "<strong>Government (Госрасходы):</strong> Госзакупки федерального и местного уровней. Стабильные 17-19%.",
+            glossaryNx: "<strong>Net Exports (NX):</strong> Отрицательное сальдо торговли (Импорт > Экспорт). Отражает дефицит торгового баланса США.",
+            
+            expChartTitle: "Сравнение структуры расходов (Затратный метод)",
+            expChartSubtitle: "(% от ВВП)",
+            expChartDesc: "Пример: Личные потребительские расходы (Consumption) остаются ключевой опорой американской экономики, стабилизируясь в районе 68% ВВП. Доля инвестиционного капитала за 15 лет выросла до 17.7%, компенсируя сокращение доли классических товарных расходов.",
+            
+            changesTitle: "Основные изменения долей",
+            change1Title: "Consumption (Потребление)",
+            change2Title: "FMCG (Непродовольственные товары)",
+            change3Title: "Investment (Инвестиции)",
+            change4Title: "Government (Госзакупки)",
+            change5Title: "Net Exports (Чистый экспорт, NX)",
+            changesFooter: "Инвестиции в оборудование (Equipment) выросли до $1,643.7 млрд в 2025 г., отражая цифровизацию и технологический бум. Чистый экспорт остается дефицитным (около -$926 млрд), но его доля в общем объеме ВВП уменьшилась.",
+            
+            gdiTitle: "Доходный метод (GDI 2025)",
+            gdiDesc: "Детальная структура национального дохода США по данным BEA за 2025 год демонстрирует, как распределяется стоимость, созданная в экономике.",
+            gdiCompLabel: "Структура оплаты труда сотрудников",
+            gdiCompSub: "Зарплаты: $12,981.4 млрд (42.5%), социальные надбавки/взносы: $2,768.3 млрд (9.1%).",
+            gdiCorpLabel: "Прибыль корпораций и её деление",
+            gdiCorpTax: "• Налоги корпораций: <strong>$695.2 млрд</strong> (19.6% прибыли)",
+            gdiCorpDiv: "• Выплаченные дивиденды: <strong>$1,706.9 млрд</strong> (48.1%)",
+            gdiCorpUndiv: "• Нераспределенная прибыль: <strong>$1,148.9 млрд</strong> (32.3%)",
+            gdiChartTitle: "Полная детализация структуры доходов США (2010 vs 2025)",
+            
+            globalTitle: "Структура ВВП по расходам по странам мира (2025)",
+            globalSubtitle: "Выберите страну, чтобы визуализировать её структуру потребления, инвестиций и внешней торговли.",
+            miniCons: "Личное потребление",
+            miniInv: "Валовые инвестиции",
+            miniGov: "Госрасходы",
+            miniNx: "Чистый экспорт (NX)",
+            
+            matrixTitle: "Сводный визуальный анализ структуры спроса",
+            matrixNote1: "💡 <strong>Потребление:</strong> Максимальные значения в США, Великобритании, Греции (более 65% ВВП).",
+            matrixNote2: "🏭 <strong>Инвестиции:</strong> Абсолютный лидер — Китай (около 40% ВВП инвестируется в капитал).",
+            matrixNote3: "🛢️ <strong>Чистый экспорт:</strong> Нефтяные гиганты (Норвегия, ОАЭ, Саудовская Аравия) имеют огромную долю NX (выделена красным).",
+            
+            tableExpTitle: "США: Метод расходов (Затратный) — Подробная детализация",
+            thExpComp: "Компонент ВВП",
+            thExp10b: "2010 (млрд $)",
+            thExp25b: "2025 (млрд $)",
+            
+            tC: "Consumption (Потребительские расходы)",
+            tFmcg: "FMCG (Nondurable / Товары краткосрочного спроса)",
+            tDur: "Durable Goods (Товары длительного пользования)",
+            tServ: "Services (Услуги)",
+            tI: "Investment (Валовые частные инвестиции)",
+            tFi: "Fixed investment (Фиксированные инвестиции)",
+            tNonres: "Nonresidential Structures & IP (Здания, ПО, НИОКР)",
+            tRes: "Residential (Жилая недвижимость)",
+            tInvch: "Inventory Change (Изменение запасов)",
+            tG: "Government Purchases (Государственные закупки)",
+            tNx: "Net Export (Чистый экспорт, NX)",
+            tExp: "Export (Экспорт)",
+            tImp: "Import (Импорт)",
+            tTotexp: "ИТОГО ВВП (Total GDP)",
+            
+            tableIncTitle: "США: Метод доходов (Gross Domestic Income) — Подробная детализация",
+            thIncCat: "Категория дохода",
+            thInc10b: "2010 (млрд $)",
+            thInc25b: "2025 (млрд $)",
+            thInc25s: "Доля в GDI 2025 (%)",
+            
+            tiComp: "Compensation of Employees (Оплата труда сотрудников)",
+            tiRent: "Rental income of Persons (Рентный доход физлиц)",
+            tiInt: "Net interest (Чистый процент)",
+            tiPropcorp: "Proprietors' & Corporate Income (Доходы собственников и корпораций)",
+            tiProp: "Proprietor's Income (Доходы малого/ИП бизнеса)",
+            tiCorp: "Corporate Profits (Прибыль корпораций)",
+            tiTax: "Corporate income taxes (Налог на прибыль)",
+            tiDiv: "Dividends (Выплаченные дивиденды)",
+            tiUndiv: "Undistributed profits (Нераспределенная чистая прибыль)",
+            tiNatinc: "НАЦИОНАЛЬНЫЙ ДОХОД (The National Income)",
+            tiIndtax: "Indirect business taxes less subsidies (Косвенные налоги за вычетом субсидий)",
+            tiDepr: "Capital consumption / depreciation (Амортизация капитала)",
+            tiDisc: "Statistical discrepancy / Net foreign factor (Разница / чистый фактор)",
+            tiTotgdi: "ИТОГО ВВП по доходам (Total GDI/GDP)",
+            gdiTableNote: "* GDI (Валовой внутренний доход) в США по закону равен ВВП, но из-за разных источников сбора информации возникает статистическое расхождение (Statistical discrepancy), которое за 2025 год составило около $229.6 млрд.",
+
+            // Chart Labels
+            ds10_exp: '2010 (из файла)',
+            ds25_exp: '2025 (Новые данные)',
+            ds10_inc: '2010 (% от GDI)',
+            ds25_inc: '2025 (% от GDI)',
+            
+            chartExpLabels: ['Consumption', 'FMCG (nondurable)', 'Durable Goods', 'Services', 'Investments', 'Government', 'Net Exports'],
+            chartIncLabels: [
+                'Чистая ЗП (Wages)', 
+                'Соц. надбавки (Supplements)', 
+                'Доходы ИП (Proprietors)', 
+                'Рентный доход', 
+                'Налог на прибыль корп.', 
+                'Дивиденды', 
+                'Нераспределенная прибыль', 
+                'Процентный доход', 
+                'Косв. налоги минус субсидии', 
+                'Амортизация (Depreciation)'
+            ],
+            globalPieLabels: ['Личное потребление (C)', 'Частные инвестиции (I)', 'Государственные расходы (G)', 'Чистый экспорт (NX)'],
+            matrixDsLabels: ['Потребление (C)', 'Инвестиции (I)', 'Госрасходы (G)', 'Чистый экспорт (NX)']
+        },
+        en: {
+            headerTitle: "GDP Macro-Analysis 2025",
+            headerSubtitle: "Interactive Expenditure & Income Approach Dashboard",
+            headerBadge: "Data: BEA & OECD (2025/2026)",
+            tabUs: "🇺🇸 US: Detailed Comparison (2010 vs 2025)",
+            tabGlobal: "🌍 Global Comparison (% Shares)",
+            tabRaw: "📊 Raw Data Tables",
+            
+            card10Tag: "US GDP (Source: GDP US 2012.docx)",
+            card10Title: "Year 2010",
+            card10Unit: "Billion",
+            card10Desc: "Historical baseline for structural share comparisons",
+            
+            card25Tag: "US GDP (Latest BEA Data)",
+            card25Title: "Year 2025",
+            card25Unit: "Billion",
+            card25Growth: "↑ +110.7% nominal growth since 2010",
+            
+            doughnutTitle: "Structural Breakdown: Expenditure Shares (2010 vs 2025)",
+            doughnutDesc: "Visual comparison of US GDP structure by end-use. Domestic consumer market is highlighted in rich green tones, while negative net exports (NX) are seamlessly integrated into the chart area.",
+            pie10Title: "US: GDP Structure (2010)",
+            pie25Title: "US: GDP Structure (2025)",
+            
+            glossaryTitle: "Glossary & Key Notes",
+            glossaryServices: "<strong>Services:</strong> Healthcare, finance, education. The absolute giant of the US economy (~47% of GDP).",
+            glossaryFmcg: "<strong>Nondurable Goods (FMCG):</strong> Food, fuel, apparel. Share declined from 16.4% to 13.8%.",
+            glossaryDurable: "<strong>Durable Goods:</strong> Automobiles, appliances. Holds steady around 7.3–7.8%.",
+            glossaryInvestments: "<strong>Gross Investment:</strong> Primary driver of tech expansion over 15 years (grew from 13.1% to 17.7%).",
+            glossaryGov: "<strong>Government Spending:</strong> Federal, state, and local purchases. Stable at 17–19%.",
+            glossaryNx: "<strong>Net Exports (NX):</strong> Negative trade balance (Imports > Exports). Reflects US trade deficit.",
+            
+            expChartTitle: "Expenditure Structure Comparison (Expenditure Approach)",
+            expChartSubtitle: "(% of GDP)",
+            expChartDesc: "Example: Personal Consumption Expenditures stay the backbone of the US economy at ~68% of GDP. Private investment share expanded to 17.7% over 15 years, offsetting the decline in traditional goods consumption.",
+            
+            changesTitle: "Key Structural Shift Highlights",
+            change1Title: "Personal Consumption",
+            change2Title: "Nondurable Goods (FMCG)",
+            change3Title: "Gross Investment",
+            change4Title: "Government Purchases",
+            change5Title: "Net Exports (NX)",
+            changesFooter: "Investment in Equipment rose to $1,643.7B in 2025, reflecting digital transformation and tech expansion. Net exports remain in deficit (-$926B), but its share in total GDP slightly shrank.",
+            
+            gdiTitle: "Income Approach (GDI 2025)",
+            gdiDesc: "Detailed US Gross Domestic Income breakdown based on 2025 BEA data, demonstrating income distribution across economic factors.",
+            gdiCompLabel: "Compensation of Employees Structure",
+            gdiCompSub: "Wages & Salaries: $12,981.4B (42.5%), Supplements/Social Contributions: $2,768.3B (9.1%).",
+            gdiCorpLabel: "Corporate Profits & Allocation",
+            gdiCorpTax: "• Corporate Taxes: <strong>$695.2B</strong> (19.6% of profits)",
+            gdiCorpDiv: "• Dividend Payouts: <strong>$1,706.9B</strong> (48.1%)",
+            gdiCorpUndiv: "• Undistributed Profits: <strong>$1,148.9B</strong> (32.3%)",
+            gdiChartTitle: "Full US GDI Factor Income Breakdown (2010 vs 2025)",
+            
+            globalTitle: "Global GDP Structure by Expenditure (2025)",
+            globalSubtitle: "Select a country to explore its consumption, investment, government, and net trade shares.",
+            miniCons: "Personal Consumption",
+            miniInv: "Gross Investment",
+            miniGov: "Government Spending",
+            miniNx: "Net Exports (NX)",
+            
+            matrixTitle: "Global Aggregate Demand Matrix Analysis",
+            matrixNote1: "💡 <strong>Consumption:</strong> Highest in US, UK, and Greece (>65% of GDP).",
+            matrixNote2: "🏭 <strong>Investment:</strong> China leads globally (~40% of GDP invested in capital).",
+            matrixNote3: "🛢️ <strong>Net Exports:</strong> Energy exporters (Norway, UAE, Saudi Arabia) maintain massive NX surplus (highlighted in red).",
+            
+            tableExpTitle: "US: Expenditure Approach — Detailed Breakdown",
+            thExpComp: "GDP Component",
+            thExp10b: "2010 ($ Billion)",
+            thExp25b: "2025 ($ Billion)",
+            
+            tC: "Personal Consumption Expenditures (C)",
+            tFmcg: "Nondurable Goods (FMCG)",
+            tDur: "Durable Goods",
+            tServ: "Services",
+            tI: "Gross Private Domestic Investment (I)",
+            tFi: "Fixed Investment",
+            tNonres: "Nonresidential Structures, Equipment & IP",
+            tRes: "Residential Investment",
+            tInvch: "Change in Private Inventories",
+            tG: "Government Consumption & Gross Investment (G)",
+            tNx: "Net Exports of Goods and Services (NX)",
+            tExp: "Exports",
+            tImp: "Imports",
+            tTotexp: "TOTAL GDP",
+            
+            tableIncTitle: "US: Gross Domestic Income (GDI) — Detailed Breakdown",
+            thIncCat: "Factor Income Category",
+            thInc10b: "2010 ($ Billion)",
+            thInc25b: "2025 ($ Billion)",
+            thInc25s: "GDI Share 2025 (%)",
+            
+            tiComp: "Compensation of Employees",
+            tiRent: "Rental Income of Persons",
+            tiInt: "Net Interest & Miscellaneous Payments",
+            tiPropcorp: "Proprietors' & Corporate Factor Income",
+            tiProp: "Proprietors' Income",
+            tiCorp: "Corporate Profits with IVA & CCAdj",
+            tiTax: "Taxes on Corporate Income",
+            tiDiv: "Net Dividends Paid",
+            tiUndiv: "Undistributed Corporate Profits",
+            tiNatinc: "NATIONAL INCOME",
+            tiIndtax: "Taxes on Production & Imports Less Subsidies",
+            tiDepr: "Consumption of Fixed Capital (Depreciation)",
+            tiDisc: "Statistical Discrepancy & Net Foreign Factor",
+            tiTotgdi: "TOTAL GROSS DOMESTIC INCOME (GDI/GDP)",
+            gdiTableNote: "* By accounting identity, US GDI equals GDP, but due to independent data sources, a statistical discrepancy exists ($229.6B in 2025).",
+
+            // Chart Labels
+            ds10_exp: '2010 (Document Data)',
+            ds25_exp: '2025 (Latest BEA Data)',
+            ds10_inc: '2010 (% of GDI)',
+            ds25_inc: '2025 (% of GDI)',
+            
+            chartExpLabels: ['Consumption', 'FMCG (Nondurable)', 'Durable Goods', 'Services', 'Investments', 'Government', 'Net Exports'],
+            chartIncLabels: [
+                'Wages & Salaries', 
+                'Supplements & Social', 
+                'Proprietors\' Income', 
+                'Rental Income', 
+                'Corporate Profits Tax', 
+                'Dividends Paid', 
+                'Undistributed Profits', 
+                'Net Interest', 
+                'Indirect Taxes Less Subs.', 
+                'Depreciation (Capital Cons.)'
+            ],
+            globalPieLabels: ['Personal Consumption (C)', 'Private Investment (I)', 'Government Purchases (G)', 'Net Exports (NX)'],
+            matrixDsLabels: ['Consumption (C)', 'Investment (I)', 'Government (G)', 'Net Exports (NX)']
         }
+    };
 
-        // --- Data ---
-        const countriesData = {
-            "kazakhstan": {
-                name: "Казахстан 🇰🇿",
-                consumption: 56.8,
-                investment: 29.0,
-                government: 10.9,
-                nx: 3.3,
-                story: "Казахстан демонстрирует сбалансированную модель развивающейся экономики с упором на внутреннее потребление (56.8%) и высокую норму инвестиций (29.0%)."
+    // --- Tab switching logic ---
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.add('hidden');
+            tab.classList.remove('block');
+        });
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('border-indigo-500', 'text-indigo-400');
+            btn.classList.add('border-transparent', 'text-slate-400');
+        });
+
+        document.getElementById('tab-' + tabId).classList.remove('hidden');
+        document.getElementById('tab-' + tabId).classList.add('block');
+        document.getElementById('btn-' + tabId).classList.add('border-indigo-500', 'text-indigo-400');
+        document.getElementById('btn-' + tabId).classList.remove('border-transparent', 'text-slate-400');
+    }
+
+    // --- Data ---
+    const countriesData = {
+        "kazakhstan": {
+            name: { ru: "Казахстан 🇰🇿", en: "Kazakhstan 🇰🇿" },
+            consumption: 56.8,
+            investment: 29.0,
+            government: 10.9,
+            nx: 3.3,
+            story: {
+                ru: "Казахстан демонстрирует сбалансированную модель развивающейся экономики с упором на внутреннее потребление (56.8%) и высокую норму инвестиций (29.0%).",
+                en: "Kazakhstan presents a balanced emerging market model focused on robust domestic consumption (56.8%) and strong capital investment rates (29.0%)."
+            }
+        },
+        "germany": {
+            name: { ru: "Германия 🇩🇪", en: "Germany 🇩🇪" },
+            consumption: 53.5,
+            investment: 20.4,
+            government: 19.7,
+            nx: 6.3,
+            story: {
+                ru: "Германия — локомотив европейской индустрии. Внутреннее личное потребление здесь традиционно умеренное (около 53.5%), зато страна держит очень высокий чистый экспорт (+6.3% к ВВП) и развивает мощные инвестиции в инфраструктуру.",
+                en: "Germany is Europe's industrial engine. Household consumption is traditionally moderate (~53.5%), while maintaining a high net export surplus (+6.3% of GDP) and substantial capital investment."
+            }
+        },
+        "uk": {
+            name: { ru: "Великобритания 🇬🇧", en: "United Kingdom 🇬🇧" },
+            consumption: 64.4,
+            investment: 16.9,
+            government: 19.9,
+            nx: -1.4,
+            story: {
+                ru: "Британская экономика сильно завязана на сферу услуг и внутреннее потребление граждан (64.4% ВВП), однако страдает от хронического дефицита торгового баланса (NX равен -1.4% ВВП).",
+                en: "The UK economy relies heavily on services and household consumption (64.4% of GDP), while carrying a chronic net trade deficit (NX at -1.4% of GDP)."
+            }
+        },
+        "china": {
+            name: { ru: "Китай 🇨🇳", en: "China 🇨🇳" },
+            consumption: 39.9,
+            investment: 40.5,
+            government: 16.9,
+            nx: 2.7,
+            story: {
+                ru: "Китай представляет уникальную структуру: аномально низкое внутреннее семейное потребление (39.9%) компенсируется гигантскими государственными инвестициями в основной капитал (40.5%) и застройку.",
+                en: "China exhibits a unique structure: exceptionally low household consumption (39.9%) offset by massive gross capital formation and infrastructure investment (40.5%)."
+            }
+        },
+        "india": {
+            name: { ru: "Индия 🇮🇳", en: "India 🇮🇳" },
+            consumption: 56.3,
+            investment: 33.5,
+            government: 9.3,
+            nx: -1.6,
+            story: {
+                ru: "Индия — быстрорастущая развивающаяся экономика. Здесь идет активная индустриализация, поэтому инвестиционная доля находится на высочайшем уровне в 33.5%, а госрасходы невелики.",
+                en: "India is a rapidly expanding emerging economy undergoing rapid industrialization, driving gross investment up to 33.5% with lean public spending."
+            }
+        },
+        "europe": {
+            name: { ru: "Европа (в среднем) 🇪🇺", en: "Eurozone Average 🇪🇺" },
+            consumption: 54.5,
+            investment: 21.0,
+            government: 21.5,
+            nx: 3.0,
+            story: {
+                ru: "Среднеевропейская модель показывает высокую стабильность с высоким уровнем госрасходов (социальные гарантии и медицина съедают до 21.5% ВВП) и сбалансированным внешнеторговым профицитом.",
+                en: "The average European model demonstrates stability with notable government expenditure (welfare and healthcare taking ~21.5% of GDP) and a healthy trade surplus."
+            }
+        },
+        "france": {
+            name: { ru: "Франция 🇫🇷", en: "France 🇫🇷" },
+            consumption: 54.0,
+            investment: 23.0,
+            government: 24.0,
+            nx: -1.0,
+            story: {
+                ru: "Франция выделяется одной из самых высоких долей государственного сектора в ВВП (24%), что отражает масштабные социальные бюджеты, при умеренно дефицитном торговом балансе.",
+                en: "France features one of the highest public sector shares in GDP (24%), reflecting generous social transfers and public services alongside a mild trade deficit."
+            }
+        },
+        "italy": {
+            name: { ru: "Италия 🇮🇹", en: "Italy 🇮🇹" },
+            consumption: 59.0,
+            investment: 19.0,
+            government: 20.0,
+            nx: 2.0,
+            story: {
+                ru: "Италия сочетает высокое личное потребление домохозяйств (59%) с положительным сальдо внешней торговли благодаря экспорту промышленного оборудования, моды и продуктов питания.",
+                en: "Italy blends strong household expenditure (59%) with a net export trade surplus driven by industrial machinery, fashion, and food exports."
+            }
+        },
+        "sweden": {
+            name: { ru: "Швеция 🇸🇪", en: "Sweden 🇸🇪" },
+            consumption: 45.0,
+            investment: 25.0,
+            government: 26.0,
+            nx: 4.0,
+            story: {
+                ru: "Скандинавская модель во всей красе: умеренное личное потребление компенсируется гигантскими коллективными государственными закупками и услугами (26% ВВП).",
+                en: "The Nordic model in full effect: moderate private consumption balanced by extensive collective public goods and social services (26% of GDP)."
+            }
+        },
+        "norway": {
+            name: { ru: "Норвегия 🇳🇴", en: "Norway 🇳🇴" },
+            consumption: 35.0,
+            investment: 21.0,
+            government: 20.0,
+            nx: 24.0,
+            story: {
+                ru: "Абсолютный мировой феномен за счет колоссального сырьевого экспорта (нефть и газ). Чистый экспорт составляет фантастические 24% от общего объема её ВВП!",
+                en: "A global outlier due to massive energy exports (oil and natural gas). Net exports account for an astonishing 24% of its total GDP!"
+            }
+        },
+        "denmark": {
+            name: { ru: "Дания 🇩🇰", en: "Denmark 🇩🇰" },
+            consumption: 46.0,
+            investment: 22.0,
+            government: 24.0,
+            nx: 8.0,
+            story: {
+                ru: "Дания сильна своими фармацевтическими и логистическими гигантами, что дает ей уверенный профицит экспорта (8%) при высочайших госрасходах на нужды граждан.",
+                en: "Denmark benefits from powerful pharmaceutical and logistics exporters, securing a strong trade surplus (8%) paired with robust public welfare spending."
+            }
+        },
+        "japan": {
+            name: { ru: "Япония 🇯🇵", en: "Japan 🇯🇵" },
+            consumption: 56.2,
+            investment: 24.5,
+            government: 19.7,
+            nx: -0.4,
+            story: {
+                ru: "Стареющее население Японии удерживает потребительскую долю на уровне 56%, при этом корпоративный сектор много инвестирует во внутреннее обновление фондов и робототехнику.",
+                en: "Japan's aging demographics maintain private consumption around 56%, while the corporate sector continuously re-invests in domestic automation and robotics."
+            }
+        },
+        "ecuador": {
+            name: { ru: "Эквадор 🇪🇨", en: "Ecuador 🇪🇨" },
+            consumption: 63.0,
+            investment: 20.0,
+            government: 15.0,
+            nx: 2.0,
+            story: {
+                ru: "Развивающаяся южноамериканская модель с высокой зависимостью от потребления населения и экспорта бананов, нефти и морепродуктов.",
+                en: "An emerging South American economy driven primarily by household demand and exports of crude oil, seafood, and agricultural goods."
+            }
+        },
+        "switzerland": {
+            name: { ru: "Швейцария 🇨🇭", en: "Switzerland 🇨🇭" },
+            consumption: 52.0,
+            investment: 22.0,
+            government: 12.0,
+            nx: 14.0,
+            story: {
+                ru: "Благодаря развитому финансовому и фармацевтическому секторам с высокой добавленной стоимостью, Швейцария генерирует огромный чистый экспорт (+14% к ВВП).",
+                en: "Driven by high-value pharmaceuticals and financial services, Switzerland generates a massive trade surplus (+14% of GDP)."
+            }
+        },
+        "greece": {
+            name: { ru: "Греция 🇬🇷", en: "Greece 🇬🇷" },
+            consumption: 68.0,
+            investment: 14.0,
+            government: 20.0,
+            nx: -2.0,
+            story: {
+                ru: "В Греции после затяжных кризисов инвестиционный сектор все еще слаб (всего 14%), в то время как экономика поддерживается за счет туризма и прямого домашнего потребления.",
+                en: "Greece's capital investment remains modest post-crisis (14%), with economic activity supported mainly by tourism and direct household spending."
+            }
+        },
+        "poland": {
+            name: { ru: "Польша 🇵🇱", en: "Poland 🇵🇱" },
+            consumption: 58.0,
+            investment: 17.0,
+            government: 18.0,
+            nx: 7.0,
+            story: {
+                ru: "Польша выступает важным производственным хабом внутри ЕС, что гарантирует ей устойчивый чистый экспорт (+7% к ВВП) при растущем качестве жизни населения.",
+                en: "Poland acts as a major manufacturing hub within the EU, sustaining a reliable net export surplus (+7% of GDP) alongside rising living standards."
+            }
+        },
+        "uae": {
+            name: { ru: "ОАЭ 🇦🇪", en: "UAE 🇦🇪" },
+            consumption: 42.0,
+            investment: 25.0,
+            government: 13.0,
+            nx: 20.0,
+            story: {
+                ru: "Эмиратская модель перераспределяет огромные доходы от экспорта нефти и финансовых услуг. Торговый профицит (NX) составляет уверенные 20% ВВП.",
+                en: "The UAE reallocates extensive revenue from energy exports and financial services, securing a giant 20% net trade surplus."
+            }
+        },
+        "israel": {
+            name: { ru: "Израиль 🇮🇱", en: "Israel 🇮🇱" },
+            consumption: 53.0,
+            investment: 22.0,
+            government: 22.0,
+            nx: 3.0,
+            story: {
+                ru: "Высокотехнологичный экспорт (ИТ и оборонные технологии) обеспечивает Израилю торговый профицит (+3%), а государство сохраняет весомую долю расходов (22%).",
+                en: "High-tech exports (IT, software, and defense technology) yield a solid trade surplus (+3%) alongside significant government expenditures (22%)."
+            }
+        }
+    };
+
+    // --- Init Charts References ---
+    let usExpendituresChart, usIncomeChart, globalStructureChart, matrixChart;
+    let usPie2010Chart, usPie2025Chart;
+
+    window.onload = function() {
+        initUSExpenseChart();
+        initUSIncomeChart();
+        initUSPies(); 
+        populateCountrySelector();
+        initGlobalChart();
+        initMatrixChart();
+    };
+
+    // --- Translation Switcher Logic ---
+    function toggleLanguage() {
+        currentLang = currentLang === 'ru' ? 'en' : 'ru';
+        document.getElementById('langLabel').innerText = currentLang === 'ru' ? 'EN' : 'RU';
+        document.documentElement.lang = currentLang;
+
+        const t = translations[currentLang];
+
+        // 1. Text elements translate
+        document.getElementById('i18n-header-title').innerText = t.headerTitle;
+        document.getElementById('i18n-header-subtitle').innerText = t.headerSubtitle;
+        document.getElementById('i18n-header-badge').innerText = t.headerBadge;
+        
+        document.getElementById('i18n-tab-us').innerText = t.tabUs;
+        document.getElementById('i18n-tab-global').innerText = t.tabGlobal;
+        document.getElementById('i18n-tab-raw').innerText = t.tabRaw;
+
+        document.getElementById('i18n-card10-tag').innerText = t.card10Tag;
+        document.getElementById('i18n-card10-title').innerText = t.card10Title;
+        document.getElementById('i18n-card10-unit').innerText = t.card10Unit;
+        document.getElementById('i18n-card10-desc').innerText = t.card10Desc;
+
+        document.getElementById('i18n-card25-tag').innerText = t.card25Tag;
+        document.getElementById('i18n-card25-title').innerText = t.card25Title;
+        document.getElementById('i18n-card25-unit').innerText = t.card25Unit;
+        document.getElementById('i18n-card25-growth').innerText = t.card25Growth;
+
+        document.getElementById('i18n-doughnut-title').innerText = t.doughnutTitle;
+        document.getElementById('i18n-doughnut-desc').innerText = t.doughnutDesc;
+        document.getElementById('i18n-pie10-title').innerText = t.pie10Title;
+        document.getElementById('i18n-pie25-title').innerText = t.pie25Title;
+
+        document.getElementById('i18n-glossary-title').innerText = t.glossaryTitle;
+        document.getElementById('i18n-glossary-services').innerHTML = t.glossaryServices;
+        document.getElementById('i18n-glossary-fmcg').innerHTML = t.glossaryFmcg;
+        document.getElementById('i18n-glossary-durable').innerHTML = t.glossaryDurable;
+        document.getElementById('i18n-glossary-investments').innerHTML = t.glossaryInvestments;
+        document.getElementById('i18n-glossary-gov').innerHTML = t.glossaryGov;
+        document.getElementById('i18n-glossary-nx').innerHTML = t.glossaryNx;
+
+        document.getElementById('i18n-exp-chart-title').innerText = t.expChartTitle;
+        document.getElementById('i18n-exp-chart-subtitle').innerText = t.expChartSubtitle;
+        document.getElementById('i18n-exp-chart-desc').innerText = t.expChartDesc;
+
+        document.getElementById('i18n-changes-title').innerText = t.changesTitle;
+        document.getElementById('i18n-change1-title').innerText = t.change1Title;
+        document.getElementById('i18n-change2-title').innerText = t.change2Title;
+        document.getElementById('i18n-change3-title').innerText = t.change3Title;
+        document.getElementById('i18n-change4-title').innerText = t.change4Title;
+        document.getElementById('i18n-change5-title').innerText = t.change5Title;
+        document.getElementById('i18n-changes-footer').innerText = t.changesFooter;
+
+        document.getElementById('i18n-gdi-title').innerText = t.gdiTitle;
+        document.getElementById('i18n-gdi-desc').innerText = t.gdiDesc;
+        document.getElementById('i18n-gdi-comp-label').innerText = t.gdiCompLabel;
+        document.getElementById('i18n-gdi-comp-sub').innerText = t.gdiCompSub;
+        document.getElementById('i18n-gdi-corp-label').innerText = t.gdiCorpLabel;
+        document.getElementById('i18n-gdi-corp-tax').innerHTML = t.gdiCorpTax;
+        document.getElementById('i18n-gdi-corp-div').innerHTML = t.gdiCorpDiv;
+        document.getElementById('i18n-gdi-corp-undiv').innerHTML = t.gdiCorpUndiv;
+        document.getElementById('i18n-gdi-chart-title').innerText = t.gdiChartTitle;
+
+        document.getElementById('i18n-global-title').innerText = t.globalTitle;
+        document.getElementById('i18n-global-subtitle').innerText = t.globalSubtitle;
+        document.getElementById('i18n-mini-cons').innerText = t.miniCons;
+        document.getElementById('i18n-mini-inv').innerText = t.miniInv;
+        document.getElementById('i18n-mini-gov').innerText = t.miniGov;
+        document.getElementById('i18n-mini-nx').innerText = t.miniNx;
+
+        document.getElementById('i18n-matrix-title').innerText = t.matrixTitle;
+        document.getElementById('i18n-matrix-note1').innerHTML = t.matrixNote1;
+        document.getElementById('i18n-matrix-note2').innerHTML = t.matrixNote2;
+        document.getElementById('i18n-matrix-note3').innerHTML = t.matrixNote3;
+
+        document.getElementById('i18n-table-exp-title').innerText = t.tableExpTitle;
+        document.getElementById('i18n-th-exp-comp').innerText = t.thExpComp;
+        document.getElementById('i18n-th-exp-10b').innerText = t.thExp10b;
+        document.getElementById('i18n-th-exp-25b').innerText = t.thExp25b;
+
+        document.getElementById('i18n-t-c').innerText = t.tC;
+        document.getElementById('i18n-t-fmcg').innerText = t.tFmcg;
+        document.getElementById('i18n-t-dur').innerText = t.tDur;
+        document.getElementById('i18n-t-serv').innerText = t.tServ;
+        document.getElementById('i18n-t-i').innerText = t.tI;
+        document.getElementById('i18n-t-fi').innerText = t.tFi;
+        document.getElementById('i18n-t-nonres').innerText = t.tNonres;
+        document.getElementById('i18n-t-res').innerText = t.tRes;
+        document.getElementById('i18n-t-invch').innerText = t.tInvch;
+        document.getElementById('i18n-t-g').innerText = t.tG;
+        document.getElementById('i18n-t-nx').innerText = t.tNx;
+        document.getElementById('i18n-t-exp').innerText = t.tExp;
+        document.getElementById('i18n-t-imp').innerText = t.tImp;
+        document.getElementById('i18n-t-totexp').innerText = t.tTotexp;
+
+        document.getElementById('i18n-table-inc-title').innerText = t.tableIncTitle;
+        document.getElementById('i18n-th-inc-cat').innerText = t.thIncCat;
+        document.getElementById('i18n-th-inc-10b').innerText = t.thInc10b;
+        document.getElementById('i18n-th-inc-25b').innerText = t.thInc25b;
+        document.getElementById('i18n-th-inc-25s').innerText = t.thInc25s;
+
+        document.getElementById('i18n-ti-comp').innerText = t.tiComp;
+        document.getElementById('i18n-ti-rent').innerText = t.tiRent;
+        document.getElementById('i18n-ti-int').innerText = t.tiInt;
+        document.getElementById('i18n-ti-propcorp').innerText = t.tiPropcorp;
+        document.getElementById('i18n-ti-prop').innerText = t.tiProp;
+        document.getElementById('i18n-ti-corp').innerText = t.tiCorp;
+        document.getElementById('i18n-ti-tax').innerText = t.tiTax;
+        document.getElementById('i18n-ti-div').innerText = t.tiDiv;
+        document.getElementById('i18n-ti-undiv').innerText = t.tiUndiv;
+        document.getElementById('i18n-ti-natinc').innerText = t.tiNatinc;
+        document.getElementById('i18n-ti-indtax').innerText = t.tiIndtax;
+        document.getElementById('i18n-ti-depr').innerText = t.tiDepr;
+        document.getElementById('i18n-ti-disc').innerText = t.tiDisc;
+        document.getElementById('i18n-ti-totgdi').innerText = t.tiTotgdi;
+        document.getElementById('i18n-gdi-table-note').innerText = t.gdiTableNote;
+
+        // 2. Repopulate Country dropdown selector
+        const selector = document.getElementById('countrySelector');
+        const selectedKey = selector.value;
+        selector.innerHTML = '';
+        for (const [key, country] of Object.entries(countriesData)) {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.innerHTML = country.name[currentLang];
+            selector.appendChild(opt);
+        }
+        selector.value = selectedKey;
+
+        // 3. Update Charts
+        updateChartsLanguage();
+        updateGlobalChart();
+    }
+
+    function updateChartsLanguage() {
+        const t = translations[currentLang];
+
+        // Update US Expenditures Chart
+        usExpendituresChart.data.labels = t.chartExpLabels;
+        usExpendituresChart.data.datasets[0].label = t.ds10_exp;
+        usExpendituresChart.data.datasets[1].label = t.ds25_exp;
+        usExpendituresChart.update();
+
+        // Update US Income Chart
+        usIncomeChart.data.labels = t.chartIncLabels;
+        usIncomeChart.data.datasets[0].label = t.ds10_inc;
+        usIncomeChart.data.datasets[1].label = t.ds25_inc;
+        usIncomeChart.update();
+
+        // Update Doughnuts
+        usPie2010Chart.data.labels = t.chartExpLabels.slice(0, 6);
+        usPie2010Chart.update();
+
+        usPie2025Chart.data.labels = t.chartExpLabels.slice(0, 6);
+        usPie2025Chart.update();
+
+        // Update Global Doughnut Labels
+        globalStructureChart.data.labels = t.globalPieLabels;
+        globalStructureChart.update();
+
+        // Update Matrix Datasets
+        matrixChart.data.datasets[0].label = t.matrixDsLabels[0];
+        matrixChart.data.datasets[1].label = t.matrixDsLabels[1];
+        matrixChart.data.datasets[2].label = t.matrixDsLabels[2];
+        matrixChart.data.datasets[3].label = t.matrixDsLabels[3];
+        matrixChart.update();
+    }
+
+    // 1. США Expenditures Chart (Comparison)
+    function initUSExpenseChart() {
+        const ctx = document.getElementById('usExpendituresChart').getContext('2d');
+        const t = translations.ru;
+        usExpendituresChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: t.chartExpLabels,
+                datasets: [
+                    {
+                        label: t.ds10_exp,
+                        data: [71.0, 16.4, 7.8, 46.8, 13.1, 19.7, -3.8],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.4)',
+                            'rgba(15, 118, 110, 0.4)',
+                            'rgba(52, 211, 153, 0.4)',
+                            'rgba(6, 78, 59, 0.4)',
+                            'rgba(29, 78, 216, 0.4)',
+                            'rgba(217, 119, 6, 0.4)',
+                            'rgba(225, 29, 72, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(15, 118, 110, 1)',
+                            'rgba(52, 211, 153, 1)',
+                            'rgba(6, 78, 59, 1)',
+                            'rgba(29, 78, 216, 1)',
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(225, 29, 72, 1)'
+                        ],
+                        borderWidth: 1.5
+                    },
+                    {
+                        label: t.ds25_exp,
+                        data: [68.12, 13.79, 7.36, 46.96, 17.74, 17.15, -3.01],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.85)',
+                            'rgba(15, 118, 110, 0.85)',
+                            'rgba(52, 211, 153, 0.85)',
+                            'rgba(6, 78, 59, 0.85)',
+                            'rgba(29, 78, 216, 0.85)',
+                            'rgba(217, 119, 6, 0.85)',
+                            'rgba(225, 29, 72, 0.9)'
+                        ],
+                        borderColor: [
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(15, 118, 110, 1)',
+                            'rgba(52, 211, 153, 1)',
+                            'rgba(6, 78, 59, 1)',
+                            'rgba(29, 78, 216, 1)',
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(225, 29, 72, 1)'
+                        ],
+                        borderWidth: 1.5
+                    }
+                ]
             },
-            "germany": {
-                name: "Германия 🇩🇪",
-                consumption: 53.5,
-                investment: 20.4,
-                government: 19.7,
-                nx: 6.3,
-                story: "Германия — локомотив европейской индустрии. Внутреннее личное потребление здесь традиционно умеренное (около 53.5%), зато страна держит очень высокий чистый экспорт (+6.3% к ВВП) и развивает мощные инвестиции в инфраструктуру."
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#94a3b8' } }
+                },
+                scales: {
+                    y: {
+                        ticks: { color: '#94a3b8', callback: value => value + '%' },
+                        grid: { color: 'rgba(51, 65, 85, 0.3)' }
+                    },
+                    x: {
+                        ticks: { color: '#94a3b8' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2. США Income Chart (GDI)
+    function initUSIncomeChart() {
+        const ctx = document.getElementById('usIncomeChart').getContext('2d');
+        const t = translations.ru;
+        usIncomeChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: t.chartIncLabels,
+                datasets: [
+                    {
+                        label: t.ds10_inc,
+                        data: [47.71, 10.09, 7.67, 2.94, 2.83, 5.72, 4.77, 3.60, 7.57, 7.45],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.4)',
+                            'rgba(96, 165, 250, 0.4)',
+                            'rgba(147, 197, 253, 0.4)',
+                            'rgba(191, 219, 254, 0.4)',
+                            'rgba(248, 113, 113, 0.4)',
+                            'rgba(29, 78, 216, 0.4)',
+                            'rgba(52, 211, 153, 0.4)',
+                            'rgba(30, 58, 138, 0.4)',
+                            'rgba(100, 116, 139, 0.4)',
+                            'rgba(139, 92, 246, 0.4)'
+                        ],
+                        borderColor: [
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(96, 165, 250, 1)',
+                            'rgba(147, 197, 253, 1)',
+                            'rgba(191, 219, 254, 1)',
+                            'rgba(248, 113, 113, 1)',
+                            'rgba(29, 78, 216, 1)',
+                            'rgba(52, 211, 153, 1)',
+                            'rgba(30, 58, 138, 1)',
+                            'rgba(100, 116, 139, 1)',
+                            'rgba(139, 92, 246, 1)'
+                        ],
+                        borderWidth: 1.5
+                    },
+                    {
+                        label: t.ds25_inc,
+                        data: [42.52, 9.07, 6.91, 3.65, 2.28, 5.59, 3.76, 2.00, 6.88, 16.59],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.85)',
+                            'rgba(96, 165, 250, 0.85)',
+                            'rgba(147, 197, 253, 0.85)',
+                            'rgba(191, 219, 254, 0.85)',
+                            'rgba(248, 113, 113, 0.85)',
+                            'rgba(29, 78, 216, 0.85)',
+                            'rgba(52, 211, 153, 0.85)',
+                            'rgba(30, 58, 138, 0.85)',
+                            'rgba(100, 116, 139, 0.85)',
+                            'rgba(139, 92, 246, 0.85)'
+                        ],
+                        borderColor: [
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(96, 165, 250, 1)',
+                            'rgba(147, 197, 253, 1)',
+                            'rgba(191, 219, 254, 1)',
+                            'rgba(248, 113, 113, 1)',
+                            'rgba(29, 78, 216, 1)',
+                            'rgba(52, 211, 153, 1)',
+                            'rgba(30, 58, 138, 1)',
+                            'rgba(100, 116, 139, 1)',
+                            'rgba(139, 92, 246, 1)'
+                        ],
+                        borderWidth: 1.5
+                    }
+                ]
             },
-            "uk": {
-                name: "Великобритания 🇬🇧",
-                consumption: 64.4,
-                investment: 16.9,
-                government: 19.9,
-                nx: -1.4,
-                story: "Британская экономика сильно завязана на сферу услуг и внутреннее потребление граждан (64.4% ВВП), однако страдает от хронического дефицита торгового баланса (NX равен -1.4% ВВП)."
-            },
-            "china": {
-                name: "Китай 🇨🇳",
-                consumption: 39.9,
-                investment: 40.5,
-                government: 16.9,
-                nx: 2.7,
-                story: "Китай представляет уникальную структуру: аномально низкое внутреннее семейное потребление (39.9%) компенсируется гигантскими государственными инвестициями в основной капитал (40.5%) и застройку."
-            },
-            "india": {
-                name: "Индия 🇮🇳",
-                consumption: 56.3,
-                investment: 33.5,
-                government: 9.3,
-                nx: -1.6,
-                story: "Индия — быстрорастущая развивающаяся экономика. Здесь идет активная индустриализация, поэтому инвестиционная доля находится на высочайшем уровне в 33.5%, а госрасходы невелики."
-            },
-            "europe": {
-                name: "Европа (в среднем) 🇪🇺",
-                consumption: 54.5,
-                investment: 21.0,
-                government: 21.5,
-                nx: 3.0,
-                story: "Среднеевропейская модель показывает высокую стабильность с высоким уровнем госрасходов (социальные гарантии и медицина съедают до 21.5% ВВП) и сбалансированным внешнеторговым профицитом."
-            },
-            "france": {
-                name: "Франция 🇫🇷",
-                consumption: 54.0,
-                investment: 23.0,
-                government: 24.0,
-                nx: -1.0,
-                story: "Франция выделяется одной из самых высоких долей государственного сектора в ВВП (24%), что отражает масштабные социальные бюджеты, при умеренно дефицитном торговом балансе."
-            },
-            "italy": {
-                name: "Италия 🇮🇹",
-                consumption: 59.0,
-                investment: 19.0,
-                government: 20.0,
-                nx: 2.0,
-                story: "Италия сочетает высокое личное потребление домохозяйств (59%) с положительным сальдо внешней торговли благодаря экспорту промышленного оборудования, моды и продуктов питания."
-            },
-            "sweden": {
-                name: "Швеция 🇸🇪",
-                consumption: 45.0,
-                investment: 25.0,
-                government: 26.0,
-                nx: 4.0,
-                story: "Скандинавская модель во всей красе: умеренное личное потребление компенсируется гигантскими коллективными государственными закупками и услугами (26% ВВП)."
-            },
-            "norway": {
-                name: "Норвегия 🇳🇴",
-                consumption: 35.0,
-                investment: 21.0,
-                government: 20.0,
-                nx: 24.0,
-                story: "Абсолютный мировой феномен за счет колоссального сырьевого экспорта (нефть и газ). Чистый экспорт составляет фантастические 24% от общего объема её ВВП!"
-            },
-            "denmark": {
-                name: "Дания 🇩🇰",
-                consumption: 46.0,
-                investment: 22.0,
-                government: 24.0,
-                nx: 8.0,
-                story: "Дания сильна своими фармацевтическими и логистическими гигантами, что дает ей уверенный профицит экспорта (8%) при высочайших госрасходах на нужды граждан."
-            },
-            "japan": {
-                name: "Япония 🇯🇵",
-                consumption: 56.2,
-                investment: 24.5,
-                government: 19.7,
-                nx: -0.4,
-                story: "Стареющее население Японии удерживает потребительскую долю на уровне 56%, при этом корпоративный сектор много инвестирует во внутреннее обновление фондов и робототехнику."
-            },
-            "ecuador": {
-                name: "Эквадор 🇪🇨",
-                consumption: 63.0,
-                investment: 20.0,
-                government: 15.0,
-                nx: 2.0,
-                story: "Развивающаяся южноамериканская модель с высокой зависимостью от потребления населения и экспорта бананов, нефти и морепродуктов."
-            },
-            "switzerland": {
-                name: "Швейцария 🇨🇭",
-                consumption: 52.0,
-                investment: 22.0,
-                government: 12.0,
-                nx: 14.0,
-                story: "Благодаря развитому финансовому и фармацевтическому секторам с высокой добавленной стоимостью, Швейцария генерирует огромный чистый экспорт (+14% к ВВП)."
-            },
-            "greece": {
-                name: "Греция 🇬🇷",
-                consumption: 68.0,
-                investment: 14.0,
-                government: 20.0,
-                nx: -2.0,
-                story: "В Греции после затяжных кризисов инвестиционный сектор все еще слаб (всего 14%), в то время как экономика поддерживается за счет туризма и прямого домашнего потребления."
-            },
-            "poland": {
-                name: "Польша 🇵🇱",
-                consumption: 58.0,
-                investment: 17.0,
-                government: 18.0,
-                nx: 7.0,
-                story: "Польша выступает важным производственным хабом внутри ЕС, что гарантирует ей устойчивый чистый экспорт (+7% к ВВП) при растущем качестве жизни населения."
-            },
-            "uae": {
-                name: "ОАЭ 🇦🇪",
-                consumption: 42.0,
-                investment: 25.0,
-                government: 13.0,
-                nx: 20.0,
-                story: "Эмиратская модель перераспределяет огромные доходы от экспорта нефти и финансовых услуг. Торговый профицит (NX) составляет уверенные 20% ВВП."
-            },
-            "israel": {
-                name: "Израиль 🇮🇱",
-                consumption: 53.0,
-                investment: 22.0,
-                government: 22.0,
-                nx: 3.0,
-                story: "Высокотехнологичный экспорт (ИТ и оборонные технологии) обеспечивает Израилю торговый профицит (+3%), а государство сохраняет весомую долю расходов (22%)."
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#94a3b8' } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ' ' + context.label.split(' ')[0] + ': ' + context.raw + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: { color: '#94a3b8', callback: value => value + '%' },
+                        grid: { color: 'rgba(51, 65, 85, 0.3)' }
+                    },
+                    x: {
+                        ticks: { color: '#94a3b8', autoSkip: false, maxRotation: 45, minRotation: 45 },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    // 3. Clean Doughnut charts
+    function initUSPies() {
+        const labels = translations.ru.chartExpLabels.slice(0, 6);
+        const colors = [
+            '#064e3b',
+            '#0f766e',
+            '#34d399',
+            '#1d4ed8',
+            '#d97706',
+            '#e11d48'
+        ];
+
+        const optionsConfig = {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '74%',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label;
+                            let value = context.raw;
+                            if (label.includes('Net Exports') || label.includes('Импорт') || label.includes('Export')) {
+                                return ` ${label}: -${value}%`;
+                            }
+                            return ` ${label}: ${value}%`;
+                        }
+                    }
+                }
             }
         };
 
-        // --- Init Charts ---
-        let usExpendituresChart, usIncomeChart, globalStructureChart, matrixChart;
-        let usPie2010Chart, usPie2025Chart;
+        const ctx2010 = document.getElementById('usPie2010Canvas').getContext('2d');
+        usPie2010Chart = new Chart(ctx2010, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: [46.8, 16.4, 7.8, 13.1, 19.7, 3.8],
+                    backgroundColor: colors,
+                    borderColor: '#0f172a',
+                    borderWidth: 2
+                }]
+            },
+            options: optionsConfig
+        });
 
-        window.onload = function() {
-            initUSExpenseChart();
-            initUSIncomeChart();
-            initUSPies(); 
-            populateCountrySelector();
-            initGlobalChart();
-            initMatrixChart();
-        };
+        const ctx2025 = document.getElementById('usPie2025Canvas').getContext('2d');
+        usPie2025Chart = new Chart(ctx2025, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: [46.96, 13.79, 7.36, 17.74, 17.15, 3.01],
+                    backgroundColor: colors,
+                    borderColor: '#0f172a',
+                    borderWidth: 2
+                }]
+            },
+            options: optionsConfig
+        });
+    }
 
-        // 1. США Expenditures Chart (Comparison) - MULTI-COLOR
-        function initUSExpenseChart() {
-            const ctx = document.getElementById('usExpendituresChart').getContext('2d');
-            usExpendituresChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Consumption', 'FMCG (nondurable)', 'Durable Goods', 'Services', 'Investments', 'Government', 'Net Exports'],
-                    datasets: [
-                        {
-                            label: '2010 (из файла)',
-                            data: [71.0, 16.4, 7.8, 46.8, 13.1, 19.7, -3.8],
-                            backgroundColor: [
-                                'rgba(16, 185, 129, 0.4)',  // Consumption (Emerald)
-                                'rgba(15, 118, 110, 0.4)',  // FMCG (Teal Dark)
-                                'rgba(52, 211, 153, 0.4)',  // Durable Goods (Emerald Light)
-                                'rgba(6, 78, 59, 0.4)',     // Services (Emerald Ultra Dark)
-                                'rgba(29, 78, 216, 0.4)',   // Investments (Royal Blue)
-                                'rgba(217, 119, 6, 0.4)',   // Government (Amber)
-                                'rgba(225, 29, 72, 0.5)'    // Net Exports (Rose Red)
-                            ],
-                            borderColor: [
-                                'rgba(16, 185, 129, 1)',
-                                'rgba(15, 118, 110, 1)',
-                                'rgba(52, 211, 153, 1)',
-                                'rgba(6, 78, 59, 1)',
-                                'rgba(29, 78, 216, 1)',
-                                'rgba(217, 119, 6, 1)',
-                                'rgba(225, 29, 72, 1)'
-                            ],
-                            borderWidth: 1.5
-                        },
-                        {
-                            label: '2025 (Новые данные)',
-                            data: [68.12, 13.79, 7.36, 46.96, 17.74, 17.15, -3.01],
-                            backgroundColor: [
-                                'rgba(16, 185, 129, 0.85)', // Consumption
-                                'rgba(15, 118, 110, 0.85)', // FMCG
-                                'rgba(52, 211, 153, 0.85)', // Durable Goods
-                                'rgba(6, 78, 59, 0.85)',    // Services
-                                'rgba(29, 78, 216, 0.85)',  // Investments
-                                'rgba(217, 119, 6, 0.85)',  // Government
-                                'rgba(225, 29, 72, 0.9)'    // Net Exports
-                            ],
-                            borderColor: [
-                                'rgba(16, 185, 129, 1)',
-                                'rgba(15, 118, 110, 1)',
-                                'rgba(52, 211, 153, 1)',
-                                'rgba(6, 78, 59, 1)',
-                                'rgba(29, 78, 216, 1)',
-                                'rgba(217, 119, 6, 1)',
-                                'rgba(225, 29, 72, 1)'
-                            ],
-                            borderWidth: 1.5
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#94a3b8' } }
-                    },
-                    scales: {
-                        y: {
-                            ticks: { color: '#94a3b8', callback: value => value + '%' },
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' }
-                        },
-                        x: {
-                            ticks: { color: '#94a3b8' },
-                            grid: { display: false }
-                        }
-                    }
-                }
-            });
+    // 4. Populate Country Selector
+    function populateCountrySelector() {
+        const selector = document.getElementById('countrySelector');
+        selector.innerHTML = '';
+        for (const [key, country] of Object.entries(countriesData)) {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.innerHTML = country.name[currentLang];
+            selector.appendChild(opt);
         }
+    }
 
-        // 2. США Income Chart (GDI) - SOLID COLOR ASSIGNMENTS
-        function initUSIncomeChart() {
-            const ctx = document.getElementById('usIncomeChart').getContext('2d');
-            usIncomeChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [
-                        'Чистая ЗП (Wages)', 
-                        'Соц. надбавки (Supplements)', 
-                        'Доходы ИП (Proprietors)', 
-                        'Рентный доход', 
-                        'Налог на прибыль корп.', 
-                        'Дивиденды', 
-                        'Нераспределенная прибыль', 
-                        'Процентный доход', 
-                        'Косв. налоги минус субсидии', 
-                        'Амортизация (Depreciation)'
+    // 5. Init Global Country breakdown chart
+    function initGlobalChart() {
+        const ctx = document.getElementById('globalStructureChart').getContext('2d');
+        globalStructureChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: translations.ru.globalPieLabels,
+                datasets: [{
+                    data: [56.8, 29.0, 10.9, 3.3],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.85)',
+                        'rgba(99, 102, 241, 0.85)',
+                        'rgba(245, 158, 11, 0.85)',
+                        'rgba(239, 68, 68, 0.95)'
                     ],
-                    datasets: [
-                        {
-                            label: '2010 (% от GDI)',
-                            data: [47.71, 10.09, 7.67, 2.94, 2.83, 5.72, 4.77, 3.60, 7.57, 7.45],
-                            backgroundColor: [
-                                'rgba(59, 130, 246, 0.4)',  // Wages (Deep Blue)
-                                'rgba(96, 165, 250, 0.4)',  // Supplements (Classic Blue)
-                                'rgba(147, 197, 253, 0.4)', // Proprietors (Sky Blue)
-                                'rgba(191, 219, 254, 0.4)', // Rent (Light Soft Blue)
-                                'rgba(248, 113, 113, 0.4)', // Corporate Taxes (Reddish)
-                                'rgba(29, 78, 216, 0.4)',   // Dividends (Navy Blue)
-                                'rgba(52, 211, 153, 0.4)',  // Undistributed Profits (Beautiful Emerald Green)
-                                'rgba(30, 58, 138, 0.4)',   // Net Interest (Deep Navy)
-                                'rgba(100, 116, 139, 0.4)', // Indirect Taxes (Neutral Slate Gray)
-                                'rgba(139, 92, 246, 0.4)'   // Depreciation (Vibrant Purple)
-                            ],
-                            borderColor: [
-                                'rgba(59, 130, 246, 1)',
-                                'rgba(96, 165, 250, 1)',
-                                'rgba(147, 197, 253, 1)',
-                                'rgba(191, 219, 254, 1)',
-                                'rgba(248, 113, 113, 1)',
-                                'rgba(29, 78, 216, 1)',
-                                'rgba(52, 211, 153, 1)',
-                                'rgba(30, 58, 138, 1)',
-                                'rgba(100, 116, 139, 1)',
-                                'rgba(139, 92, 246, 1)'
-                            ],
-                            borderWidth: 1.5
-                        },
-                        {
-                            label: '2025 (% от GDI)',
-                            data: [42.52, 9.07, 6.91, 3.65, 2.28, 5.59, 3.76, 2.00, 6.88, 16.59],
-                            backgroundColor: [
-                                'rgba(59, 130, 246, 0.85)', // Wages
-                                'rgba(96, 165, 250, 0.85)', // Supplements
-                                'rgba(147, 197, 253, 0.85)',// Proprietors
-                                'rgba(191, 219, 254, 0.85)',// Rent
-                                'rgba(248, 113, 113, 0.85)',// Corporate Taxes (Reddish)
-                                'rgba(29, 78, 216, 0.85)',  // Dividends
-                                'rgba(52, 211, 153, 0.85)', // Undistributed Profits (Beautiful Emerald Green)
-                                'rgba(30, 58, 138, 0.85)',  // Net Interest
-                                'rgba(100, 116, 139, 0.85)',// Indirect Taxes
-                                'rgba(139, 92, 246, 0.85)'  // Depreciation
-                            ],
-                            borderColor: [
-                                'rgba(59, 130, 246, 1)',
-                                'rgba(96, 165, 250, 1)',
-                                'rgba(147, 197, 253, 1)',
-                                'rgba(191, 219, 254, 1)',
-                                'rgba(248, 113, 113, 1)',
-                                'rgba(29, 78, 216, 1)',
-                                'rgba(52, 211, 153, 1)',
-                                'rgba(30, 58, 138, 1)',
-                                'rgba(100, 116, 139, 1)',
-                                'rgba(139, 92, 246, 1)'
-                            ],
-                            borderWidth: 1.5
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#94a3b8' } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ' ' + context.label.split(' ')[0] + ': ' + context.raw + '%';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            ticks: { color: '#94a3b8', callback: value => value + '%' },
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' }
-                        },
-                        x: {
-                            ticks: { color: '#94a3b8', autoSkip: false, maxRotation: 45, minRotation: 45 },
-                            grid: { display: false }
-                        }
-                    }
-                }
-            });
-        }
-
-        // 3. Clean Elegant Doughnut charts side-by-side (NO MULTI-RINGS!)
-        function initUSPies() {
-            const labels = ['Services (Услуги)', 'FMCG (Краткоср. спрос)', 'Durable Goods (Длит. спрос)', 'Investments (Инвестиции)', 'Government (Госзакупки)', 'Net Exports (Импорт NX)'];
-            const colors = [
-                '#064e3b', // Services (Deep forest green)
-                '#0f766e', // FMCG (Teal Pine green)
-                '#34d399', // Durable Goods (Fresh Mint green)
-                '#1d4ed8', // Investments (Classic Blue)
-                '#d97706', // Government (Amber Gold)
-                '#e11d48'  // Net Exports (Rose Red)
-            ];
-
-            const optionsConfig = {
+                    borderColor: '#0f172a',
+                    borderWidth: 3
+                }]
+            },
+            options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '74%', // Делаем дырочку чуть шире для идеального рендеринга флага США в центре
+                cutout: '74%',
                 plugins: {
                     legend: {
-                        display: false // Custom elegant HTML glossary panel
+                        position: 'bottom',
+                        labels: { color: '#e2e8f0', padding: 20 }
                     },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                let label = context.label;
-                                let value = context.raw;
-                                if (label.includes('Net Exports') || label.includes('Импорт')) {
-                                    return ` ${label}: -${value}% (Превышение импорта)`;
-                                }
-                                return ` ${label}: ${value}%`;
+                                return ' ' + context.label + ': ' + context.raw + '%';
                             }
                         }
                     }
                 }
-            };
-
-            // 2010 Single Elegant Pie
-            const ctx2010 = document.getElementById('usPie2010Canvas').getContext('2d');
-            usPie2010Chart = new Chart(ctx2010, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: [46.8, 16.4, 7.8, 13.1, 19.7, 3.8],
-                        backgroundColor: colors,
-                        borderColor: '#0f172a',
-                        borderWidth: 2
-                    }]
-                },
-                options: optionsConfig
-            });
-
-            // 2025 Single Elegant Pie
-            const ctx2025 = document.getElementById('usPie2025Canvas').getContext('2d');
-            usPie2025Chart = new Chart(ctx2025, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: [46.96, 13.79, 7.36, 17.74, 17.15, 3.01],
-                        backgroundColor: colors,
-                        borderColor: '#0f172a',
-                        borderWidth: 2
-                    }]
-                },
-                options: optionsConfig
-            });
-        }
-
-        // 4. Populate Country Selector
-        function populateCountrySelector() {
-            const selector = document.getElementById('countrySelector');
-            for (const [key, country] of Object.entries(countriesData)) {
-                const opt = document.createElement('option');
-                opt.value = key;
-                opt.innerHTML = country.name;
-                selector.appendChild(opt);
             }
+        });
+        
+        document.getElementById('countrySelector').value = "kazakhstan";
+        updateGlobalChart();
+    }
+
+    function updateGlobalChart() {
+        const selectedKey = document.getElementById('countrySelector').value;
+        const data = countriesData[selectedKey];
+
+        if (!data) return;
+
+        document.getElementById('selectedCountryName').innerHTML = data.name[currentLang];
+        document.getElementById('selectedCountryStory').innerHTML = data.story[currentLang];
+        document.getElementById('valConsumption').innerHTML = data.consumption + '%';
+        document.getElementById('valInvestment').innerHTML = data.investment + '%';
+        document.getElementById('valGovernment').innerHTML = data.government + '%';
+        document.getElementById('valNX').innerHTML = (data.nx > 0 ? '+' : '') + data.nx + '%';
+
+        globalStructureChart.data.datasets[0].data = [
+            data.consumption,
+            data.investment,
+            data.government,
+            Math.abs(data.nx)
+        ];
+        
+        globalStructureChart.update();
+    }
+
+    // 6. Comparison Matrix Chart
+    function initMatrixChart() {
+        const ctx = document.getElementById('globalComparisonMatrixChart').getContext('2d');
+        
+        const labels = [];
+        const consumptions = [];
+        const investments = [];
+        const governments = [];
+        const nxs = [];
+
+        const limit = 18;
+        let count = 0;
+        for (const [key, country] of Object.entries(countriesData)) {
+            if (count >= limit) break;
+            labels.push(country.name.ru.split(' ')[0]);
+            consumptions.push(country.consumption);
+            investments.push(country.investment);
+            governments.push(country.government);
+            nxs.push(country.nx);
+            count++;
         }
 
-        // 5. Init Global Country breakdown chart
-        function initGlobalChart() {
-            const ctx = document.getElementById('globalStructureChart').getContext('2d');
-            globalStructureChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Личное потребление (C)', 'Частные инвестиции (I)', 'Государственные расходы (G)', 'Чистый экспорт (NX)'],
-                    datasets: [{
-                        data: [56.8, 29.0, 10.9, 3.3], // Начинаем сразу с Казахстана
-                        backgroundColor: [
-                            'rgba(16, 185, 129, 0.85)', // emerald
-                            'rgba(99, 102, 241, 0.85)',  // indigo
-                            'rgba(245, 158, 11, 0.85)',  // amber
-                            'rgba(239, 68, 68, 0.95)'    // RED for net exports!
-                        ],
-                        borderColor: '#0f172a',
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '74%', // Расширяем внутренний радиус под иконку флага
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#e2e8f0', padding: 20 }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ' ' + context.label + ': ' + context.raw + '%';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Выставляем селектор на Казахстан по умолчанию
-            document.getElementById('countrySelector').value = "kazakhstan";
-            updateGlobalChart();
-        }
-
-       // Обновление данных и флага при смене страны в списке
-        function updateGlobalChart() {
-            const selectedKey = document.getElementById('countrySelector').value;
-            const data = countriesData[selectedKey];
-
-            if (!data) return;
-
-            // Обновляем текстовые блоки на панели
-            document.getElementById('selectedCountryName').innerHTML = data.name;
-            document.getElementById('selectedCountryStory').innerHTML = data.story;
-            document.getElementById('valConsumption').innerHTML = data.consumption + '%';
-            document.getElementById('valInvestment').innerHTML = data.investment + '%';
-            document.getElementById('valGovernment').innerHTML = data.government + '%';
-            document.getElementById('valNX').innerHTML = (data.nx > 0 ? '+' : '') + data.nx + '%';
-
-            // Обновляем сектора самого графика
-            globalStructureChart.data.datasets[0].data = [
-                data.consumption,
-                data.investment,
-                data.government,
-                Math.abs(data.nx)
-            ];
-            
-            // Перерисовываем график, плагин выше автоматически подтянет нужный SVG флаг
-            globalStructureChart.update();
-        }
-
-        // 6. Comparison Matrix Chart
-        function initMatrixChart() {
-            const ctx = document.getElementById('globalComparisonMatrixChart').getContext('2d');
-            
-            const labels = [];
-            const consumptions = [];
-            const investments = [];
-            const governments = [];
-            const nxs = [];
-
-            // Grab top countries for matrix
-            const limit = 18;
-            let count = 0;
-            for (const [key, country] of Object.entries(countriesData)) {
-                if (count >= limit) break;
-                labels.push(country.name.split(' ')[0]); // Get name without flag
-                consumptions.push(country.consumption);
-                investments.push(country.investment);
-                governments.push(country.government);
-                nxs.push(country.nx);
-                count++;
-            }
-
-            matrixChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Потребление (C)',
-                            data: consumptions,
-                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                        },
-                        {
-                            label: 'Инвестиции (I)',
-                            data: investments,
-                            backgroundColor: 'rgba(99, 102, 241, 0.7)',
-                        },
-                        {
-                            label: 'Госрасходы (G)',
-                            data: governments,
-                            backgroundColor: 'rgba(245, 158, 11, 0.7)',
-                        },
-                        {
-                            label: 'Чистый экспорт (NX)',
-                            data: nxs,
-                            backgroundColor: 'rgba(239, 68, 68, 0.9)', 
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { color: '#94a3b8' } }
+        const t = translations.ru;
+        matrixChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: t.matrixDsLabels[0],
+                        data: consumptions,
+                        backgroundColor: 'rgba(16, 185, 129, 0.7)',
                     },
-                    scales: {
-                        y: {
-                            stacked: false, 
-                            ticks: { color: '#94a3b8', callback: value => value + '%' },
-                            grid: { color: 'rgba(51, 65, 85, 0.2)' }
-                        },
-                        x: {
-                            ticks: { color: '#94a3b8' },
-                            grid: { display: false }
-                        }
+                    {
+                        label: t.matrixDsLabels[1],
+                        data: investments,
+                        backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                    },
+                    {
+                        label: t.matrixDsLabels[2],
+                        data: governments,
+                        backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                    },
+                    {
+                        label: t.matrixDsLabels[3],
+                        data: nxs,
+                        backgroundColor: 'rgba(239, 68, 68, 0.9)', 
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { color: '#94a3b8' } }
+                },
+                scales: {
+                    y: {
+                        stacked: false, 
+                        ticks: { color: '#94a3b8', callback: value => value + '%' },
+                        grid: { color: 'rgba(51, 65, 85, 0.2)' }
+                    },
+                    x: {
+                        ticks: { color: '#94a3b8' },
+                        grid: { display: false }
                     }
                 }
-            });
-        }
+            }
+        });
+    }
     </script>
 </body>
 </html>
