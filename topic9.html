@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 9 | Principles of Economics</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 30px;
+        }
+
+        /* Верхняя панель: Логотип слева, Заголовок по центру, Кнопка справа */
+        .top-bar {
+            width: 100%;
+            max-width: 1450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            padding-top: 10px;
+        }
+
+        .top-left-logo {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .header-titles {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #001e50;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #555555;
+            line-height: 1.4;
+        }
+
+        .back-button {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            background-color: #001e50;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .back-button:hover {
+            background-color: #003380;
+        }
+
+        /* Контейнер карточек — опускаем на середину экрана */
+        .grid-container {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 18px;
+            max-width: 1450px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            margin: auto 0; /* Центрирование карточек по высоте экрана */
+            padding: 20px 0;
+        }
+
+        /* Точная рамка под исходные PNG картинки (185x300px) */
+        .card {
+            display: block;
+            text-decoration: none;
+            background: #ffffff;
+            border: 2px solid #001e50;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 30, 80, 0.08);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 185px; 
+            height: 300px; 
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card img {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            object-fit: fill !important;
+            border: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: #0284c7;
+            box-shadow: 0 18px 35px rgba(0, 30, 80, 0.25);
+        }
+
+        footer {
+            margin-top: auto;
+            font-size: 14px;
+            color: #718096;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Адаптивность для смартфонов и планшетов */
+        @media (max-width: 1250px) {
+            .grid-container {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                justify-content: center;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .top-left-logo, .back-button {
+                position: static;
+                transform: none;
+            }
+
+            .top-left-logo {
+                width: 52px;
+                height: 52px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+
+            .back-button {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .grid-container {
+                margin: 10px 0;
+            }
+
+            .card {
+                width: 155px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Верхняя панель -->
+    <div class="top-bar">
+        <img src="https://ogaydv-prog.github.io/economics-se/almau.jpg" alt="AlmaU Logo" class="top-left-logo" onerror="this.src='./almau.jpg'">
+        <div class="header-titles">
+            <h1>Topic 9: Measuring the Cost of Living</h1>
+            <p class="subtitle">
+                Select a learning resource below: presentation, inflation simulators, lab task, or video lecture.
+            </p>
+        </div>
+        <a href="topics.html" class="back-button">← Back to Topics</a>
+    </div>
+
+    <!-- Основная сетка ресурсов (посередине) -->
+    <main class="grid-container">
+        <!-- 1. Лекция -->
+        <a href="cpi-lecture9-pro-pe.html" class="card" title="Lecture Notes">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-lecture9-pe.png" alt="Lecture Notes" onerror="this.src='./pic-lecture9-pe.png'">
+        </a>
+
+        <!-- 2. Презентация Canva -->
+        <a href="https://canva.link/sqo0h6oo8x0mp9c" target="_blank" rel="noopener noreferrer" class="card" title="Presentation">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-preza9-pe.png" alt="Presentation" onerror="this.src='./pic-preza9-pe.png'">
+        </a>
+
+        <!-- 3. Симулятор ИПЦ / CPI -->
+        <a href="sim-cpi-pe.html" class="card" title="CPI Simulator">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-cpi-pe.png" alt="CPI Simulator" onerror="this.src='./pic-cpi-pe.png'">
+        </a>
+
+        <!-- 4. Симулятор Альтернативных Индексов (Биг-Мак и др.) -->
+        <a href="sim-big-mc-pe-pro.html" class="card" title="Alternative Inflation Indices">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-big-mc-pe.png" alt="Alternative Inflation Indices" onerror="this.src='./pic-big-mc-pe.png'">
+        </a>
+
+        <!-- 5. Лабораторная работа (Task) -->
+        <a href="#" class="card" title="CPI Lab Task (Coming Soon)">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-cpi-task-pe.png" alt="CPI Lab Task" onerror="this.src='./pic-cpi-task-pe.png'">
+        </a>
+
+        <!-- 6. Видеолекция -->
+        <a href="https://www.youtube.com/watch?v=JW7IQ45_up8&list=PL11ADD17785C9C9A4&index=6" target="_blank" rel="noopener noreferrer" class="card" title="Video Lecture">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-video9-pe.png" alt="Video Lecture" onerror="this.src='./pic-video9-pe.png'">
+        </a>
+    </main>
+
+    <footer>
+        <p>Developed for Principles of Economics Course AlmaU 2026</p>
+        <p>© Almaty Management University | School of Digital Technologies & Economics</p>
+    </footer>
+
+</body>
+</html>
