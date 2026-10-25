@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topic 9 | Principles of Economics</title>
+    <title>Topic 9 | Economics (SE)</title>
     <style>
         * {
             box-sizing: border-box;
@@ -82,7 +82,7 @@
             background-color: #003380;
         }
 
-        /* Контейнер карточек — опускаем на середину экрана */
+        /* Контейнер карточек — центрирование по высоте экрана */
         .grid-container {
             display: flex;
             flex-wrap: nowrap;
@@ -91,11 +91,11 @@
             width: 100%;
             justify-content: center;
             align-items: center;
-            margin: auto 0; /* Центрирование карточек по высоте экрана */
+            margin: auto 0;
             padding: 20px 0;
         }
 
-        /* Точная рамка под исходные PNG картинки (185x300px) */
+        /* Карточка ресурсов (185x300px) */
         .card {
             display: block;
             text-decoration: none;
@@ -122,10 +122,11 @@
             padding: 0 !important;
         }
 
+        /* Усиленный эффект при наведении: утолщенная рамка, подъём и яркая подсветка */
         .card:hover {
-            transform: translateY(-8px) scale(1.03);
-            border-color: #0284c7;
-            box-shadow: 0 18px 35px rgba(0, 30, 80, 0.25);
+            transform: translateY(-10px) scale(1.04);
+            border: 3px solid #0284c7;
+            box-shadow: 0 12px 28px rgba(2, 132, 199, 0.35), inset 0 0 10px rgba(2, 132, 199, 0.15);
         }
 
         footer {
@@ -240,7 +241,7 @@
     </main>
 
     <footer>
-        <p>Developed for Principles of Economics Course AlmaU 2026</p>
+        <p>Developed for Software Engineering Team AlmaU 2026 | Course: Economics</p>
         <p>© Almaty Management University | School of Digital Technologies & Economics</p>
     </footer>
 
