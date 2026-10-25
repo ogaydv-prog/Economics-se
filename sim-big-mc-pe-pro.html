@@ -33,7 +33,7 @@
             overflow: hidden;
             cursor: pointer;
             padding: 0;
-            aspect-ratio: 1 / 1; /* Строгий квадрат */
+            aspect-ratio: 1 / 1;
             width: 100%;
             display: flex;
             align-items: center;
@@ -49,11 +49,11 @@
         .tab-btn img {
             width: 100%;
             height: 100%;
-            object-fit: fill; /* Заполнение всей рамки без щелей */
+            object-fit: fill;
             display: block;
         }
 
-        /* Подсветка неоновых рамок строго по контуру */
+        /* Подсветка неоновых рамок */
         .tab-btn-mac.active {
             border-color: #10b981 !important;
             box-shadow: 0 0 25px rgba(16, 185, 129, 0.7), inset 0 0 12px rgba(16, 185, 129, 0.3) !important;
@@ -118,39 +118,32 @@
         </div>
     </header>
 
-    <!-- NAVIGATION TABS (7 Квадратных рамок) -->
+    <!-- NAVIGATION TABS -->
     <nav class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-4 mb-6">
-        <!-- Big Mac -->
         <button onclick="switchTab('tab-bigmac', this)" class="tab-btn tab-btn-mac active" title="Big Mac Index">
             <img src="pic-dash-mc.png" alt="McDonald's" onerror="this.src='./pic-dash-mc.png'">
         </button>
 
-        <!-- iPhone -->
         <button onclick="switchTab('tab-iphone', this)" class="tab-btn tab-btn-iphone" title="iPhone Index">
             <img src="pic-dash-apl.png" alt="iPhone Index" onerror="this.src='./pic-dash-apl.png'">
         </button>
 
-        <!-- Starbucks -->
         <button onclick="switchTab('tab-starbucks', this)" class="tab-btn tab-btn-starbucks" title="Starbucks Latte Index">
             <img src="pic-dash-strb.png" alt="Starbucks" onerror="this.src='./pic-dash-strb.png'">
         </button>
 
-        <!-- Banana Index -->
         <button onclick="switchTab('tab-banana', this)" class="tab-btn tab-btn-banana" title="Banana Index">
             <img src="pic-dash-ban.png" alt="Banana Index" onerror="this.src='./pic-dash-ban.png'">
         </button>
 
-        <!-- Hollywood -->
         <button onclick="switchTab('tab-cinema', this)" class="tab-btn tab-btn-cinema" title="Hollywood Index">
             <img src="pic-dash-hol.png" alt="Hollywood Index" onerror="this.src='./pic-dash-hol.png'">
         </button>
 
-        <!-- Региональные индексы -->
         <button onclick="switchTab('tab-dishes', this)" class="tab-btn tab-btn-dishes" title="Региональные индексы">
             <img src="pic-dash-reg.png" alt="Региональные индексы" onerror="this.src='./pic-dash-reg.png'">
         </button>
 
-        <!-- Методология -->
         <button onclick="switchTab('tab-methodology', this)" class="tab-btn tab-btn-method" title="Методология">
             <img src="pic-dash-metod.png" alt="Методология" onerror="this.src='./pic-dash-metod.png'">
         </button>
@@ -172,7 +165,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-                    <div class="lg:col-span-7 h-80 glass-panel p-3 rounded-xl">
+                    <div class="lg:col-span-7 h-80 glass-panel p-3 rounded-xl relative">
                         <canvas id="chartBigMac"></canvas>
                     </div>
                     <div class="lg:col-span-5 space-y-3">
@@ -205,7 +198,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-                    <div class="lg:col-span-7 h-80 glass-panel p-3 rounded-xl">
+                    <div class="lg:col-span-7 h-80 glass-panel p-3 rounded-xl relative">
                         <canvas id="chartIphone"></canvas>
                     </div>
                     <div class="lg:col-span-5 space-y-3">
@@ -237,7 +230,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-                    <div class="lg:col-span-7 h-80 glass-panel p-3 rounded-xl">
+                    <div class="lg:col-span-7 h-80 glass-panel p-3 rounded-xl relative">
                         <canvas id="chartStarbucks"></canvas>
                     </div>
                     <div class="lg:col-span-5 space-y-3 text-xs">
@@ -273,7 +266,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-                    <div class="lg:col-span-7 h-80 glass-panel p-3 rounded-xl">
+                    <div class="lg:col-span-7 h-80 glass-panel p-3 rounded-xl relative">
                         <canvas id="chartBanana"></canvas>
                     </div>
                     <div class="lg:col-span-5 space-y-3 text-xs">
@@ -305,9 +298,9 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    <div class="glass-panel p-4 rounded-xl h-80 space-y-2">
+                    <div class="glass-panel p-4 rounded-xl h-80 space-y-2 relative">
                         <h3 class="text-xs font-bold text-purple-300 uppercase tracking-wider" id="hw-chart-title">1. Цена билета на международный фильм (USD)</h3>
-                        <div class="h-64">
+                        <div class="h-64 relative">
                             <canvas id="chartCinemaTickets"></canvas>
                         </div>
                     </div>
@@ -327,7 +320,6 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-800/60 font-mono" id="tb-movies-body">
-                                    <!-- Dynamic -->
                                 </tbody>
                             </table>
                         </div>
@@ -352,16 +344,16 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    <div class="glass-panel p-4 rounded-xl h-80 space-y-2">
+                    <div class="glass-panel p-4 rounded-xl h-80 space-y-2 relative">
                         <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider" id="reg-plov-title">Индекс Плова по регионам Узбекистана (Сумов)</h3>
-                        <div class="h-64">
+                        <div class="h-64 relative">
                             <canvas id="chartPlov"></canvas>
                         </div>
                     </div>
 
-                    <div class="glass-panel p-4 rounded-xl h-80 space-y-2">
+                    <div class="glass-panel p-4 rounded-xl h-80 space-y-2 relative">
                         <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-wider" id="reg-thali-title">CRISIL Roti Rice Rate — Индия (Рупий)</h3>
-                        <div class="h-64">
+                        <div class="h-64 relative">
                             <canvas id="chartThali"></canvas>
                         </div>
                     </div>
@@ -405,7 +397,6 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/60 font-mono" id="tb-methodology-body">
-                            <!-- Dynamic -->
                         </tbody>
                     </table>
                 </div>
@@ -433,6 +424,7 @@
     <!-- SCRIPTS -->
     <script>
         let currentLang = 'ru';
+        let currentActiveTab = 'tab-bigmac';
 
         const dict = {
             ru: {
@@ -587,13 +579,197 @@
             }
         };
 
-        let chartBigMacObj = null, chartIphoneObj = null, chartStarbucksObj = null, chartBananaObj = null, chartCinemaTicketsObj = null, chartPlovObj = null, chartThaliObj = null;
+        // Экземпляры графиков
+        const chartInstances = {};
+
+        function renderChartForTab(tabId) {
+            const d = dict[currentLang];
+
+            if (tabId === 'tab-bigmac') {
+                if (chartInstances.bigmac) chartInstances.bigmac.destroy();
+                const ctx = document.getElementById('chartBigMac').getContext('2d');
+                chartInstances.bigmac = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: currentLang === 'ru' 
+                            ? ['Швейцария', 'Уругвай', 'Норвегия', 'Колумбия', 'США (Base)', 'Украина', 'Индия', 'Индонезия']
+                            : ['Switzerland', 'Uruguay', 'Norway', 'Colombia', 'USA (Base)', 'Ukraine', 'India', 'Indonesia'],
+                        datasets: [{
+                            label: d.bmChartLabel,
+                            data: [9.04, 8.94, 8.05, 8.00, 6.22, 3.34, 2.45, 2.38],
+                            backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#06b6d4', '#3b82f6', '#8b5cf6'],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
+                    }
+                });
+            }
+
+            if (tabId === 'tab-iphone') {
+                if (chartInstances.iphone) chartInstances.iphone.destroy();
+                const ctx = document.getElementById('chartIphone').getContext('2d');
+                chartInstances.iphone = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: currentLang === 'ru'
+                            ? ['Турция', 'Бразилия', 'Египет', 'Швеция', 'Индия', 'США', 'Южная Корея']
+                            : ['Turkey', 'Brazil', 'Egypt', 'Sweden', 'India', 'USA', 'South Korea'],
+                        datasets: [{
+                            label: d.ipChartLabel,
+                            data: [2182, 1835, 1525, 1448, 1401, 1079, 1063],
+                            backgroundColor: '#38bdf8',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
+                    }
+                });
+            }
+
+            if (tabId === 'tab-starbucks') {
+                if (chartInstances.starbucks) chartInstances.starbucks.destroy();
+                const ctx = document.getElementById('chartStarbucks').getContext('2d');
+                chartInstances.starbucks = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: currentLang === 'ru'
+                            ? ['Швейцария', 'США', 'Великобритания', 'ОАЭ', 'Корея', 'Япония', 'Индия', 'Бразилия']
+                            : ['Switzerland', 'USA', 'UK', 'UAE', 'Korea', 'Japan', 'India', 'Brazil'],
+                        datasets: [{
+                            label: d.sbChartLabel,
+                            data: [6.70, 5.45, 5.34, 4.29, 3.85, 3.33, 3.04, 2.12],
+                            backgroundColor: ['#10b981', '#059669', '#047857', '#0d9488', '#0284c7', '#2563eb', '#7c3aed', '#db2777'],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
+                    }
+                });
+            }
+
+            if (tabId === 'tab-banana') {
+                if (chartInstances.banana) chartInstances.banana.destroy();
+                const ctx = document.getElementById('chartBanana').getContext('2d');
+                chartInstances.banana = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: currentLang === 'ru'
+                            ? ['Израиль', 'Дания', 'Сингапур', 'Южная Корея', 'Казахстан', 'США', 'Эквадор', 'Индия', 'Пакистан']
+                            : ['Israel', 'Denmark', 'Singapore', 'South Korea', 'Kazakhstan', 'USA', 'Ecuador', 'India', 'Pakistan'],
+                        datasets: [{
+                            label: d.bnChartLabel,
+                            data: [3.50, 3.23, 3.15, 3.00, 2.05, 1.67, 1.08, 0.66, 0.65],
+                            backgroundColor: ['#eab308', '#facc15', '#fde047', '#fef08a', '#eab308', '#84cc16', '#22c55e', '#10b981', '#059669'],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
+                    }
+                });
+            }
+
+            if (tabId === 'tab-cinema') {
+                if (chartInstances.cinema) chartInstances.cinema.destroy();
+                const ctx = document.getElementById('chartCinemaTickets').getContext('2d');
+                chartInstances.cinema = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: currentLang === 'ru'
+                            ? ['Цюрих', 'Лондон', 'Нью-Йорк', 'Токио', 'Сеул', 'Мумбаи', 'Джакарта']
+                            : ['Zurich', 'London', 'New York', 'Tokyo', 'Seoul', 'Mumbai', 'Jakarta'],
+                        datasets: [{
+                            label: d.hwChartLabel,
+                            data: [24.6, 20.4, 20.0, 13.2, 11.1, 4.7, 3.1],
+                            backgroundColor: '#a855f7',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
+                    }
+                });
+            }
+
+            if (tabId === 'tab-dishes') {
+                if (chartInstances.plov) chartInstances.plov.destroy();
+                const ctxPlov = document.getElementById('chartPlov').getContext('2d');
+                chartInstances.plov = new Chart(ctxPlov, {
+                    type: 'bar',
+                    data: {
+                        labels: currentLang === 'ru'
+                            ? ['Ташкент', 'Фергана', 'Самарканд', 'Ташкентская обл.', 'Каракалпакстан']
+                            : ['Tashkent', 'Fergana', 'Samarkand', 'Tashkent Region', 'Karakalpakstan'],
+                        datasets: [{
+                            label: d.plovChartLabel,
+                            data: [125125, 122884, 119999, 119694, 103557],
+                            backgroundColor: ['#f59e0b', '#fbbf24', '#d97706', '#b45309', '#78350f'],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
+                    }
+                });
+
+                if (chartInstances.thali) chartInstances.thali.destroy();
+                const ctxThali = document.getElementById('chartThali').getContext('2d');
+                chartInstances.thali = new Chart(ctxThali, {
+                    type: 'bar',
+                    data: {
+                        labels: currentLang === 'ru' ? ['Сентябрь 2025', 'Сентябрь 2026'] : ['September 2025', 'September 2026'],
+                        datasets: [
+                            { label: d.thaliVegLabel, data: [28.1, 30.8], backgroundColor: '#10b981' },
+                            { label: d.thaliNonVegLabel, data: [56.0, 59.5], backgroundColor: '#f59e0b' }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: '#f3f4f6' } } },
+                        scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
+                    }
+                });
+            }
+        }
 
         function switchTab(tabId, btn) {
+            currentActiveTab = tabId;
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
+
+            // Отрисовываем график только видимой вкладки
+            setTimeout(() => {
+                renderChartForTab(tabId);
+            }, 50);
         }
 
         function renderDynamicTables(lang) {
@@ -623,164 +799,6 @@
                 </tr>`;
             });
             mthTbody.innerHTML = mthHtml;
-        }
-
-        function renderAllCharts(lang) {
-            const d = dict[lang];
-
-            if (chartBigMacObj) chartBigMacObj.destroy();
-            chartBigMacObj = new Chart(document.getElementById('chartBigMac'), {
-                type: 'bar',
-                data: {
-                    labels: lang === 'ru' 
-                        ? ['Швейцария', 'Уругвай', 'Норвегия', 'Колумбия', 'США (Base)', 'Украина', 'Индия', 'Индонезия']
-                        : ['Switzerland', 'Uruguay', 'Norway', 'Colombia', 'USA (Base)', 'Ukraine', 'India', 'Indonesia'],
-                    datasets: [{
-                        label: d.bmChartLabel,
-                        data: [9.04, 8.94, 8.05, 8.00, 6.22, 3.34, 2.45, 2.38],
-                        backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#06b6d4', '#3b82f6', '#8b5cf6'],
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
-                }
-            });
-
-            if (chartIphoneObj) chartIphoneObj.destroy();
-            chartIphoneObj = new Chart(document.getElementById('chartIphone'), {
-                type: 'bar',
-                data: {
-                    labels: lang === 'ru'
-                        ? ['Турция', 'Бразилия', 'Египет', 'Швеция', 'Индия', 'США', 'Южная Корея']
-                        : ['Turkey', 'Brazil', 'Egypt', 'Sweden', 'India', 'USA', 'South Korea'],
-                    datasets: [{
-                        label: d.ipChartLabel,
-                        data: [2182, 1835, 1525, 1448, 1401, 1079, 1063],
-                        backgroundColor: '#38bdf8',
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
-                }
-            });
-
-            if (chartStarbucksObj) chartStarbucksObj.destroy();
-            chartStarbucksObj = new Chart(document.getElementById('chartStarbucks'), {
-                type: 'bar',
-                data: {
-                    labels: lang === 'ru'
-                        ? ['Швейцария', 'США', 'Великобритания', 'ОАЭ', 'Корея', 'Япония', 'Индия', 'Бразилия']
-                        : ['Switzerland', 'USA', 'UK', 'UAE', 'Korea', 'Japan', 'India', 'Brazil'],
-                    datasets: [{
-                        label: d.sbChartLabel,
-                        data: [6.70, 5.45, 5.34, 4.29, 3.85, 3.33, 3.04, 2.12],
-                        backgroundColor: ['#10b981', '#059669', '#047857', '#0d9488', '#0284c7', '#2563eb', '#7c3aed', '#db2777'],
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
-                }
-            });
-
-            if (chartBananaObj) chartBananaObj.destroy();
-            chartBananaObj = new Chart(document.getElementById('chartBanana'), {
-                type: 'bar',
-                data: {
-                    labels: lang === 'ru'
-                        ? ['Израиль', 'Дания', 'Сингапур', 'Южная Корея', 'Казахстан', 'США', 'Эквадор', 'Индия', 'Пакистан']
-                        : ['Israel', 'Denmark', 'Singapore', 'South Korea', 'Kazakhstan', 'USA', 'Ecuador', 'India', 'Pakistan'],
-                    datasets: [{
-                        label: d.bnChartLabel,
-                        data: [3.50, 3.23, 3.15, 3.00, 2.05, 1.67, 1.08, 0.66, 0.65],
-                        backgroundColor: ['#eab308', '#facc15', '#fde047', '#fef08a', '#eab308', '#84cc16', '#22c55e', '#10b981', '#059669'],
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
-                }
-            });
-
-            if (chartCinemaTicketsObj) chartCinemaTicketsObj.destroy();
-            chartCinemaTicketsObj = new Chart(document.getElementById('chartCinemaTickets'), {
-                type: 'bar',
-                data: {
-                    labels: lang === 'ru'
-                        ? ['Цюрих', 'Лондон', 'Нью-Йорк', 'Токио', 'Сеул', 'Мумбаи', 'Джакарта']
-                        : ['Zurich', 'London', 'New York', 'Tokyo', 'Seoul', 'Mumbai', 'Jakarta'],
-                    datasets: [{
-                        label: d.hwChartLabel,
-                        data: [24.6, 20.4, 20.0, 13.2, 11.1, 4.7, 3.1],
-                        backgroundColor: '#a855f7',
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
-                }
-            });
-
-            if (chartPlovObj) chartPlovObj.destroy();
-            chartPlovObj = new Chart(document.getElementById('chartPlov'), {
-                type: 'bar',
-                data: {
-                    labels: lang === 'ru'
-                        ? ['Ташкент', 'Фергана', 'Самарканд', 'Ташкентская обл.', 'Каракалпакстан']
-                        : ['Tashkent', 'Fergana', 'Samarkand', 'Tashkent Region', 'Karakalpakstan'],
-                    datasets: [{
-                        label: d.plovChartLabel,
-                        data: [125125, 122884, 119999, 119694, 103557],
-                        backgroundColor: ['#f59e0b', '#fbbf24', '#d97706', '#b45309', '#78350f'],
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
-                }
-            });
-
-            if (chartThaliObj) chartThaliObj.destroy();
-            chartThaliObj = new Chart(document.getElementById('chartThali'), {
-                type: 'bar',
-                data: {
-                    labels: lang === 'ru' ? ['Сентябрь 2025', 'Сентябрь 2026'] : ['September 2025', 'September 2026'],
-                    datasets: [
-                        { label: d.thaliVegLabel, data: [28.1, 30.8], backgroundColor: '#10b981' },
-                        { label: d.thaliNonVegLabel, data: [56.0, 59.5], backgroundColor: '#f59e0b' }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#f3f4f6' } } },
-                    scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#f3f4f6' } } }
-                }
-            });
         }
 
         function setLanguage(lang) {
@@ -853,7 +871,7 @@
             }
 
             renderDynamicTables(lang);
-            renderAllCharts(lang);
+            renderChartForTab(currentActiveTab);
         }
 
         window.onload = function() {
