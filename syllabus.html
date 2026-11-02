@@ -32,10 +32,37 @@
             object-fit: contain;
         }
 
-        .back-button {
+        .top-actions {
             position: absolute;
             top: 30px;
             right: 30px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .pdf-download-btn {
+            text-decoration: none;
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(225, 29, 72, 0.35);
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+        }
+
+        .back-button {
             text-decoration: none;
             background-color: #001e50;
             color: white;
@@ -116,6 +143,51 @@
             display: block;
         }
 
+        /* Плашка скачивания внутри вкладки Overview */
+        .download-banner {
+            background: linear-gradient(135deg, #001e50 0%, #1e3a8a 100%);
+            border-radius: 12px;
+            padding: 18px 24px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 30, 80, 0.15);
+        }
+
+        .download-banner-text h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .download-banner-text p {
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 0;
+        }
+
+        .banner-btn {
+            text-decoration: none;
+            background-color: #e11d48;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .banner-btn:hover {
+            background-color: #f43f5e;
+        }
+
         h2 {
             color: #001e50;
             font-size: 22px;
@@ -168,25 +240,44 @@
 <body>
 
     <img src="https://ogaydv-prog.github.io/principles-economics/almau.jpg" alt="AlmaU Logo" class="top-left-logo">
-    <a href="index.html" class="back-button">← Back to Dashboard</a>
+    
+    <div class="top-actions">
+        <a href="economics-sillabus.pdf" download class="pdf-download-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download PDF
+        </a>
+        <a href="index.html" class="back-button">← Back to Dashboard</a>
+    </div>
 
     <header>
         <h1>Course Syllabus</h1>
-        <p class="subtitle">SEE2116  Economics | Software Engineering (3 ECTS)</p>
+        <p class="subtitle">SEE2116 Economics | Software Engineering (3 ECTS)</p>
     </header>
 
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="openTab('overview')">Overview</button>
-        <button class="tab-btn" onclick="openTab('plan')">15-Week Schedule</button>
-        <button class="tab-btn" onclick="openTab('outcomes')">Learning Outcomes</button>
-        <button class="tab-btn" onclick="openTab('ai')">Academic Integrity & AI</button>
-        <button class="tab-btn" onclick="openTab('policy')">Course Policy</button>
-        <button class="tab-btn" onclick="openTab('evaluation')">Evaluation & Rubrics</button>
+        <button class="tab-btn active" onclick="openTab('overview', event)">Overview</button>
+        <button class="tab-btn" onclick="openTab('plan', event)">15-Week Schedule</button>
+        <button class="tab-btn" onclick="openTab('outcomes', event)">Learning Outcomes</button>
+        <button class="tab-btn" onclick="openTab('ai', event)">Academic Integrity & AI</button>
+        <button class="tab-btn" onclick="openTab('policy', event)">Course Policy</button>
+        <button class="tab-btn" onclick="openTab('evaluation', event)">Evaluation & Rubrics</button>
     </div>
 
     <main class="content-box">
         <!-- 1. OVERVIEW -->
         <div id="overview" class="tab-content active">
+            <!-- Плашка скачивания файла -->
+            <div class="download-banner">
+                <div class="download-banner-text">
+                    <h3>Official Course Syllabus Document</h3>
+                    <p>Download the complete printable PDF syllabus for offline reference.</p>
+                </div>
+                <a href="economics-sillabus.pdf" download class="banner-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download PDF
+                </a>
+            </div>
+
             <h2>Course Overview & Details</h2>
             <p><strong>Course Code & Name:</strong> SEI2116 Economics</p>
             <p><strong>Program:</strong> Software Engineering (SE-2401/2501)</p>
@@ -285,7 +376,7 @@
     </footer>
 
     <script>
-        function openTab(tabId) {
+        function openTab(tabId, evt) {
             const contents = document.querySelectorAll('.tab-content');
             const buttons = document.querySelectorAll('.tab-btn');
             
@@ -293,7 +384,9 @@
             buttons.forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
         }
     </script>
 
