@@ -29,7 +29,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             position: relative;
             padding-top: 10px;
         }
@@ -92,47 +92,48 @@
             justify-content: center;
             align-items: center;
             margin: auto 0;
-            padding: 20px 0;
+            padding: 25px 0;
         }
 
-        /* Плотная песчано-коричневая рамка для карточек */
+        /* Плотная песчано-коричневая рамка для обычных карточек */
         .card {
             display: block;
             text-decoration: none;
-            background: #ffffff;
-            border: 3px solid #78350f; /* Глубокий песчано-коричневый цвет */
-            border-radius: 10px;
+            background: #78350f; /* Коричневый подложковый цвет исключает белые щели */
+            border: 3px solid #78350f;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 14px rgba(120, 53, 15, 0.15);
+            box-shadow: 0 4px 14px rgba(120, 53, 15, 0.2);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             width: 185px; 
-            height: 300px; 
+            height: 304px; /* Увеличено на 4px для компенсации миллиметрового среза */
             flex-shrink: 0;
             cursor: pointer;
             position: relative;
+            padding: 1px;
         }
 
         .card img {
             width: 100% !important;
             height: 100% !important;
             display: block !important;
-            object-fit: cover !important;
-            border: none !important;
+            object-fit: fill !important; /* Гарантирует полный показ рамки с верхом */
+            border-radius: 8px;
             margin: 0 !important;
             padding: 0 !important;
         }
 
-        /* Эффект при наведении: ЯРКАЯ ПЕСЧАНО-ЗОЛОТАЯ НЕОНОВАЯ подсветка */
+        /* Эффект при наведении: ЯРКАЯ ПЕСЧАНО-ЗОЛОТАЯ ПОДСВЕТКА */
         .card:hover {
             transform: translateY(-10px) scale(1.05);
-            border: 3px solid #f59e0b; /* Теплый песчано-золотой цвет */
+            border: 3px solid #f59e0b;
             box-shadow: 0 12px 30px rgba(245, 158, 11, 0.5), inset 0 0 12px rgba(245, 158, 11, 0.25);
         }
 
         /* 3D FLIP CARD STYLES (для 6-й карточки) */
         .flip-card {
             width: 185px;
-            height: 300px;
+            height: 304px;
             perspective: 1000px;
             flex-shrink: 0;
         }
@@ -145,9 +146,9 @@
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
             border: 3px solid #78350f;
-            border-radius: 10px;
-            box-shadow: 0 4px 14px rgba(120, 53, 15, 0.15);
-            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(120, 53, 15, 0.2);
+            background: #78350f;
             overflow: hidden;
         }
 
@@ -161,19 +162,22 @@
             position: absolute;
             width: 100%;
             height: 100%;
+            top: 0;
+            left: 0;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 7px;
+            border-radius: 8px;
             overflow: hidden;
         }
 
         .flip-card-front img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: fill;
             display: block;
         }
 
+        /* Обратная сторона: исправлен зеркальный разворот и кликабельность элементов */
         .flip-card-back {
             background-color: #001e50;
             color: white;
@@ -182,8 +186,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 14px 10px;
-            gap: 14px;
+            padding: 16px 12px;
+            gap: 16px;
+            z-index: 10;
         }
 
         .flip-card-back h3 {
@@ -193,8 +198,8 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 2px;
-            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
-            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.4);
+            padding-bottom: 6px;
             width: 100%;
         }
 
@@ -203,25 +208,28 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            padding: 11px 8px;
+            padding: 12px 8px;
             background: #002d72;
-            color: #ffffff;
+            color: #ffffff !important;
             text-decoration: none;
             font-size: 11px;
             font-weight: 600;
             border-radius: 6px;
             border: 1px solid #f59e0b;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
             line-height: 1.2;
+            cursor: pointer;
+            position: relative;
+            z-index: 20;
         }
 
         .video-btn:hover {
             background: #f59e0b;
-            color: #001e50;
+            color: #001e50 !important;
             font-weight: 700;
-            transform: scale(1.03);
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+            transform: scale(1.04);
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.9);
         }
 
         footer {
@@ -283,7 +291,7 @@
 
             .card, .flip-card {
                 width: 155px;
-                height: 250px;
+                height: 256px;
             }
 
             .flip-card-back h3 {
@@ -292,7 +300,7 @@
 
             .video-btn {
                 font-size: 10px;
-                padding: 9px 6px;
+                padding: 10px 6px;
             }
         }
     </style>
@@ -338,14 +346,14 @@
             <img src="https://ogaydv-prog.github.io/economics-se/pic-reading11-se.png" alt="Required Reading" onerror="this.src='./pic-reading11-se.png'">
         </a>
 
-        <!-- 6. Видеолекции (2 видеоклипа) -->
+        <!-- 6. Видеолекции (Flip-карточка с 2 активными кнопками YouTube) -->
         <div class="flip-card">
             <div class="flip-card-inner">
                 <!-- Лицевая сторона -->
                 <div class="flip-card-front">
                     <img src="https://ogaydv-prog.github.io/economics-se/pic-video11-se.png" alt="Video Lectures" onerror="this.src='./pic-video11-se.png'">
                 </div>
-                <!-- Обратная сторона с 2 видеолекциями -->
+                <!-- Обратная сторона: Читаемая прямая ориентация, кликабельные кнопки -->
                 <div class="flip-card-back">
                     <h3>Video Lectures</h3>
                     <a href="https://www.youtube.com/watch?v=9i6vf5Wz6nY&t=23s" target="_blank" rel="noopener noreferrer" class="video-btn">
