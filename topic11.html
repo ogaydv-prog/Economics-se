@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 11 | Economics (SE)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 30px;
+        }
+
+        /* Верхняя панель */
+        .top-bar {
+            width: 100%;
+            max-width: 1450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            padding-top: 10px;
+        }
+
+        .top-left-logo {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .header-titles {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #001e50;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #555555;
+            line-height: 1.4;
+        }
+
+        .back-button {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            background-color: #001e50;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .back-button:hover {
+            background-color: #003380;
+        }
+
+        /* Контейнер карточек */
+        .grid-container {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 18px;
+            max-width: 1450px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            margin: auto 0;
+            padding: 20px 0;
+        }
+
+        /* Плотная песчано-коричневая рамка для карточек */
+        .card {
+            display: block;
+            text-decoration: none;
+            background: #ffffff;
+            border: 3px solid #78350f; /* Глубокий песчано-коричневый цвет */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(120, 53, 15, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 185px; 
+            height: 300px; 
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card img {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            object-fit: cover !important;
+            border: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* Эффект при наведении: ЯРКАЯ ПЕСЧАНО-ЗОЛОТАЯ НЕОНОВАЯ подсветка */
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border: 3px solid #f59e0b; /* Теплый песчано-золотой цвет */
+            box-shadow: 0 12px 30px rgba(245, 158, 11, 0.5), inset 0 0 12px rgba(245, 158, 11, 0.25);
+        }
+
+        /* 3D FLIP CARD STYLES (для 6-й карточки) */
+        .flip-card {
+            width: 185px;
+            height: 300px;
+            perspective: 1000px;
+            flex-shrink: 0;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            border: 3px solid #78350f;
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(120, 53, 15, 0.15);
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+            border: 3px solid #f59e0b;
+            box-shadow: 0 12px 30px rgba(245, 158, 11, 0.5), inset 0 0 12px rgba(245, 158, 11, 0.25);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .flip-card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .flip-card-back {
+            background-color: #001e50;
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 14px 10px;
+            gap: 14px;
+        }
+
+        .flip-card-back h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #f59e0b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+            padding-bottom: 4px;
+            width: 100%;
+        }
+
+        .video-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 11px 8px;
+            background: #002d72;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            border: 1px solid #f59e0b;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            line-height: 1.2;
+        }
+
+        .video-btn:hover {
+            background: #f59e0b;
+            color: #001e50;
+            font-weight: 700;
+            transform: scale(1.03);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+        }
+
+        footer {
+            margin-top: auto;
+            font-size: 14px;
+            color: #718096;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Мобильная адаптивность */
+        @media (max-width: 1250px) {
+            .grid-container {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                justify-content: center;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .top-left-logo, .back-button {
+                position: static;
+                transform: none;
+            }
+
+            .top-left-logo {
+                width: 52px;
+                height: 52px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+
+            .back-button {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .grid-container {
+                margin: 10px 0;
+            }
+
+            .card, .flip-card {
+                width: 155px;
+                height: 250px;
+            }
+
+            .flip-card-back h3 {
+                font-size: 11px;
+            }
+
+            .video-btn {
+                font-size: 10px;
+                padding: 9px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Верхняя панель -->
+    <div class="top-bar">
+        <img src="https://ogaydv-prog.github.io/economics-se/almau.png" alt="AlmaU Logo" class="top-left-logo" onerror="this.src='./almau.png'">
+        <div class="header-titles">
+            <h1>Topic 11: Macroeconomic Instability. Unemployment & Inflation</h1>
+            <p class="subtitle">
+                Select a learning resource below: presentation, macro economic simulators, reading materials, or video lectures.
+            </p>
+        </div>
+        <a href="topics.html" class="back-button">← Back to Topics</a>
+    </div>
+
+    <!-- Основная сетка ресурсов -->
+    <main class="grid-container">
+        <!-- 1. Лекция -->
+        <a href="lecture11.html" class="card" title="Lecture Notes Topic 11">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-lecture11-se.png" alt="Lecture Notes" onerror="this.src='./pic-lecture11-se.png'">
+        </a>
+
+        <!-- 2. Презентация Piktochart -->
+        <a href="https://create.piktochart.com/output/d5c5361b731d-economics-principles-of-macroeconomics-2026-2027" target="_blank" rel="noopener noreferrer" class="card" title="Presentation Topic 11">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-preza11-se.png" alt="Presentation" onerror="this.src='./pic-preza11-se.png'">
+        </a>
+
+        <!-- 3. Симулятор Безработицы -->
+        <a href="sim-unemp-pe-pro-g.html" class="card" title="Unemployment & Labor Market Simulator">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-sim-unemp-se.png" alt="Unemployment Simulator" onerror="this.src='./pic-sim-unemp-se.png'">
+        </a>
+
+        <!-- 4. Симулятор Инфляции -->
+        <a href="sim-inflation.html" class="card" title="Global Inflation & Hyperinflation Simulator">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-sim-inflation-se.png" alt="Inflation Simulator" onerror="this.src='./pic-sim-inflation-se.png'">
+        </a>
+
+        <!-- 5. Обязательное чтение (Google Docs) -->
+        <a href="https://docs.google.com/document/d/1yuqm0Kt1Ga7Pr90e4AJaMi5D8nLidKP3/edit?usp=sharing&ouid=109725301150629205728&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" class="card" title="Required Reading Topic 11">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-reading11-se.png" alt="Required Reading" onerror="this.src='./pic-reading11-se.png'">
+        </a>
+
+        <!-- 6. Видеолекции (2 видеоклипа) -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <!-- Лицевая сторона -->
+                <div class="flip-card-front">
+                    <img src="https://ogaydv-prog.github.io/economics-se/pic-video11-se.png" alt="Video Lectures" onerror="this.src='./pic-video11-se.png'">
+                </div>
+                <!-- Обратная сторона с 2 видеолекциями -->
+                <div class="flip-card-back">
+                    <h3>Video Lectures</h3>
+                    <a href="https://www.youtube.com/watch?v=9i6vf5Wz6nY&t=23s" target="_blank" rel="noopener noreferrer" class="video-btn">
+                        ▶ Part 1: Unemployment
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=USj52Vlvd5M&t=4s" target="_blank" rel="noopener noreferrer" class="video-btn">
+                        ▶ Part 2: Inflation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Developed for Software Engineering Team AlmaU 2026 | Course: Economics</p>
+        <p>© Almaty Management University | School of Digital Technologies & Economics</p>
+    </footer>
+
+</body>
+</html>
