@@ -19,68 +19,68 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 20px 30px;
-        }
-
-        /* Верхняя панель */
-        .top-bar {
-            width: 100%;
-            max-width: 1450px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
+            padding: 20px;
             position: relative;
-            padding-top: 10px;
         }
 
+        /* Логотип прижат к крайнему левому краю на уровне заголовка */
         .top-left-logo {
             position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 60px;
-            height: 60px;
+            top: 22px;
+            left: 20px;
+            width: 56px;
+            height: 56px;
             object-fit: contain;
+            z-index: 10;
         }
 
+        /* Кнопка возврата симметрично прижата к крайнему правому краю на той же линии */
+        .back-button {
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            text-decoration: none;
+            background-color: #001e50;
+            color: white;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 30, 80, 0.15);
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            background-color: #003380;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 30, 80, 0.25);
+        }
+
+        /* Заголовок и подзаголовок по центру с боковыми отступами под логотип и кнопку */
         .header-titles {
             text-align: center;
-            padding: 0 160px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            padding: 0 180px;
+            width: 100%;
         }
 
         h1 {
             font-size: 28px;
             font-weight: 700;
             color: #001e50;
-            line-height: 1.2;
+            line-height: 1.25;
             margin-bottom: 6px;
         }
 
         .subtitle {
             font-size: 14px;
             color: #555555;
-            line-height: 1.4;
-        }
-
-        .back-button {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            text-decoration: none;
-            background-color: #001e50;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .back-button:hover {
-            background-color: #003380;
+            line-height: 1.45;
+            max-width: 780px;
+            margin: 0 auto;
         }
 
         /* Контейнер карточек */
@@ -96,7 +96,7 @@
             padding: 20px 0;
         }
 
-        /* Плотная песочная рамка для карточек 1-5 */
+        /* Плотная песочная рамка с небольшим кантом вокруг рисунка без обрезки верха */
         .card {
             display: block;
             text-decoration: none;
@@ -109,19 +109,19 @@
                         border-color 0.3s ease,
                         box-shadow 0.3s ease;
             width: 185px;
-            height: 304px;
+            height: 306px;
             flex-shrink: 0;
             cursor: pointer;
             position: relative;
-            padding: 0;
+            padding: 3px;
         }
 
         .card img {
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: cover;
-            border-radius: 9px;
+            object-fit: fill;
+            border-radius: 8px;
             margin: 0;
             padding: 0;
         }
@@ -137,7 +137,7 @@
         /* ======================================================== */
         .flip-card {
             width: 185px;
-            height: 304px;
+            height: 306px;
             perspective: 1200px;
             flex-shrink: 0;
             cursor: pointer;
@@ -179,17 +179,19 @@
             overflow: hidden;
         }
 
-        /* Лицевая сторона */
+        /* Лицевая сторона с тем же песочным кантом 3px */
         .flip-card-front {
             z-index: 2;
             transform: rotateY(0deg);
             background-color: #c29b61;
+            padding: 3px;
         }
 
         .flip-card-front img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: fill;
+            border-radius: 8px;
             display: block;
         }
 
@@ -269,46 +271,51 @@
             }
         }
 
-        /* Адаптивность для смартфонов */
+        @media (max-width: 960px) {
+            .header-titles {
+                padding: 0 150px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* Адаптивность для смартфонов: логотип и кнопка по центру, карточки в 2 колонки */
         @media (max-width: 768px) {
             body {
                 padding: 14px 12px;
             }
 
-            .top-bar {
-                flex-direction: column;
-                justify-content: center;
-                gap: 10px;
-                margin-bottom: 16px;
-                padding-top: 0;
+            .top-left-logo {
+                position: static;
+                display: block;
+                margin: 0 auto 10px auto;
+                width: 52px;
+                height: 52px;
             }
 
-            .top-left-logo,
             .back-button {
                 position: static;
-                transform: none;
-            }
-
-            .top-left-logo {
-                width: 48px;
-                height: 48px;
+                display: inline-block;
+                margin: 0 auto 14px auto;
+                padding: 8px 16px;
+                font-size: 13px;
             }
 
             .header-titles {
-                padding: 0 6px;
+                margin-top: 0;
+                margin-bottom: 16px;
+                padding: 0 8px;
             }
 
             h1 {
-                font-size: 20px;
+                font-size: 21px;
             }
 
             .subtitle {
-                font-size: 12.5px;
-            }
-
-            .back-button {
-                padding: 8px 16px;
                 font-size: 13px;
+                line-height: 1.4;
             }
 
             .grid-container {
@@ -316,15 +323,20 @@
                 grid-template-columns: repeat(2, minmax(140px, 165px));
                 justify-content: center;
                 gap: 14px;
-                margin: 8px 0;
-                padding: 10px 0;
+                margin: 8px auto;
+                padding: 10px 0 24px;
+                width: 100%;
             }
 
             .card,
             .flip-card {
                 width: 100%;
                 height: auto;
-                aspect-ratio: 185 / 304;
+                aspect-ratio: 185 / 306;
+            }
+
+            .card:hover {
+                transform: translateY(-4px) scale(1.02);
             }
 
             .flip-card-back {
@@ -351,43 +363,45 @@
 </head>
 <body>
 
-    <!-- Верхняя панель -->
-    <div class="top-bar">
-        <img src="https://ogaydv-prog.github.io/economics-se/almau.png" alt="AlmaU Logo" class="top-left-logo" onerror="this.src='./almau.png'">
-        <div class="header-titles">
-            <h1>Topic 12: Money, Banking &amp; Monetary Policy</h1>
-            <p class="subtitle">
-                Select a learning resource below: presentation, monetary simulators, reading materials, or video lectures.
-            </p>
-        </div>
-        <a href="topics.html" class="back-button">← Back to Topics</a>
+    <!-- Логотип AlmaU в крайнем левом верхнем углу на уровне заголовка -->
+    <img src="https://ogaydv-prog.github.io/economics-se/almau.png" alt="AlmaU Logo" class="top-left-logo" onerror="this.onerror=null; this.src='./almau.png';">
+
+    <!-- Кнопка возврата симметрично в крайнем правом верхнем углу -->
+    <a href="topics.html" class="back-button">← Back to Topics</a>
+
+    <!-- Заголовок и подзаголовок -->
+    <div class="header-titles">
+        <h1>Topic 12: Money, Banking &amp; Monetary Policy</h1>
+        <p class="subtitle">
+            Select a learning resource below: presentation, monetary simulators, reading materials, or video lectures.
+        </p>
     </div>
 
     <!-- Основная сетка ресурсов -->
     <main class="grid-container">
         <!-- 1. Лекция -->
         <a href="lecture12.html" class="card" title="Lecture Notes Topic 12">
-            <img src="https://ogaydv-prog.github.io/economics-se/pic-lecture12.png" alt="Lecture Notes" onerror="this.src='./pic-lecture12.png'">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-lecture12.png" alt="Lecture Notes" onerror="this.onerror=null; this.src='./pic-lecture12.png';">
         </a>
 
         <!-- 2. Презентация Canva -->
         <a href="https://canva.link/az4f7wowge88c75" target="_blank" rel="noopener noreferrer" class="card" title="Presentation Topic 12">
-            <img src="https://ogaydv-prog.github.io/economics-se/pic-preza12.png" alt="Presentation" onerror="this.src='./pic-preza12.png'">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-preza12.png" alt="Presentation" onerror="this.onerror=null; this.src='./pic-preza12.png';">
         </a>
 
         <!-- 3. Симулятор Спроса на деньги -->
         <a href="sim-demand-money-pe.html" class="card" title="Demand for Money Simulator">
-            <img src="https://ogaydv-prog.github.io/economics-se/pic-sim-demand-money.png" alt="Demand for Money Simulator" onerror="this.src='./pic-sim-demand-money.png'">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-sim-demand-money.png" alt="Demand for Money Simulator" onerror="this.onerror=null; this.src='./pic-sim-demand-money.png';">
         </a>
 
         <!-- 4. Симулятор Денежных агрегатов -->
         <a href="sim-money-aggregates-pe.html" class="card" title="Money Aggregates Simulator">
-            <img src="https://ogaydv-prog.github.io/economics-se/pic-sim-money-aggregates.png" alt="Money Aggregates Simulator" onerror="this.src='./pic-sim-money-aggregates.png'">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-sim-money-aggregates.png" alt="Money Aggregates Simulator" onerror="this.onerror=null; this.src='./pic-sim-money-aggregates.png';">
         </a>
 
         <!-- 5. Обязательное чтение (Google Docs) -->
         <a href="https://docs.google.com/document/d/1pm9aer2aIhw1ZK1l391Z5B81P6KJHZAc/edit?usp=sharing&ouid=109725301150629205728&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" class="card" title="Required Reading Topic 12">
-            <img src="https://ogaydv-prog.github.io/economics-se/pic-reading12.png" alt="Required Reading" onerror="this.src='./pic-reading12.png'">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-reading12.png" alt="Required Reading" onerror="this.onerror=null; this.src='./pic-reading12.png';">
         </a>
 
         <!-- 6. Видеолекции (3D Flip-карточка) -->
@@ -395,7 +409,7 @@
             <div class="flip-card-inner">
                 <!-- Лицевая сторона -->
                 <div class="flip-card-front">
-                    <img src="https://ogaydv-prog.github.io/economics-se/pic-video12.png" alt="Video Lectures" onerror="this.src='./pic-video12.png'">
+                    <img src="https://ogaydv-prog.github.io/economics-se/pic-video12.png" alt="Video Lectures" onerror="this.onerror=null; this.src='./pic-video12.png';">
                 </div>
                 <!-- Обратная сторона с 2 YouTube кнопками -->
                 <div class="flip-card-back">
