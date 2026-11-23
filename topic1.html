@@ -95,8 +95,8 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 170px; 
-            height: 260px; 
+            width: 170px;
+            height: 260px;
         }
 
         .card img {
@@ -123,13 +123,49 @@
             text-align: center;
             line-height: 1.6;
         }
+
+        /* Адаптация под смартфоны */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 16px;
+            }
+
+            .top-left-logo {
+                position: static;
+                display: block;
+                margin: 0 auto 12px;
+                width: 60px;
+                height: 60px;
+            }
+
+            header {
+                margin-top: 0;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-top: 0;
+            }
+
+            .back-button {
+                position: static;
+                display: inline-block;
+                margin: 0 auto 24px;
+            }
+
+            .grid-container {
+                gap: 16px;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- Исправленный логотип на новый репозиторий -->
     <img src="https://ogaydv-prog.github.io/Economics-se/almau.jpg" alt="AlmaU Logo" class="top-left-logo">
-    
+
     <!-- Кнопка возврата к выбору топиков внутри нового репозитория -->
     <a href="topics.html" class="back-button">← Back to Course Topics</a>
 
