@@ -95,8 +95,8 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 180px; 
-            height: 270px; 
+            width: 180px;
+            height: 270px;
             position: relative;
         }
 
@@ -136,13 +136,69 @@
             text-align: center;
             line-height: 1.6;
         }
+
+        /* Адаптация под смартфоны */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 14px;
+            }
+
+            .top-left-logo {
+                position: static;
+                display: block;
+                margin: 0 auto 12px;
+                width: 60px;
+                height: 60px;
+            }
+
+            header {
+                margin-top: 0;
+                margin-bottom: 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-top: 0;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .back-button {
+                position: static;
+                display: inline-block;
+                margin: 0 auto 24px;
+            }
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 165px));
+                justify-content: center;
+                gap: 16px;
+                padding-bottom: 24px;
+            }
+
+            .card {
+                width: 100%;
+                height: 240px;
+            }
+
+            .grid-container .card:last-child:nth-child(odd) {
+                grid-column: 1 / -1;
+                justify-self: center;
+                width: calc(50% - 8px);
+                min-width: 150px;
+                max-width: 180px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- Исправленный логотип на репозиторий Economics-se -->
     <img src="https://ogaydv-prog.github.io/Economics-se/almau.jpg" alt="AlmaU Logo" class="top-left-logo">
-    
+
     <!-- Кнопка возврата к списку тем -->
     <a href="topics.html" class="back-button">← Back to Topics</a>
 
@@ -155,7 +211,7 @@
 
     <main class="grid-container">
         <!-- 1. Презентация (Google Drive) -->
-        <a href="https://docs.google.com/presentation/d/13MqsLGTv5iMm7DjokB-ZXyrr13yDnxU3/edit?usp=sharing&ouid=109725301150629205728&rtpof=true&sd=true" 
+        <a href="https://docs.google.com/presentation/d/13MqsLGTv5iMm7DjokB-ZXyrr13yDnxU3/edit?usp=sharing&ouid=109725301150629205728&rtpof=true&sd=true"
            target="_blank" class="card" title="Presentation">
             <img src="pic-preza-2.png" alt="Presentation">
         </a>
@@ -176,9 +232,9 @@
         </a>
 
         <!-- 5. Резервная карточка -->
-       <a href="task-demand-supply-analysis-ru-en-style-1.html" class="card" title="Demand and Supply Analysis Task">
-    <img src="pic-task-2.png" alt="Demand & Supply Task">
-</a>
+        <a href="task-demand-supply-analysis-ru-en-style-1.html" class="card" title="Demand and Supply Analysis Task">
+            <img src="pic-task-2.png" alt="Demand & Supply Task">
+        </a>
     </main>
 
     <footer>
