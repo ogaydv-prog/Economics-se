@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 14 | Economics (SE)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Логотип прижат к крайнему левому краю на уровне заголовка */
+        .top-left-logo {
+            position: absolute;
+            top: 22px;
+            left: 20px;
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            z-index: 10;
+        }
+
+        /* Кнопка возврата симметрично прижата к крайнему правому краю на той же линии */
+        .back-button {
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            text-decoration: none;
+            background-color: #001e50;
+            color: white;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 30, 80, 0.15);
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            background-color: #003380;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 30, 80, 0.25);
+        }
+
+        /* Заголовок и подзаголовок по центру с боковыми отступами под логотип и кнопку */
+        .header-titles {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            padding: 0 180px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #001e50;
+            line-height: 1.25;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #555555;
+            line-height: 1.45;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        /* Контейнер карточек по центру */
+        .grid-container {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 18px;
+            max-width: 1450px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            margin: auto 0;
+            padding: 20px 0;
+        }
+
+        /* Тонкая серая рамка и спокойная подсветка при наведении */
+        .card {
+            display: block;
+            text-decoration: none;
+            background-color: #e2e8f0;
+            border: 1.5px solid #94a3b8;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(71, 85, 105, 0.16);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        border-color 0.3s ease,
+                        background-color 0.3s ease,
+                        box-shadow 0.3s ease;
+            width: 185px;
+            height: 306px;
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+            padding: 2px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: fill;
+            border-radius: 9px;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Увеличение и спокойная песочно-золотистая подсветка при наведении */
+        .card:hover {
+            transform: translateY(-8px) scale(1.04);
+            background-color: #e6d5b8;
+            border-color: #d6c09c;
+            box-shadow: 0 12px 26px rgba(148, 163, 184, 0.35), 0 0 18px rgba(230, 213, 184, 0.75);
+        }
+
+        footer {
+            margin-top: auto;
+            font-size: 14px;
+            color: #718096;
+            padding-top: 25px;
+            padding-bottom: 10px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Адаптивность для планшетов и средних экранов */
+        @media (max-width: 1250px) {
+            .grid-container {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 960px) {
+            .header-titles {
+                padding: 0 150px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* Адаптивность для смартфонов: логотип и кнопка по центру, карточки в 2 колонки */
+        @media (max-width: 768px) {
+            body {
+                padding: 14px 12px;
+            }
+
+            .top-left-logo {
+                position: static;
+                display: block;
+                margin: 0 auto 10px auto;
+                width: 52px;
+                height: 52px;
+            }
+
+            .back-button {
+                position: static;
+                display: inline-block;
+                margin: 0 auto 14px auto;
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .header-titles {
+                margin-top: 0;
+                margin-bottom: 16px;
+                padding: 0 8px;
+            }
+
+            h1 {
+                font-size: 21px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(140px, 165px));
+                justify-content: center;
+                gap: 14px;
+                margin: 8px auto;
+                padding: 10px 0 24px;
+                width: 100%;
+            }
+
+            .card {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 185 / 306;
+            }
+
+            .card:hover {
+                transform: translateY(-4px) scale(1.02);
+            }
+
+            footer {
+                font-size: 12px;
+                padding-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Логотип AlmaU в крайнем левом верхнем углу на уровне заголовка -->
+    <img src="https://ogaydv-prog.github.io/economics-se/almau.png" alt="AlmaU Logo" class="top-left-logo" onerror="this.onerror=null; this.src='./almau.png';">
+
+    <!-- Кнопка возврата симметрично в крайнем правом верхнем углу -->
+    <a href="topics.html" class="back-button">← Back to Topics</a>
+
+    <!-- Заголовок и подзаголовок -->
+    <div class="header-titles">
+        <h1>Topic 14: International Trade & Exchange Rates</h1>
+        <p class="subtitle">
+            Select a learning resource below: lecture notes, presentation, trade simulators, reading materials, or video lecture.
+        </p>
+    </div>
+
+    <!-- Основная сетка ресурсов -->
+    <main class="grid-container">
+        <!-- 1. Лекция -->
+        <a href="lecture14-pro.html" class="card" title="Lecture Notes — Topic 14">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-lecture14.png" alt="Lecture Notes" onerror="this.onerror=null; this.src='./pic-lecture14.png';">
+        </a>
+
+        <!-- 2. Презентация Canva -->
+        <a href="https://canva.link/7q9woxmvq4xhe7p" target="_blank" rel="noopener noreferrer" class="card" title="Presentation — Topic 14">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-preza14.png" alt="Presentation" onerror="this.onerror=null; this.src='./pic-preza14.png';">
+        </a>
+
+        <!-- 3. Симулятор Международной торговли -->
+        <a href="sim-trade.html" class="card" title="International Trade Simulator">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-sim-trade.png" alt="International Trade Simulator" onerror="this.onerror=null; this.src='./pic-sim-trade.png';">
+        </a>
+
+        <!-- 4. Симулятор Стандартной модели торговли -->
+        <a href="sim-standart-model.html" class="card" title="Standard Trade Model Simulator">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-sim-standart-trade.png" alt="Standard Trade Model Simulator" onerror="this.onerror=null; this.src='./pic-sim-standart-trade.png';">
+        </a>
+
+        <!-- 5. Обязательное чтение (Google Docs) -->
+        <a href="https://docs.google.com/document/d/1NMJSbimYHS33THK_DS2U5aEqcGYg-1VB/edit?usp=sharing&ouid=109725301150629205728&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" class="card" title="Required Reading — Topic 14">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-reading14.png" alt="Required Reading" onerror="this.onerror=null; this.src='./pic-reading14.png';">
+        </a>
+
+        <!-- 6. Видеолекция (прямая ссылка на YouTube) -->
+        <a href="https://www.youtube.com/watch?v=XGrKx2chuI4" target="_blank" rel="noopener noreferrer" class="card" title="Video Lecture — Topic 14">
+            <img src="https://ogaydv-prog.github.io/economics-se/pic-video14.png" alt="Video Lecture" onerror="this.onerror=null; this.src='./pic-video14.png';">
+        </a>
+    </main>
+
+    <footer>
+        <p>Developed for Software Engineering Students | Economics</p>
+        <p>© Almaty Management University | School of Digital Technologies & Economics</p>
+    </footer>
+
+</body>
+</html>
